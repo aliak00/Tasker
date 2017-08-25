@@ -56,17 +56,8 @@ public class Logger {
         guard self.transports.count > 0 else {
             return
         }
-        let value = object()
-        let string: String
 
-        switch value {
-        case let value as CustomDebugStringConvertible:
-            string = value.debugDescription
-        case let value as CustomStringConvertible:
-            string = value.description
-        default:
-            fatalError("Logger.log only works for values that conform to CustomDebugStringConvertible or CustomStringConvertible")
-        }
+        let string = "\(object())"
 
         if self.ignoredTags.count > 0 && self.ignoredTags.intersection(tags).count > 0 {
             return
@@ -90,14 +81,13 @@ public class Logger {
         let queue = Thread.isMainThread ? "UI" : "BG"
 
         let functionName = function.components(separatedBy: "(")[0]
-        let unquotedString = string.substring(with: string.index(after: string.startIndex)..<string.index(before: string.endIndex))
 
         var tagsString = ""
         if tags.count > 0 && self.printTags {
             tagsString = ":\(tags.joined(separator: ","))"
         }
         for transport in self.transports {
-            transport("[\(queue)-\(tid):\(fileName):\(line):\(functionName)\(tagsString)] => \(unquotedString)")
+            transport("[\(queue)-\(tid):\(fileName):\(line):\(functionName)\(tagsString)] => \(string)")
         }
     }
 }
