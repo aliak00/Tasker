@@ -62,25 +62,30 @@ private class TaskData {
 
 public class TaskManager {
 
-    public static let kTaskQueueTag = "tk-q"
-    public static let kOperationQueueTag = "op-q"
-    public static let kCallbackTag = "cb"
-    public static let kInterceptorQueueTag = "in-q"
+    public struct LogTag {
+        public static let manager = "tm"
+        public static let task = "tk-q"
+        public static let op = "op-q"
+        public static let cb = "cb"
+        public static let interceptor = "in-q"
+    }
 
-    static let kOpQTags = [kOperationQueueTag]
-    static let kInQTags = [kInterceptorQueueTag]
-    static let kCbOpQTags = [kOperationQueueTag, kCallbackTag]
-    static let kTkQTags = [kTaskQueueTag]
-    static let kCbInQTags = [kInterceptorQueueTag, kCallbackTag]
+    private static let kOpQTags = [LogTag.manager, LogTag.op]
+    private static let kInQTags = [LogTag.manager, LogTag.interceptor]
+    private static let kCbOpQTags = [LogTag.manager, LogTag.op, LogTag.cb]
+    private static let kTkQTags = [LogTag.manager, LogTag.task]
+    private static let kCbInQTags = [LogTag.manager, LogTag.interceptor, LogTag.cb]
 
     private static let logKeys: Void = {
         Logger.shared.log(
             "log keys = ["
-                + "\(kTaskQueueTag): task queue, "
-                + "\(kOperationQueueTag): operation queue, "
-                + "\(kCallbackTag): callback, "
-                + "\(kInterceptorQueueTag): interceptor queue"
-                + "]")
+                + "\(LogTag.task): task queue, "
+                + "\(LogTag.op): operation queue, "
+                + "\(LogTag.cb): callback, "
+                + "\(LogTag.interceptor): interceptor queue"
+                + "]",
+            tag: LogTag.manager
+        )
     }()
 
     static var counter = AtomicInt()
