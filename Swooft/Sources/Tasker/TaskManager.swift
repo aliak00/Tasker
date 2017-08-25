@@ -281,7 +281,7 @@ public class TaskManager {
         }
     }
 
-    private func interceptTask<T: Task>(_ task: T, handle: OwnedTaskHandle, operation: TaskOperation) -> InterceptTaskResult {
+    private func interceptTask<T: Task>(_ task: T, handle: OwnedTaskHandle, operation _: TaskOperation) -> InterceptTaskResult {
         if #available(iOS 10.0, *) {
             __dispatch_assert_queue(self.taskQueue)
         }
@@ -297,7 +297,7 @@ public class TaskManager {
         //
         var shouldBeIgnored = false
         var shouldBeForceExecuted = false
-        var interceptorIndexHoldingTask: Int? = nil
+        var interceptorIndexHoldingTask: Int?
         var executeInterceptorIndices: [Int] = []
         var handles = [handle]
         for (index, interceptor) in self.interceptors.enumerated() {
@@ -357,7 +357,7 @@ public class TaskManager {
                 manager.taskOperationQueue.addOperation(data.operation)
                 return
             }
-            guard case .carryOn(let handles) = data.intercept(data) else {
+            guard case let .carryOn(handles) = data.intercept(data) else {
                 Logger.shared.log("bailing on \(handle) at \(manager.startTime.elapsed)", tags: TaskManager.kTkQTags)
                 return
             }
