@@ -17,7 +17,7 @@
 import Foundation
 
 public struct AtomicInt {
-    private var queue = DispatchQueue(label: "com.aliak.Tasker.AtomicInt")
+    private var queue = DispatchQueue(label: "Swooft.AtomicInt")
     private var _value = 0
 
     public var value: Int {

@@ -88,8 +88,8 @@ public class TaskManager {
     private var pendingTasks: [OwnedTaskHandle: TaskData] = [:]
     private let taskOperationQueue = OperationQueue()
 
-    private let taskQueue = DispatchQueue(label: "com.aliak.Tasker.TaskManager.tasks")
-    private let interceptorQueue = DispatchQueue(label: "com.aliak.Tasker.TaskManager.interceptors", attributes: [.concurrent])
+    private let taskQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.tasks")
+    private let interceptorQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.interceptors", attributes: [.concurrent])
 
     private let interceptors: [TaskInterceptor]
 
