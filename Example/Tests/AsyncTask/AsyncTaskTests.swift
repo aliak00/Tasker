@@ -1,0 +1,79 @@
+/*
+ Copyright 2017 Ali Akhtarzada
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+import Quick
+import Nimble
+
+@testable import Swooft
+
+class AsyncTaskTests: QuickSpec {
+
+    override func spec() {
+
+        describe("async") {
+
+            it("should call execute") {
+                let task = AsyncTaskSpy { _ in .success() }
+                task.async()
+                ensure(task.completionHandlerCallCount).becomes(1)
+            }
+
+            it("should get cancelled error") {
+                let task = AsyncTaskSpy { sleep(for: .milliseconds(10)) }
+                let handle = task.async()
+                handle.cancel()
+                ensure(task.completionHandlerCallCount).becomes(1)
+                expect(task.completionHandlerCallData[0]).to(failWith(TaskError.cancelled))
+            }
+
+            it("should timeout after deadline reached") {
+                let task = AsyncTaskSpy { sleep(for: .milliseconds(10)) }
+                task.async(timeout: .milliseconds(5))
+                ensure(task.completionHandlerCallCount).becomes(1)
+                expect(task.completionHandlerCallData[0]).to(failWith(TaskError.timedOut))
+            }
+        }
+
+        describe("await") {
+
+            it("should return value") {
+                let task = AsyncTaskSpy { _ in true }
+                let value = try! task.await()
+                expect(value).to(beTrue())
+            }
+
+            it("should turn async in to sync") {
+                let task = AsyncTask { (callback: (Result<Int>) -> Void) in
+                    sleep(for: .milliseconds(1))
+                    callback(.success(3))
+                }
+                let value = try! task.await()
+                expect(value).to(equal(3))
+            }
+
+            it("should timeout after deadline reached") {
+                let task = AsyncTaskSpy { sleep(for: .milliseconds(10)) }
+                var maybeError: Error?
+                do {
+                    try task.await(timeout: .milliseconds(5))
+                } catch {
+                    maybeError = error
+                }
+                expect(maybeError).to(matchError(TaskError.timedOut))
+            }
+        }
+    }
+}
