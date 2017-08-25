@@ -20,23 +20,36 @@ public class Logger {
     public static let shared = Logger()
 
     private var transports: [(String) -> Void] = []
-    private var tagFilters = Set<String>()
-
-    private let printTags = false
+    private var allowedTags = Set<String>()
+    private var ignoredTags = Set<String>()
     private var filePathMemo: [String: String] = [:]
 
-    init() {}
+    public var printTags = false
+
+    public init() {}
 
     public func addTransport(_ transport: @escaping (String) -> Void) {
         self.transports.append(transport)
     }
 
-    public func filter(tag: String) {
-        self.tagFilters.insert(tag)
+    public func filterUnless(tag: String) {
+        self.allowedTags.insert(tag)
     }
 
-    public func filter(tags: [String]) {
-        self.tagFilters = self.tagFilters.union(tags)
+    public func filterUnless(tags: [String]) {
+        self.allowedTags = self.allowedTags.union(tags)
+    }
+
+    public func filterIf(tag: String) {
+        self.ignoredTags.insert(tag)
+    }
+
+    public func filterIf(tags: [String]) {
+        self.ignoredTags = self.ignoredTags.union(tags)
+    }
+
+    public func log<T>(_ object: @autoclosure () -> T, tag: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+        self.log(object(), tags: [tag], file, function, line)
     }
 
     public func log<T>(_ object: @autoclosure () -> T, tags: [String] = [], _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
@@ -52,13 +65,15 @@ public class Logger {
         case let value as CustomStringConvertible:
             string = value.description
         default:
-            fatalError("log only works for values that conform to CustomDebugStringConvertible or CustomStringConvertible")
+            fatalError("Logger.log only works for values that conform to CustomDebugStringConvertible or CustomStringConvertible")
         }
 
-        if tags.count > 0 && self.tagFilters.count > 0 {
-            guard self.tagFilters.intersection(tags).count > 0 else {
-                return
-            }
+        if self.ignoredTags.count > 0 && self.ignoredTags.intersection(tags).count > 0 {
+            return
+        }
+
+        if self.allowedTags.count > 0 && self.allowedTags.intersection(tags).count == 0 {
+            return
         }
 
         let fileName: String = {

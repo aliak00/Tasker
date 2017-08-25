@@ -23,6 +23,7 @@
 		E18AD1041F50B40900757478 /* Ensure.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1011F50B40900757478 /* Ensure.swift */; };
 		E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1021F50B40900757478 /* KitchenSink.swift */; };
 		E18AD1061F50B40900757478 /* YieldingIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1031F50B40900757478 /* YieldingIterator.swift */; };
+		E18AD1091F50B8F000757478 /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1081F50B8F000757478 /* LoggerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		E18AD1011F50B40900757478 /* Ensure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ensure.swift; sourceTree = "<group>"; };
 		E18AD1021F50B40900757478 /* KitchenSink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KitchenSink.swift; sourceTree = "<group>"; };
 		E18AD1031F50B40900757478 /* YieldingIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YieldingIterator.swift; sourceTree = "<group>"; };
+		E18AD1081F50B8F000757478 /* LoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoggerTests.swift; path = Logger/LoggerTests.swift; sourceTree = "<group>"; };
 		E8BBF77C8B1AB741F355F151 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +104,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E18AD1071F50B8D400757478 /* Logger */,
 				E18AD0F41F50B3DE00757478 /* Doubles */,
 				E18AD0F31F50B3C600757478 /* AsyncTask */,
 				E18AD0F21F50B3B800757478 /* Utils */,
@@ -170,6 +173,14 @@
 				E18AD0F91F50B3F600757478 /* TaskSpy.swift */,
 			);
 			path = Doubles;
+			sourceTree = "<group>";
+		};
+		E18AD1071F50B8D400757478 /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+				E18AD1081F50B8F000757478 /* LoggerTests.swift */,
+			);
+			name = Logger;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -318,6 +329,7 @@
 				E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */,
 				E18AD0FA1F50B3F600757478 /* AsyncTaskSpy.swift in Sources */,
 				E18AD1001F50B40100757478 /* AsyncTaskTests.swift in Sources */,
+				E18AD1091F50B8F000757478 /* LoggerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
