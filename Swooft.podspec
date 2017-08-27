@@ -22,6 +22,12 @@ A group of libraries that provide some utility
 
   s.ios.deployment_target = '9.0'
 
+  s.subspec 'Collections' do |collections|
+    collections.subspec 'RingBuffer' do |ringbuffer|
+      ringbuffer.source_files  = ['Swooft/Sources/Collections/RingBuffer/**/*.swift']
+    end
+  end
+
   s.subspec 'Atomics' do |atomics|
     atomics.source_files  = ['Swooft/Sources/Atomics/**/*.swift']
   end
@@ -32,6 +38,7 @@ A group of libraries that provide some utility
 
   s.subspec 'Logger' do |logger|
     logger.source_files  = ['Swooft/Sources/Logger/**/*.swift']
+    logger.dependency 'Swooft/Collections/RingBuffer'
   end
 
   s.subspec 'Tasker' do |tasker|

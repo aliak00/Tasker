@@ -23,10 +23,17 @@ public class Logger {
     private var allowedTags = Set<String>()
     private var ignoredTags = Set<String>()
     private var filePathMemo: [String: String] = [:]
+    private var historyBuffer: RingBuffer<String>?
 
     public var printTags = false
 
-    public init() {}
+    public init() {
+        self.historyBuffer = nil
+    }
+
+    public init(logHistorySize _: Int) {
+        self.historyBuffer = RingBuffer(size: 50)
+    }
 
     public func addTransport(_ transport: @escaping (String) -> Void) {
         self.transports.append(transport)
@@ -86,8 +93,10 @@ public class Logger {
         if tags.count > 0 && self.printTags {
             tagsString = ":\(tags.joined(separator: ","))"
         }
+        let output = "[\(queue)-\(tid):\(fileName):\(line):\(functionName)\(tagsString)] => \(string)"
+        self.historyBuffer?.append(output)
         for transport in self.transports {
-            transport("[\(queue)-\(tid):\(fileName):\(line):\(functionName)\(tagsString)] => \(string)")
+            transport(output)
         }
     }
 }

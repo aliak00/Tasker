@@ -31,8 +31,8 @@ typealias SuccessTaskSpy = TaskSpy<Void>
 
 func failWith<T>(_ expectedError: Error) -> Predicate<Result<T>> {
     let domain = (expectedError as NSError).domain
-    return Predicate.simple("get <failure(\(domain).\(expectedError))>") { (actualExpression: Expression<Result<T>>) in
-        guard let result = try actualExpression.evaluate(), case let .failure(actualError) = result else {
+    return Predicate.simple("get <failure(\(domain).\(expectedError))>") { expression in
+        guard let result = try expression.evaluate(), case let .failure(actualError) = result else {
             return .doesNotMatch
         }
         let a = actualError as NSError
