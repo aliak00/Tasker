@@ -43,6 +43,22 @@ class RingBufferTests: QuickSpec {
                 let r2: RingBuffer<Int> = [4, 2, 3]
                 expect(r1) == r2
             }
+
+            it("should provide accurate count") {
+                var r1 = RingBuffer<Int>(capacity: 10)
+                expect(r1.capacity) == 10
+                r1.append(0)
+                r1.append(0)
+                expect(r1.count) == 2
+                let r2: RingBuffer<Int> = [0, 0]
+                expect(r1) == r2
+            }
+
+            it("should equal another similar") {
+                let r1: RingBuffer<Int> = [0, 1, 2]
+                let r2: RingBuffer<Int> = [0, 1, 2]
+                expect(r1) == r2
+            }
         }
     }
 }

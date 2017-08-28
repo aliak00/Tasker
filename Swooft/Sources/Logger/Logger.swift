@@ -31,8 +31,8 @@ public class Logger {
         self.historyBuffer = nil
     }
 
-    public init(logHistorySize _: Int) {
-        self.historyBuffer = RingBuffer(size: 50)
+    public init(logHistorySize: Int) {
+        self.historyBuffer = RingBuffer(capacity: logHistorySize)
     }
 
     public func addTransport(_ transport: @escaping (String) -> Void) {

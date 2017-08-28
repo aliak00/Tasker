@@ -19,15 +19,15 @@ import Foundation
 public struct RingBuffer<Element> {
     fileprivate var array: [Element] = []
     fileprivate var currentIndex = 0
-    private let size: Int
+    public let capacity: Int
 
-    public init(size: Int) {
-        self.size = size
-        self.array.reserveCapacity(size)
+    public init(capacity: Int) {
+        self.capacity = capacity
+        self.array.reserveCapacity(capacity)
     }
 
     public mutating func append(_ element: Element) {
-        if self.array.count < self.size {
+        if self.array.count < self.capacity {
             self.array.append(element)
         } else {
             self.array[self.currentIndex % self.array.count] = element
@@ -40,7 +40,8 @@ public func == <Element>(lhs: RingBuffer<Element>, rhs: RingBuffer<Element>) -> 
     return lhs.array == rhs.array
 }
 
-extension RingBuffer: Collection {
+extension RingBuffer: MutableCollection, RandomAccessCollection {
+
     public func index(after i: Int) -> Int {
         return i + 1
     }
@@ -54,13 +55,18 @@ extension RingBuffer: Collection {
     }
 
     public subscript(index: Int) -> Element {
-        return self.array[(self.currentIndex + index) % self.array.count]
+        get {
+            return self.array[(self.currentIndex + index) % self.array.count]
+        }
+        set(element) {
+            self.array[(self.currentIndex + index) % self.array.count] = element
+        }
     }
 }
 
 extension RingBuffer: ExpressibleByArrayLiteral {
     public init(arrayLiteral elements: Element...) {
-        self.init(size: elements.count)
+        self.init(capacity: elements.count)
         self.array = elements
     }
 }
