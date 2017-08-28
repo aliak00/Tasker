@@ -16,13 +16,6 @@
 
 import Foundation
 
-private struct Weak<T: AnyObject> {
-    weak var value: T?
-    init(_ value: T) {
-        self.value = value
-    }
-}
-
 private extension DispatchTime {
     var elapsed: Double {
         let nanoTime = DispatchTime.now().uptimeNanoseconds - self.uptimeNanoseconds

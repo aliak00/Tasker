@@ -22,6 +22,12 @@ A group of libraries that provide some utility
 
   s.ios.deployment_target = '9.0'
 
+  s.subspec 'Utils' do |utils|
+    utils.subspec 'Weak' do |weak|
+      weak.source_files = ['Swooft/Sources/Utils/Weak.swift']
+    end
+  end
+
   s.subspec 'Collections' do |collections|
     collections.subspec 'RingBuffer' do |ringbuffer|
       ringbuffer.source_files  = ['Swooft/Sources/Collections/RingBuffer/**/*.swift']
@@ -46,6 +52,7 @@ A group of libraries that provide some utility
     tasker.dependency 'Swooft/Atomics'
     tasker.dependency 'Swooft/Logger'
     tasker.dependency 'Swooft/Result'
+    tasker.dependency 'Swooft/Utils/Weak'
   end
 
   s.subspec 'AsyncTask' do |asynctask|
