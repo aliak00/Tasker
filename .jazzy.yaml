@@ -1,0 +1,48 @@
+
+readme: README.md
+hide_documentation_coverage: true
+
+xcodebuild_arguments: [
+  -workspace,
+  Example/Swooft.xcworkspace,
+  -scheme,
+  Swooft-Example,
+  -sdk,
+  iphonesimulator10.3
+]
+
+custom_categories:
+  - name: AsyncAwait
+    children:
+      - AsyncTask
+  - name: Atomics
+    children:
+      - AtomicInt
+  - name: Collections
+    children:
+      - RingBuffer
+  - name: Logger
+    children:
+      - Logger
+  - name: Result
+    children:
+      - Result
+  - name: Tasker
+    children:
+      - AnyTask
+      - InterceptCommand
+      - Task
+      - TaskError
+      - TaskHandle
+      - TaskInterceptor
+      - TaskInterceptorConfiguration
+      - TaskManager
+      - TaskState
+  - name: Utils
+    children:
+      - Weak
+
+  - name: LogTags
+    children:
+      - TaskManager.LogTag
+      
