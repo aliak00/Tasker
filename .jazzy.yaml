@@ -2,7 +2,6 @@
 author: Ali Akhtarzada
 module: Swooft
 readme: README.md
-podspec: Swooft.podspec
 hide_documentation_coverage: true
 
 theme: docs/jazzy-theme/
