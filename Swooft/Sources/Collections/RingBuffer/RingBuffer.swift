@@ -34,10 +34,10 @@ public struct RingBuffer<Element> {
             self.currentIndex += 1
         }
     }
-}
 
-public func == <Element>(lhs: RingBuffer<Element>, rhs: RingBuffer<Element>) -> Bool where Element: Equatable {
-    return lhs.array == rhs.array
+    public static func == <Element>(lhs: RingBuffer<Element>, rhs: RingBuffer<Element>) -> Bool where Element: Equatable {
+        return lhs.array == rhs.array
+    }
 }
 
 extension RingBuffer: MutableCollection, RandomAccessCollection {

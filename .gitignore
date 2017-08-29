@@ -23,3 +23,9 @@ DerivedData
 .bundle
 
 Pods/
+
+/docs/*
+!/docs/jazzy-theme/
+!/docs/jazzy-theme/*
+!/docs/abstracts/
+!/docs/abstracts/*

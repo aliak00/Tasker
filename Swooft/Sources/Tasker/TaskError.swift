@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum TaskError: Error {
+public enum TaskError: Error {
     case interceptorFailed(Error)
     case interceptorTimedOut(String)
     case cancelled

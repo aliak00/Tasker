@@ -16,15 +16,14 @@
 
 import Foundation
 
-// TODO:
-enum InterceptorExecutionStyle {
-    /// The interceptor is asynchronous, manager will fire it off and continue execution
-    case asynchronous
-    /// The interceptor is asynchronous, but the manager will wait till it's done callback is called before continuing
-    case waitForCompletion
-    /// The interceptor is immediate, the manager will assume it is done when it returns
-    case immediate
-}
+//enum InterceptorExecutionStyle {
+//    /// The interceptor is asynchronous, manager will fire it off and continue execution
+//    case asynchronous
+//    /// The interceptor is asynchronous, but the manager will wait till it's done callback is called before continuing
+//    case waitForCompletion
+//    /// The interceptor is immediate, the manager will assume it is done when it returns
+//    case immediate
+//}
 
 public struct TaskInterceptorConfiguration {
     let isImmediate: Bool

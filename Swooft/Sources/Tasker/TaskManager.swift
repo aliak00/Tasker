@@ -55,7 +55,7 @@ private class TaskData {
 
 public class TaskManager {
 
-    public struct LogTag {
+    public struct LoggerTag {
         public static let manager = "tm"
         public static let task = "tk-q"
         public static let op = "op-q"
@@ -63,21 +63,21 @@ public class TaskManager {
         public static let interceptor = "in-q"
     }
 
-    private static let kOpQTags = [LogTag.manager, LogTag.op]
-    private static let kInQTags = [LogTag.manager, LogTag.interceptor]
-    private static let kCbOpQTags = [LogTag.manager, LogTag.op, LogTag.cb]
-    private static let kTkQTags = [LogTag.manager, LogTag.task]
-    private static let kCbInQTags = [LogTag.manager, LogTag.interceptor, LogTag.cb]
+    private static let kOpQTags = [LoggerTag.manager, LoggerTag.op]
+    private static let kInQTags = [LoggerTag.manager, LoggerTag.interceptor]
+    private static let kCbOpQTags = [LoggerTag.manager, LoggerTag.op, LoggerTag.cb]
+    private static let kTkQTags = [LoggerTag.manager, LoggerTag.task]
+    private static let kCbInQTags = [LoggerTag.manager, LoggerTag.interceptor, LoggerTag.cb]
 
     private static let logKeys: Void = {
         Logger.shared.log(
             "log keys = ["
-                + "\(LogTag.task): task queue, "
-                + "\(LogTag.op): operation queue, "
-                + "\(LogTag.cb): callback, "
-                + "\(LogTag.interceptor): interceptor queue"
+                + "\(LoggerTag.task): task queue, "
+                + "\(LoggerTag.op): operation queue, "
+                + "\(LoggerTag.cb): callback, "
+                + "\(LoggerTag.interceptor): interceptor queue"
                 + "]",
-            tag: LogTag.manager
+            tag: LoggerTag.manager
         )
     }()
 

@@ -1,6 +1,14 @@
 
+author: Ali Akhtarzada
+module: Swooft
 readme: README.md
 hide_documentation_coverage: true
+
+theme: docs/jazzy-theme/
+abstract: docs/abstracts/*.md
+
+# author_url:
+# github_url:
 
 xcodebuild_arguments: [
   -workspace,
@@ -12,7 +20,7 @@ xcodebuild_arguments: [
 ]
 
 custom_categories:
-  - name: AsyncAwait
+  - name: AsyncTask
     children:
       - AsyncTask
   - name: Atomics
@@ -41,8 +49,3 @@ custom_categories:
   - name: Utils
     children:
       - Weak
-
-  - name: LogTags
-    children:
-      - TaskManager.LogTag
-      
