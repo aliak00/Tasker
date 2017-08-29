@@ -2,13 +2,14 @@
 author: Ali Akhtarzada
 module: Swooft
 readme: README.md
+podspec: Swooft.podspec
 hide_documentation_coverage: true
 
 theme: docs/jazzy-theme/
 abstract: docs/abstracts/*.md
 
-# author_url:
-# github_url:
+author_url: https://github.com/aliak00/
+github_url: https://github.com/aliak00/swooft.git
 
 xcodebuild_arguments: [
   -workspace,
