@@ -8,7 +8,8 @@ theme: docs/jazzy-theme/
 abstract: docs/abstracts/*.md
 
 author_url: https://github.com/aliak00/
-github_url: https://github.com/aliak00/swooft.git
+github_url: https://github.com/aliak00/swooft/
+root_url: https://github.com/aliak00/swooft/
 
 xcodebuild_arguments: [
   -workspace,
