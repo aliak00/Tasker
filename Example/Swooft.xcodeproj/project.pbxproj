@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		69CF2F5A4A9B4EB8F06D21A3 /* Pods_Swooft_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */; };
+		E103B32A1F574DE9000F3F70 /* ProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3291F574DE9000F3F70 /* ProfilerTests.swift */; };
 		E17C3FB31F5372E30002ADFF /* RingBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C3FB21F5372E30002ADFF /* RingBufferTests.swift */; };
 		E18AD0EC1F50B3AD00757478 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E61F50B3AD00757478 /* Configuration.swift */; };
 		E18AD0ED1F50B3AD00757478 /* ScenarioBatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */; };
@@ -35,6 +36,7 @@
 		956BD3EEF87BAD2FA1F00F8B /* Swooft.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Swooft.podspec; path = ../Swooft.podspec; sourceTree = "<group>"; };
 		97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swooft_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB23F84E0C87F16C518F852E /* Pods-Swooft_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		E103B3291F574DE9000F3F70 /* ProfilerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilerTests.swift; sourceTree = "<group>"; };
 		E17C3FB21F5372E30002ADFF /* RingBufferTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBufferTests.swift; sourceTree = "<group>"; };
 		E18AD0E61F50B3AD00757478 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenarioBatchingTests.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E103B3281F574DB1000F3F70 /* Profiler */,
 				E17C3FB01F5371300002ADFF /* Collections */,
 				E18AD1071F50B8D400757478 /* Logger */,
 				E18AD0F41F50B3DE00757478 /* Doubles */,
@@ -133,6 +136,14 @@
 				E8BBF77C8B1AB741F355F151 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		E103B3281F574DB1000F3F70 /* Profiler */ = {
+			isa = PBXGroup;
+			children = (
+				E103B3291F574DE9000F3F70 /* ProfilerTests.swift */,
+			);
+			path = Profiler;
 			sourceTree = "<group>";
 		};
 		E17C3FB01F5371300002ADFF /* Collections */ = {
@@ -341,6 +352,7 @@
 				E18AD0ED1F50B3AD00757478 /* ScenarioBatchingTests.swift in Sources */,
 				E18AD0EF1F50B3AD00757478 /* TaskHandleTests.swift in Sources */,
 				E18AD0EE1F50B3AD00757478 /* ScenarioValidatingRetryingTests.swift in Sources */,
+				E103B32A1F574DE9000F3F70 /* ProfilerTests.swift in Sources */,
 				E18AD1061F50B40900757478 /* YieldingIterator.swift in Sources */,
 				E18AD1041F50B40900757478 /* Ensure.swift in Sources */,
 				E18AD0FD1F50B3F600757478 /* TaskManagerSpy.swift in Sources */,

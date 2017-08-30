@@ -42,6 +42,10 @@ A group of libraries that provide some utility
     result.source_files  = ['Swooft/Sources/Result/**/*.swift']
   end
 
+  s.subspec 'Profiler' do |profiler|
+    profiler.source_files = ['Swooft/Sources/Profiler/**/*.swift']
+  end
+
   s.subspec 'Logger' do |logger|
     logger.source_files  = ['Swooft/Sources/Logger/**/*.swift']
     logger.dependency 'Swooft/Collections/RingBuffer'

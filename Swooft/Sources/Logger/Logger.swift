@@ -75,6 +75,7 @@ public class Logger {
         }
 
         let fileName: String = {
+            // this should be a cache lru or something, lest memory go wild
             if let name = self.filePathMemo[file] {
                 return name
             }
