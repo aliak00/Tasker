@@ -33,8 +33,14 @@ custom_categories:
   - name: Logger
     children:
       - Logger
+  - name: Profiler
+    children:
+      - Profiler
+      - ProfilerConfiguration
+      - ProfilerResults
   - name: Result
     children:
+      - AnyResult
       - Result
   - name: Tasker
     children:
