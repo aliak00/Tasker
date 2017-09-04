@@ -29,6 +29,9 @@ custom_categories:
       - AtomicInt
   - name: Collections
     children:
+      - Cache
+      - LinkedList
+      - LinkedListNode
       - RingBuffer
   - name: Logger
     children:

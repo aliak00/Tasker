@@ -17,8 +17,8 @@
 import Foundation
 
 public struct AtomicInt {
-    private var queue = DispatchQueue(label: "Swooft.AtomicInt")
-    private var _value = 0
+    fileprivate var queue = DispatchQueue(label: "Swooft.AtomicInt")
+    fileprivate var _value = 0
 
     public var value: Int {
         get {
@@ -54,5 +54,14 @@ public struct AtomicInt {
             self._value -= 1
         }
         return previousValue
+    }
+}
+
+extension AtomicInt: Equatable {
+    ///
+    public static func == (lhs: AtomicInt, rhs: AtomicInt) -> Bool {
+        return lhs.queue.sync {
+            lhs._value == rhs.value
+        }
     }
 }

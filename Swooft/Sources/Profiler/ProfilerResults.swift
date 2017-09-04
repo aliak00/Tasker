@@ -1,12 +1,12 @@
 /*
  Copyright 2017 Ali Akhtarzada
- 
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
  http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,39 +20,37 @@ public struct ProfilerResults: CustomStringConvertible {
     let label: String
     let configuration: ProfilerConfiguration
     let results: [String: Double]
-    
+
     public subscript(tag: String) -> Double? {
-        get {
-            return self.results[tag]
-        }
+        return self.results[tag]
     }
 
     public func descending() -> [(tag: String, duration: Double)] {
         return self.results.sorted {
-            return $0.1 > $1.1
+            $0.1 > $1.1
         }.map { (tag: $0.0, duration: $0.1) }
     }
-    
+
     public func ascending() -> [(tag: String, duration: Double)] {
         return self.results.sorted {
-            return $0.1 < $1.1
+            $0.1 < $1.1
         }.map { (tag: $0.0, duration: $0.1) }
     }
-    
+
     public var description: String {
-        
+
         let header = "[profiler:\(self.label)] threads: \(self.configuration.threadCount), samples: \(self.configuration.sampleCount)"
-        
+
         if self.results.count == 1, let duration = self.results[self.label] {
             return header + ", time: \(duration) ms"
         }
-        
+
         let sortedResults = self.descending()
-        
+
         guard sortedResults.count > 0 else {
             return "You haven't profiled anything numbnuts"
         }
-        
+
         var lines: [String] = []
         var previousDuration: Double?
         for result in sortedResults {

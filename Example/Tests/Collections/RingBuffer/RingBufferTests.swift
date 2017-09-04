@@ -27,7 +27,7 @@ func equal<T: Equatable>(_ expected: RingBuffer<T>) -> Predicate<RingBuffer<T>> 
     }
 }
 
-public func ==<T: Equatable>(lhs: Expectation<RingBuffer<T>>, rhs: RingBuffer<T>) {
+func == <T: Equatable>(lhs: Expectation<RingBuffer<T>>, rhs: RingBuffer<T>) {
     lhs.to(equal(rhs))
 }
 
@@ -38,9 +38,9 @@ class RingBufferTests: QuickSpec {
         describe("ring buffer") {
 
             it("should wrap appends") {
-                var r1: RingBuffer<Int> = [1, 2, 3]
+                var r1 = RingBuffer(elementsDictatingCapacity: [1, 2, 3])
                 r1.append(4)
-                let r2: RingBuffer<Int> = [4, 2, 3]
+                let r2 = RingBuffer(elementsDictatingCapacity: [4, 2, 3])
                 expect(r1) == r2
             }
 
@@ -50,13 +50,13 @@ class RingBufferTests: QuickSpec {
                 r1.append(0)
                 r1.append(0)
                 expect(r1.count) == 2
-                let r2: RingBuffer<Int> = [0, 0]
+                let r2 = RingBuffer(elementsDictatingCapacity: [0, 0])
                 expect(r1) == r2
             }
 
             it("should equal another similar") {
-                let r1: RingBuffer<Int> = [0, 1, 2]
-                let r2: RingBuffer<Int> = [0, 1, 2]
+                let r1 = RingBuffer(elementsDictatingCapacity: [0, 1, 2])
+                let r2 = RingBuffer(elementsDictatingCapacity: [0, 1, 2])
                 expect(r1) == r2
             }
         }

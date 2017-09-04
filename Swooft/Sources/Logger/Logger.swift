@@ -22,17 +22,18 @@ public class Logger {
     private var transports: [(String) -> Void] = []
     private var allowedTags = Set<String>()
     private var ignoredTags = Set<String>()
-    private var filePathMemo: [String: String] = [:]
+    private var filePathMemo: Cache<String, String>
     private var historyBuffer: RingBuffer<String>?
 
     public var printTags = false
 
-    public init() {
-        self.historyBuffer = nil
-    }
-
-    public init(logHistorySize: Int) {
-        self.historyBuffer = RingBuffer(capacity: logHistorySize)
+    public init(logHistorySize: Int? = nil, fileLookupMemoCapacity: Int = 50) {
+        if let logHistorySize = logHistorySize {
+            self.historyBuffer = RingBuffer(capacity: logHistorySize)
+        } else {
+            self.historyBuffer = nil
+        }
+        self.filePathMemo = Cache(capacity: fileLookupMemoCapacity)
     }
 
     public func addTransport(_ transport: @escaping (String) -> Void) {

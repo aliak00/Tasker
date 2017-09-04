@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		69CF2F5A4A9B4EB8F06D21A3 /* Pods_Swooft_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */; };
 		E103B32A1F574DE9000F3F70 /* ProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3291F574DE9000F3F70 /* ProfilerTests.swift */; };
+		E103B3351F5C5952000F3F70 /* LinkedListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3341F5C5952000F3F70 /* LinkedListTests.swift */; };
+		E103B3381F5C596F000F3F70 /* CacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3371F5C596F000F3F70 /* CacheTests.swift */; };
 		E17C3FB31F5372E30002ADFF /* RingBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C3FB21F5372E30002ADFF /* RingBufferTests.swift */; };
 		E18AD0EC1F50B3AD00757478 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E61F50B3AD00757478 /* Configuration.swift */; };
 		E18AD0ED1F50B3AD00757478 /* ScenarioBatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */; };
@@ -37,6 +39,8 @@
 		97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swooft_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB23F84E0C87F16C518F852E /* Pods-Swooft_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		E103B3291F574DE9000F3F70 /* ProfilerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilerTests.swift; sourceTree = "<group>"; };
+		E103B3341F5C5952000F3F70 /* LinkedListTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedListTests.swift; sourceTree = "<group>"; };
+		E103B3371F5C596F000F3F70 /* CacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheTests.swift; sourceTree = "<group>"; };
 		E17C3FB21F5372E30002ADFF /* RingBufferTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBufferTests.swift; sourceTree = "<group>"; };
 		E18AD0E61F50B3AD00757478 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenarioBatchingTests.swift; sourceTree = "<group>"; };
@@ -146,9 +150,27 @@
 			path = Profiler;
 			sourceTree = "<group>";
 		};
+		E103B3331F5C5931000F3F70 /* LinkedList */ = {
+			isa = PBXGroup;
+			children = (
+				E103B3341F5C5952000F3F70 /* LinkedListTests.swift */,
+			);
+			path = LinkedList;
+			sourceTree = "<group>";
+		};
+		E103B3361F5C5957000F3F70 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				E103B3371F5C596F000F3F70 /* CacheTests.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
 		E17C3FB01F5371300002ADFF /* Collections */ = {
 			isa = PBXGroup;
 			children = (
+				E103B3361F5C5957000F3F70 /* Cache */,
+				E103B3331F5C5931000F3F70 /* LinkedList */,
 				E17C3FB11F5372A70002ADFF /* RingBuffer */,
 			);
 			path = Collections;
@@ -357,6 +379,8 @@
 				E18AD1041F50B40900757478 /* Ensure.swift in Sources */,
 				E18AD0FD1F50B3F600757478 /* TaskManagerSpy.swift in Sources */,
 				E18AD0FC1F50B3F600757478 /* InterceptorSpy.swift in Sources */,
+				E103B3351F5C5952000F3F70 /* LinkedListTests.swift in Sources */,
+				E103B3381F5C596F000F3F70 /* CacheTests.swift in Sources */,
 				E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */,
 				E18AD0FA1F50B3F600757478 /* AsyncTaskSpy.swift in Sources */,
 				E18AD1001F50B40100757478 /* AsyncTaskTests.swift in Sources */,

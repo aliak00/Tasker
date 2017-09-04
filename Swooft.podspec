@@ -32,6 +32,13 @@ A group of libraries that provide some utility
     collections.subspec 'RingBuffer' do |ringbuffer|
       ringbuffer.source_files  = ['Swooft/Sources/Collections/RingBuffer/**/*.swift']
     end
+    collections.subspec 'Cache' do |cache|
+      cache.source_files  = ['Swooft/Sources/Collections/Cache/**/*.swift']
+      cache.dependency 'Swooft/Collections/LinkedList'
+    end
+    collections.subspec 'LinkedList' do |linkedlist|
+      linkedlist.source_files  = ['Swooft/Sources/Collections/LinkedList/**/*.swift']
+    end
   end
 
   s.subspec 'Atomics' do |atomics|
@@ -49,6 +56,7 @@ A group of libraries that provide some utility
   s.subspec 'Logger' do |logger|
     logger.source_files  = ['Swooft/Sources/Logger/**/*.swift']
     logger.dependency 'Swooft/Collections/RingBuffer'
+    logger.dependency 'Swooft/Collections/Cache'
   end
 
   s.subspec 'Tasker' do |tasker|

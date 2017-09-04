@@ -15,9 +15,15 @@ PODS:
     - Swooft/Tasker
   - Swooft/Atomics (0.1.0)
   - Swooft/Collections (0.1.0):
+    - Swooft/Collections/Cache (= 0.1.0)
+    - Swooft/Collections/LinkedList (= 0.1.0)
     - Swooft/Collections/RingBuffer (= 0.1.0)
+  - Swooft/Collections/Cache (0.1.0):
+    - Swooft/Collections/LinkedList
+  - Swooft/Collections/LinkedList (0.1.0)
   - Swooft/Collections/RingBuffer (0.1.0)
   - Swooft/Logger (0.1.0):
+    - Swooft/Collections/Cache
     - Swooft/Collections/RingBuffer
   - Swooft/Profiler (0.1.0)
   - Swooft/Result (0.1.0)
@@ -44,7 +50,7 @@ SPEC CHECKSUMS:
   Nimble: 657d000e11df8aebe27cdaf9d244de7f30ed87f7
   Quick: dafc587e21eed9f4cab3249b9f9015b0b7a7f71d
   SwiftFormat: 7455708e7d4b7e822803c5237500cd03b756bc4a
-  Swooft: bde03ec89b5e4e95c6bbac30ddd3a7c559da9c30
+  Swooft: 1c701ae436c73261ed6985c59c7619a20a1032b9
 
 PODFILE CHECKSUM: f8774aff2b228cb2369f97342231fb07f169e556
 

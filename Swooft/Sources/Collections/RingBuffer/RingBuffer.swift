@@ -21,6 +21,16 @@ public struct RingBuffer<Element> {
     fileprivate var currentIndex = 0
     public let capacity: Int
 
+    public init(desiredCapacity: Int, initialElements: [Element]) {
+        self.init(capacity: Swift.max(desiredCapacity, initialElements.count))
+        self.array.append(contentsOf: initialElements)
+    }
+
+    public init(elementsDictatingCapacity: [Element]) {
+        self.init(capacity: elementsDictatingCapacity.count)
+        self.array = elementsDictatingCapacity
+    }
+
     public init(capacity: Int) {
         self.capacity = capacity
         self.array.reserveCapacity(capacity)
@@ -36,6 +46,9 @@ public struct RingBuffer<Element> {
     }
 }
 
+///
+/// Two ring buffers are equal if their elements are equal
+///
 public func == <Element>(lhs: RingBuffer<Element>, rhs: RingBuffer<Element>) -> Bool where Element: Equatable {
     return lhs.array == rhs.array
 }
@@ -61,13 +74,6 @@ extension RingBuffer: MutableCollection, RandomAccessCollection {
         set(element) {
             self.array[(self.currentIndex + index) % self.array.count] = element
         }
-    }
-}
-
-extension RingBuffer: ExpressibleByArrayLiteral {
-    public init(arrayLiteral elements: Element...) {
-        self.init(capacity: elements.count)
-        self.array = elements
     }
 }
 
