@@ -18,7 +18,6 @@ import Quick
 import Nimble
 @testable import Swooft
 
-
 func == <Key: Hashable, Value: Equatable>(lhs: Cache<Key, Value>, rhs: Cache<Key, Value>) -> Bool {
     guard lhs.queue.count == rhs.queue.count else {
         return false

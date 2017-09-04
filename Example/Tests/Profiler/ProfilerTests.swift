@@ -77,6 +77,54 @@ class ProfilerTests: QuickSpec {
                 expect(results[1].tag) == "2ms"
                 expect(results[2].tag) == "3ms"
             }
+
+            xit("blah") {
+                let configuration = ProfilerConfiguration(threadCount: 1, sampleCount: 10)
+                let profiler = Profiler(label: "memoize or get path component", configuration: configuration)
+
+                let numberOfFiles: UInt32 = 150
+                let numberOfLogs = 5000
+
+                var files: [String] = []
+                for i in 0..<numberOfLogs {
+                    files.append("some/path/\(Int(Float(arc4random()) / Float(UInt32.max) * 100)).ext")
+                }
+
+                func noop(_: String) {}
+
+                for capacity in [5, 20, 50, 75, 100, 120, 180, 200, 300, 400] {
+                    var cache = Cache<String, String>(capacity: capacity)
+                    profiler.profile(tag: "memo-\(capacity)") {
+                        for file in files {
+                            let name: String = {
+                                if let name = cache[file] {
+                                    return name
+                                }
+                                let name = URL(fileURLWithPath: file)
+                                    .deletingPathExtension().lastPathComponent
+                                let value = name.isEmpty ? "Unknown file" : name
+                                cache[file] = value
+                                return value
+                            }()
+                            noop(name)
+                        }
+                    }
+                }
+
+                profiler.profile(tag: "no-memo") {
+                    for file in files {
+                        let name: String = {
+                            let name = URL(fileURLWithPath: file)
+                                .deletingPathExtension().lastPathComponent
+                            let value = name.isEmpty ? "Unknown file" : name
+                            return value
+                        }()
+                        noop(name)
+                    }
+                }
+
+                print(profiler.results)
+            }
         }
     }
 }
