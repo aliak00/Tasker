@@ -19,10 +19,10 @@ import Nimble
 @testable import Swooft
 
 func == <Key: Hashable, Value: Equatable>(lhs: Cache<Key, Value>, rhs: Cache<Key, Value>) -> Bool {
-    guard lhs.queue.count == rhs.queue.count else {
+    guard lhs.lru.count == rhs.lru.count else {
         return false
     }
-    for key in lhs.queue {
+    for key in lhs.lru {
         guard lhs.store[key]?.value == rhs.store[key]?.value else {
             return false
         }
@@ -50,14 +50,14 @@ class CacheTests: QuickSpec {
         describe("subscript set") {
 
             it("should set elements") {
-                var cache = Cache<Int, Int>(capacity: 2)
+                let cache = Cache<Int, Int>(capacity: 2)
                 cache[0] = 10
                 cache[1] = 20
                 expect(cache) == Cache(elementsDictatingCapacity: [0: 10, 1: 20])
             }
 
             it("should ensure removal last accessed element") {
-                var cache = Cache<Int, Int>(capacity: 2)
+                let cache = Cache<Int, Int>(capacity: 2)
                 cache[0] = 10
                 cache[1] = 20
                 cache[2] = 30
@@ -68,14 +68,14 @@ class CacheTests: QuickSpec {
         describe("subscript get") {
 
             it("should get elements") {
-                var cache = Cache(elementsDictatingCapacity: [0: 10, 1: 20])
+                let cache = Cache(elementsDictatingCapacity: [0: 10, 1: 20])
                 expect(cache[0]) == 10
                 expect(cache[1]) == 20
                 expect(cache[2]).to(beNil())
             }
 
             it("should ensure removal last accessed element") {
-                var cache = Cache(elementsDictatingCapacity: [0: 10, 1: 20])
+                let cache = Cache(elementsDictatingCapacity: [0: 10, 1: 20])
                 _ = cache[0]
                 _ = cache[1]
                 cache[2] = 30

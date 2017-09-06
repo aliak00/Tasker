@@ -79,7 +79,7 @@ class ProfilerTests: QuickSpec {
             }
 
             xit("blah") {
-                let configuration = ProfilerConfiguration(threadCount: 1, sampleCount: 10)
+                let configuration = ProfilerConfiguration(threadCount: 2, sampleCount: 10)
                 let profiler = Profiler(label: "memoize or get path component", configuration: configuration)
 
                 let numberOfFiles: UInt32 = 150
@@ -93,7 +93,7 @@ class ProfilerTests: QuickSpec {
                 func noop(_: String) {}
 
                 for capacity in [5, 20, 50, 75, 100, 120, 180, 200, 300, 400] {
-                    var cache = Cache<String, String>(capacity: capacity)
+                    let cache = Cache<String, String>(capacity: capacity)
                     profiler.profile(tag: "memo-\(capacity)") {
                         for file in files {
                             let name: String = {

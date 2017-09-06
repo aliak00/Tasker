@@ -16,22 +16,23 @@
 
 import Foundation
 
-public struct Cache<Key: Hashable, Value> {
+public class Cache<Key: Hashable, Value> {
 
     typealias List = LinkedList<Key>
-    var queue = List()
+    var lru = List()
     var store: [Key: (node: List.Node, value: Value)] = [:]
+    let queue = DispatchQueue(label: "Swooft.Cache")
 
     let capacity: Int
 
-    public init(desiredCapacity: Int, initialElements: [Key: Value]) {
+    public convenience init(desiredCapacity: Int, initialElements: [Key: Value]) {
         self.init(capacity: Swift.max(desiredCapacity, initialElements.count))
         for (key, value) in initialElements {
             self[key] = value
         }
     }
 
-    public init(elementsDictatingCapacity: [Key: Value]) {
+    public convenience init(elementsDictatingCapacity: [Key: Value]) {
         self.init(desiredCapacity: elementsDictatingCapacity.count, initialElements: elementsDictatingCapacity)
     }
 
@@ -39,39 +40,51 @@ public struct Cache<Key: Hashable, Value> {
         self.capacity = capacity
     }
 
-    public subscript(key: Key) -> Value? {
-        mutating get {
-            guard let data = self.store[key] else {
-                return nil
+    // Not thread safe
+    private func setValue(_ value: Value?, forKey key: Key) {
+        guard let value = value else {
+            if let data = self.store.removeValue(forKey: key) {
+                self.lru.remove(data.node)
             }
+            return
+        }
 
-            self.queue.remove(data.node)
-            self.queue.append(data.node)
-            return data.value
+        if self.store.count >= self.capacity, let node = self.lru.removeBack() {
+            self.store[node.value] = nil
+        }
+        self.store[key] = (node: self.lru.append(key), value: value)
+    }
+
+    public subscript(key: Key) -> Value? {
+        get {
+            return self.queue.sync {
+                guard let data = self.store[key] else {
+                    return nil
+                }
+
+                self.lru.remove(data.node)
+                self.lru.append(data.node)
+                return data.value
+            }
         }
 
         set(newValue) {
-            guard let value = newValue else {
-                if let data = self.store.removeValue(forKey: key) {
-                    self.queue.remove(data.node)
-                }
-                return
+            self.queue.async(flags: .barrier) { [weak self] in
+                self?.setValue(newValue, forKey: key)
             }
-
-            if self.store.count >= self.capacity, let node = self.queue.removeBack() {
-                self.store[node.value] = nil
-            }
-            self.store[key] = (node: self.queue.append(key), value: value)
         }
     }
 }
 
 extension Cache: CustomStringConvertible {
     public var description: String {
+        let storeCopy = self.queue.sync {
+            return self.store
+        }
         var string = "["
-        for (index, element) in self.store.enumerated() {
+        for (index, element) in storeCopy.enumerated() {
             string += "\(element.key): \(element.value.value)"
-            if index + 1 < self.store.count {
+            if index + 1 < storeCopy.count {
                 string += ", "
             }
         }
