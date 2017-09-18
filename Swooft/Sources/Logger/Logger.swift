@@ -16,50 +16,105 @@
 
 import Foundation
 
+/**
+ A logging class that can be told where to log to. A lot of different components within
+ Swooft use the shared logger to output log information.
+
+ The logger optionally keeps a history of recent logs in memory if you tell it to during
+ construction.
+
+ ## Filtering
+
+ Two methods exist to allow for filtering of the log stream.
+
+ - `Logger.filterUnless(tag:)`
+ - `Logger.filterIf(tag:)`
+
+ ## Performance
+
+ Each log call is given the current line, file and func that the message is
+ logged from. The file is file path is out in to a `URL` object and the
+ extension removed. This is optionally memoized inside a cache object to avoid
+ the operation on each log call.
+ */
 public class Logger {
+    /// Shared logger object
     public static let shared = Logger()
 
     private var transports: [(String) -> Void] = []
     private var allowedTags = Set<String>()
     private var ignoredTags = Set<String>()
-    private var filePathMemo: Cache<String, String>
+    private var filePathMemo: Cache<String, String>?
     private var historyBuffer: RingBuffer<String>?
 
+    /// Set to true if you want the tags to be printed as well
     public var printTags = false
 
-    public init(logHistorySize: Int? = nil, fileLookupMemoCapacity: Int = 50) {
+    /**
+     Initializes a Logger object
+
+     - parameter logHistorySize: How many entried to keep in the history
+     - parameter fileLookupMemoCapacity: How big you want the file lookup cache to be
+     */
+    public init(logHistorySize: Int? = nil, fileLookupMemoCapacity: Int? = 100) {
         if let logHistorySize = logHistorySize {
             self.historyBuffer = RingBuffer(capacity: logHistorySize)
         } else {
             self.historyBuffer = nil
         }
-        self.filePathMemo = Cache(capacity: fileLookupMemoCapacity)
+        if let fileLookupMemoCapacity = fileLookupMemoCapacity {
+            self.filePathMemo = Cache(capacity: fileLookupMemoCapacity)
+        } else {
+            self.filePathMemo = nil
+        }
     }
 
+    /**
+     Adding a transport allows you to customize where the output goes to. You may add as
+     many as you like.
+
+     - parameter transport: function that is called with each log invocaton
+     */
     public func addTransport(_ transport: @escaping (String) -> Void) {
         self.transports.append(transport)
     }
 
+    /// Filters log messages unless they are tagged with `tag`
     public func filterUnless(tag: String) {
         self.allowedTags.insert(tag)
     }
 
+    /// Filters log messages unless they are tagged with any of `tags`
     public func filterUnless(tags: [String]) {
         self.allowedTags = self.allowedTags.union(tags)
     }
 
+    /// Filters log messages if they are tagged with `tag`
     public func filterIf(tag: String) {
         self.ignoredTags.insert(tag)
     }
 
+    /// Filters log messages if they are tagged with any of `tags`
     public func filterIf(tags: [String]) {
         self.ignoredTags = self.ignoredTags.union(tags)
     }
 
+    /**
+     Logs any `T` by using string interpolation
+
+     - parameter object: autoclosure statment to be logged
+     - parameter tag: a tag to apply to this log
+     */
     public func log<T>(_ object: @autoclosure () -> T, tag: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
         self.log(object(), tags: [tag], file, function, line)
     }
 
+    /**
+     Logs any `T` by using string interpolation
+
+     - parameter object: autoclosure statment to be logged
+     - parameter tags: a set of tags to apply to this log
+     */
     public func log<T>(_ object: @autoclosure () -> T, tags: [String] = [], _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
         guard self.transports.count > 0 else {
             return
@@ -76,14 +131,13 @@ public class Logger {
         }
 
         let fileName: String = {
-            // this should be a cache lru or something, lest memory go wild
-            if let name = self.filePathMemo[file] {
+            if let name = self.filePathMemo?[file] {
                 return name
             }
             let name = URL(fileURLWithPath: file)
                 .deletingPathExtension().lastPathComponent
             let value = name.isEmpty ? "Unknown file" : name
-            self.filePathMemo[file] = value
+            self.filePathMemo?[file] = value
             return value
         }()
         let tid = pthread_mach_thread_np(pthread_self())
