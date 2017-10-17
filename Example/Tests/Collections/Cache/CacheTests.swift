@@ -18,7 +18,7 @@ import Quick
 import Nimble
 @testable import Swooft
 
-func == <Key: Hashable, Value: Equatable>(lhs: Cache<Key, Value>, rhs: Cache<Key, Value>) -> Bool {
+func == <Key, Value: Equatable>(lhs: Cache<Key, Value>, rhs: Cache<Key, Value>) -> Bool {
     guard lhs.lru.count == rhs.lru.count else {
         return false
     }
@@ -30,7 +30,7 @@ func == <Key: Hashable, Value: Equatable>(lhs: Cache<Key, Value>, rhs: Cache<Key
     return true
 }
 
-func equal<K: Hashable, V: Equatable>(_ expected: Cache<K, V>) -> Predicate<Cache<K, V>> {
+func equal<K, V: Equatable>(_ expected: Cache<K, V>) -> Predicate<Cache<K, V>> {
     return Predicate.simple("equal \(expected)") { expression in
         guard let actual = try expression.evaluate() else {
             return .doesNotMatch
@@ -39,7 +39,7 @@ func equal<K: Hashable, V: Equatable>(_ expected: Cache<K, V>) -> Predicate<Cach
     }
 }
 
-func == <K: Hashable, V: Equatable>(lhs: Expectation<Cache<K, V>>, rhs: Cache<K, V>) {
+func == <K, V: Equatable>(lhs: Expectation<Cache<K, V>>, rhs: Cache<K, V>) {
     lhs.to(equal(rhs))
 }
 
