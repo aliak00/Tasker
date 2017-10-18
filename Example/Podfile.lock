@@ -1,7 +1,7 @@
 PODS:
-  - Nimble (7.0.1)
-  - Quick (1.1.0)
-  - SwiftFormat/CLI (0.29.3)
+  - Nimble (7.0.2)
+  - Quick (1.2.0)
+  - SwiftFormat/CLI (0.29.8)
   - Swooft (0.1.0):
     - Swooft/AsyncTask (= 0.1.0)
     - Swooft/Atomics (= 0.1.0)
@@ -47,11 +47,11 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  Nimble: 657d000e11df8aebe27cdaf9d244de7f30ed87f7
-  Quick: dafc587e21eed9f4cab3249b9f9015b0b7a7f71d
-  SwiftFormat: 7455708e7d4b7e822803c5237500cd03b756bc4a
+  Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
+  Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
+  SwiftFormat: 2cfa63c918808f8960d343cb4ac4f3e85cd901ae
   Swooft: 1c701ae436c73261ed6985c59c7619a20a1032b9
 
-PODFILE CHECKSUM: f8774aff2b228cb2369f97342231fb07f169e556
+PODFILE CHECKSUM: 72726bc6beb9265f0aede21898e6adb86b6cad19
 
 COCOAPODS: 1.3.1

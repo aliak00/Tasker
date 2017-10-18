@@ -6,5 +6,5 @@ target 'Swooft_Tests' do
   
   pod 'SwiftFormat/CLI'
   pod 'Quick'
-  pod 'Nimble', :inhibit_warnings => true
+  pod 'Nimble'
 end
