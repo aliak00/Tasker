@@ -55,5 +55,7 @@ func sleep(for interval: DispatchTimeInterval) {
         }
     case let .seconds(value):
         usleep(useconds_t(1000 * 1000 * value))
+    case .never:
+        break
     }
 }
