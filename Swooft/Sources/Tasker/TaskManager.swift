@@ -32,7 +32,6 @@ private class TaskData {
     fileprivate var operation: TaskOperation
     fileprivate var anyTask: AnyTask<Any>
     fileprivate var errorCallback: (TaskError) -> Void
-    fileprivate var timeout: DispatchTimeInterval?
     fileprivate var timeoutWorkItem: DispatchWorkItem?
     fileprivate var intercept: (TaskData) -> InterceptTaskResult
 
@@ -40,14 +39,12 @@ private class TaskData {
         operation: TaskOperation,
         anyTask: AnyTask<Any>,
         errorCallback: @escaping (TaskError) -> Void,
-        timeout: DispatchTimeInterval?,
         timeoutWorkItem: DispatchWorkItem?,
         intercept: @escaping (TaskData) -> InterceptTaskResult
     ) {
         self.operation = operation
         self.anyTask = anyTask
         self.errorCallback = errorCallback
-        self.timeout = timeout
         self.timeoutWorkItem = timeoutWorkItem
         self.intercept = intercept
     }
@@ -110,6 +107,11 @@ public class TaskManager {
 
     let identifier: Int
 
+    /**
+     Initializes this manager object.
+
+     - parameter interceptors: an array of interceptors that will be applied to every task before being started
+     */
     public init(interceptors: [TaskInterceptor] = []) {
         TaskManager.logKeys
         self.taskOperationQueue.isSuspended = false
@@ -117,6 +119,16 @@ public class TaskManager {
         self.identifier = type(of: self).counter.getAndIncrement()
     }
 
+    /**
+     Add a task to the manager. You may choose to start the task immediately or start if yourself via the `TaskHandle` that
+     is returned. Additionally, you can also set an interval on when to start the task but that is only valid if `startImmediately`
+     is set to true
+
+     - parameter task: the task to run
+     - parameter startImmediately: set this to false if you want to call start on the `TaskHandle` that's returned
+     - parameter after: set this to some value if you want the task to start running after some interval
+     - parameter completionHandler: called after the task is done with the result of `Task.execute`
+     */
     @discardableResult
     public func add<T: Task>(
         task: T,
@@ -145,7 +157,7 @@ public class TaskManager {
             }
 
             guard !operation.isCancelled else {
-                Logger.shared.log("\(handle) operation.execute => operation cancelled", tags: TaskManager.kOpQTags)
+                Logger.shared.log("\(handle) operation => operation cancelled", tags: TaskManager.kOpQTags)
                 return
             }
 
@@ -158,25 +170,19 @@ public class TaskManager {
                 return
             }
 
-            let intercept: (TaskData) -> InterceptTaskResult = { [weak self, weak task, weak handle] data in
-                guard let strongSelf = self else {
-                    return .ignore
-                }
-                guard let task = task else {
-                    return .ignore
-                }
-                guard let handle = handle else {
+            let intercept: (TaskData) -> InterceptTaskResult = { [weak task, weak handle] data in
+                guard let strongSelf = self, let task = task, let handle = handle else {
                     return .ignore
                 }
                 return strongSelf.interceptTask(task, handle: handle, operation: data.operation)
             }
 
             Logger.shared.log("adding \(handle) for \(T.self) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
+
             let data = TaskData(
                 operation: operation,
                 anyTask: AnyTask(task: task),
                 errorCallback: { completionHandler?(.failure($0)) },
-                timeout: task.timeout,
                 timeoutWorkItem: nil,
                 intercept: intercept
             )
@@ -218,10 +224,6 @@ public class TaskManager {
                 return
             }
 
-            if task.timeout != nil {
-                strongSelf.cancelTimeoutWork(for: handle)
-            }
-
             // Get off whatever thread the task called the callback on
             strongSelf.taskQueue.async { [weak handle] in
                 guard let strongSelf = self else {
@@ -232,6 +234,9 @@ public class TaskManager {
                     Logger.shared.log("\(T.self).execute => handle dead", tags: TaskManager.kTkQTags)
                     return
                 }
+
+                strongSelf.pendingTasks[handle]?.timeoutWorkItem?.cancel()
+
                 //
                 // Now check if we need to execute any of the interceptors. If we do and the interceptor is configured
                 // to requeue the task then we are done here. Else we fire up the interceptors and finishes the task
@@ -401,73 +406,31 @@ public class TaskManager {
 
     private func launchTimeoutWork(for handle: OwnedTaskHandle, withTimeout timeout: DispatchTimeInterval) {
         self.taskQueue.async { [weak self, weak handle] in
-            guard let strongSelf = self else {
-                Logger.shared.log("manager dead", tags: TaskManager.kTkQTags)
-                return
-            }
-
             guard let handle = handle else {
                 Logger.shared.log("handle dead", tags: TaskManager.kTkQTags)
                 return
             }
-
-            guard let data = strongSelf.pendingTasks[handle] else {
+            guard let data = self?.pendingTasks[handle] else {
                 Logger.shared.log("\(handle) data unavailable", tags: TaskManager.kTkQTags)
                 return
             }
-
             let timeoutWorkItem = DispatchWorkItem { [weak self, weak handle, weak data] in
-                guard let strongSelf = self else {
-                    Logger.shared.log("manager dead", tags: TaskManager.kTkQTags)
-                    return
-                }
                 guard let handle = handle else {
                     Logger.shared.log("handle dead", tags: TaskManager.kTkQTags)
                     return
                 }
-                guard let timeoutWorkItem = data?.timeoutWorkItem else {
-                    Logger.shared.log("\(handle) has no timeoutWorkItem", tags: TaskManager.kTkQTags)
-                    return
-                }
-                guard !timeoutWorkItem.isCancelled else {
+                guard let workItem = data?.timeoutWorkItem, !workItem.isCancelled else {
                     Logger.shared.log("\(handle) timeoutWorkItem cancelled", tags: TaskManager.kTkQTags)
                     return
                 }
-                Logger.shared.log("\(handle) timed out at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
-                strongSelf.removeAndCancel(handle: handle, with: .timedOut)
+                self?.removeAndCancel(handle: handle, with: .timedOut)
             }
 
             data.timeoutWorkItem = timeoutWorkItem
-            strongSelf.taskQueue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem)
+            self?.taskQueue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem)
         }
     }
 
-    private func cancelTimeoutWork(for handle: OwnedTaskHandle) {
-        self.taskQueue.async { [weak self, weak handle] in
-            guard let strongSelf = self else {
-                Logger.shared.log("manager dead", tags: TaskManager.kTkQTags)
-                return
-            }
-
-            guard let handle = handle else {
-                Logger.shared.log("handle dead", tags: TaskManager.kTkQTags)
-                return
-            }
-
-            guard let data = strongSelf.pendingTasks[handle] else {
-                Logger.shared.log("\(handle) data unavailable", tags: TaskManager.kTkQTags)
-                return
-            }
-
-            guard let timeoutWorkItem = data.timeoutWorkItem else {
-                Logger.shared.log("\(handle) timeoutWorkItem unavailable", tags: TaskManager.kTkQTags)
-                return
-            }
-
-            timeoutWorkItem.cancel()
-            data.timeoutWorkItem = nil
-        }
-    }
     private func launchInterceptors(at indices: [Int], on finishedHandle: OwnedTaskHandle, requeueTask: Bool, suspendQueue: Bool) {
         //
         // Executing the interceptors involves the following:
@@ -710,7 +673,7 @@ public class TaskManager {
             Logger.shared.log("\(handle) already removed", tags: TaskManager.kTkQTags)
             return
         }
-        Logger.shared.log("removed \(handle) at \(self.startTime.elapsed)", tags: TaskManager.kTkQTags)
+        Logger.shared.log("removed \(handle) at \(self.startTime.elapsed) with error \(error as Any)", tags: TaskManager.kTkQTags)
         data.operation.cancel()
         guard let error = error else {
             return
