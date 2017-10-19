@@ -26,7 +26,7 @@ class AsyncTaskTests: QuickSpec {
         describe("async") {
 
             it("should call execute") {
-                let task = AsyncTaskSpy { _ in .success() }
+                let task = AsyncTaskSpy { }
                 task.async()
                 ensure(task.completionHandlerCallCount).becomes(1)
             }
@@ -50,7 +50,7 @@ class AsyncTaskTests: QuickSpec {
         describe("await") {
 
             it("should return value") {
-                let task = AsyncTaskSpy { _ in true }
+                let task = AsyncTaskSpy { true }
                 let value = try! task.await()
                 expect(value).to(beTrue())
             }

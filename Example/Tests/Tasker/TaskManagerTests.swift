@@ -51,7 +51,7 @@ class TaskManagerTests: QuickSpec {
                 var didStartAfter: DispatchTime!
                 let task = TaskSpy<Void> { cb in
                     didStartAfter = .now()
-                    cb(.success())
+                    cb(.success(()))
                 }
 
                 manager.add(task: task, after: interval)

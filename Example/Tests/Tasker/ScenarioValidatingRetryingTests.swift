@@ -58,7 +58,7 @@ private class UserTask: Task, UserDependent, Retriable {
             completionHandler(.failure(RandomFailure()))
             return
         }
-        completionHandler(.success())
+        completionHandler(.success(()))
     }
 }
 

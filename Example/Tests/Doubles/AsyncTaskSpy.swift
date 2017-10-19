@@ -24,21 +24,15 @@ class AsyncTaskSpy<T> {
     var completionHandlerCallData: [Result<T>] = []
 
     public init(execute: @escaping (@escaping (Result<T>) -> Void) -> Void) {
-        self.asyncTask = AsyncTask { (cb: @escaping (Result<T>) -> Void) in
-            execute(cb)
-        }
+        self.asyncTask = AsyncTask(execute: execute)
     }
 
-    public convenience init(execute: @escaping () -> Result<T>) {
-        self.init { (cb: (Result<T>) -> Void) in
-            cb(execute())
-        }
+    public init(execute: @escaping () -> Result<T>) {
+        self.asyncTask = AsyncTask(execute: execute)
     }
 
-    public convenience init(execute: @escaping () -> T) {
-        self.init { (cb: (Result<T>) -> Void) in
-            cb(.success(execute()))
-        }
+    public init(execute: @escaping () -> T) {
+        self.asyncTask = AsyncTask(execute: execute)
     }
 
     @discardableResult

@@ -57,6 +57,6 @@ class TaskSpy<T>: Task {
 
 extension TaskSpy where T == Void {
     convenience init() {
-        self.init { $0(.success()) }
+        self.init { $0(.success(())) }
     }
 }

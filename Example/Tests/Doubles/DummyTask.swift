@@ -12,7 +12,7 @@ import Swooft
 class DummyTask: Task {
     typealias SuccessValue = Void
     func execute(completionHandler: @escaping (Result<Void>) -> Void) {
-        completionHandler(.success())
+        completionHandler(.success(()))
     }
 }
 

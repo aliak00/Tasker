@@ -89,7 +89,7 @@ class TaskInterceptorTests: QuickSpec {
 
                 // First let it hang, it should pause the queue then we can call the callback later to finish the interceptor
                 interceptor.executeBlock = { interceptor.executeCallCount == 0 ? () : $0(nil) }
-                interceptor.shouldExecuteBlock = { _ in interceptor.shouldExecuteCallCount == 0 }
+                interceptor.shouldExecuteBlock = { _,_,_  in interceptor.shouldExecuteCallCount == 0 }
 
                 let manager = TaskManagerSpy(interceptors: [interceptor])
                 manager.add(task: kDummyTask)
@@ -101,7 +101,7 @@ class TaskInterceptorTests: QuickSpec {
                 var handles: [(TaskHandle, SuccessTaskSpy)] = []
                 for _ in (0..<50).yielded(by: .milliseconds(1)) {
                     let task = SuccessTaskSpy()
-                    handles.append(manager.add(task: task), task)
+                    handles.append((manager.add(task: task), task))
                 }
 
                 for (handle, task) in handles {

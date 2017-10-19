@@ -39,7 +39,7 @@ class InterceptorSpy: TaskInterceptor {
     var interceptCallCount = 0
     var interceptCallData: [(weakAnyTask: WeakAnyTask, currentBatchCount: Int)] = []
     var interceptCallResultData: [InterceptCommand] = []
-    var interceptBlock: (AnyTask<Any>, Int) -> InterceptCommand = { _ in .execute }
+    var interceptBlock: (AnyTask<Any>, Int) -> InterceptCommand = { _,_  in .execute }
 
     var executeCallCount = 0
     var executeCallData: [(Error?) -> Void] = []
@@ -47,7 +47,7 @@ class InterceptorSpy: TaskInterceptor {
 
     var shouldExecuteCallCount = 0
     var shouldExecuteCallData: [(anyResult: AnyResult, anyTask: WeakAnyTask, handle: TaskHandle)] = []
-    var shouldExecuteBlock: (AnyResult, AnyTask<Any>, TaskHandle) -> Bool = { _ in true }
+    var shouldExecuteBlock: (AnyResult, AnyTask<Any>, TaskHandle) -> Bool = { _,_,_  in true }
 
     func intercept<T: Task>(task: T, currentBatchCount: Int) -> InterceptCommand {
         defer { self.interceptCallCount += 1 }
