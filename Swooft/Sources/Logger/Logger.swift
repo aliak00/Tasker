@@ -48,7 +48,10 @@ public class Logger {
     private var historyBuffer: RingBuffer<String>?
 
     /// Set to true if you want the tags to be printed as well
-    public var printTags = false
+    public var outputTags = false
+
+    /// If this is true then it ignores all logs
+    public var enabled = true
 
     /**
      Initializes a Logger object
@@ -70,7 +73,7 @@ public class Logger {
     }
 
     /**
-     Adding a transport allows you to customize where the output goes to. You may add as
+     Adding a transport allows you to tell the logger where the output goes to. You may add as
      many as you like.
 
      - parameter transport: function that is called with each log invocaton
@@ -115,20 +118,13 @@ public class Logger {
      - parameter object: autoclosure statment to be logged
      - parameter tags: a set of tags to apply to this log
      */
-    public func log<T>(_ object: @autoclosure () -> T, tags: [String] = [], _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+    public func log<T>(_ object: @autoclosure () -> T, tags userTags: [String] = [], _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
         guard self.transports.count > 0 else {
             return
         }
 
-        let string = "\(object())"
-
-        if self.ignoredTags.count > 0 && self.ignoredTags.intersection(tags).count > 0 {
-            return
-        }
-
-        if self.allowedTags.count > 0 && self.allowedTags.intersection(tags).count == 0 {
-            return
-        }
+        let functionName = function.components(separatedBy: "(").first ?? ""
+        let thread = Thread.isMainThread ? "UI" : "BG"
 
         let fileName: String = {
             if let name = self.filePathMemo?[file] {
@@ -140,16 +136,26 @@ public class Logger {
             self.filePathMemo?[file] = value
             return value
         }()
-        let tid = pthread_mach_thread_np(pthread_self())
-        let queue = Thread.isMainThread ? "UI" : "BG"
 
-        let functionName = function.components(separatedBy: "(")[0]
+        var allTags = [functionName, thread, fileName]
+        allTags.append(contentsOf: userTags)
+
+        if self.ignoredTags.count > 0 && self.ignoredTags.intersection(allTags).count > 0 {
+            return
+        }
+
+        if self.allowedTags.count > 0 && self.allowedTags.intersection(allTags).count == 0 {
+            return
+        }
+
+        let tid = pthread_mach_thread_np(pthread_self())
+        let string = "\(object())"
 
         var tagsString = ""
-        if tags.count > 0 && self.printTags {
-            tagsString = ":\(tags.joined(separator: ","))"
+        if userTags.count > 0 && self.outputTags {
+            tagsString = ":\(userTags.joined(separator: ","))"
         }
-        let output = "[\(queue)-\(tid):\(fileName):\(line):\(functionName)\(tagsString)] => \(string)"
+        let output = "[\(thread)-\(tid):\(fileName):\(line):\(functionName)\(tagsString)] => \(string)"
         self.historyBuffer?.append(output)
         for transport in self.transports {
             transport(output)

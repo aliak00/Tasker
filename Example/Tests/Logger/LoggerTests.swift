@@ -29,7 +29,7 @@ class LoggerTests: QuickSpec {
                 var log = ""
 
                 let logger = Logger()
-                logger.printTags = true
+                logger.outputTags = true
 
                 logger.addTransport { log += $0 }
                 logger.log("something", tags: tags)
@@ -42,7 +42,7 @@ class LoggerTests: QuickSpec {
                 var log = ""
 
                 let logger = Logger()
-                logger.printTags = false
+                logger.outputTags = false
 
                 logger.addTransport { log += $0 }
                 logger.log("something", tags: tags)
