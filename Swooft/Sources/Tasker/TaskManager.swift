@@ -54,7 +54,7 @@ private class TaskData {
  A task manager can be given an arbitrary number of `Task`s and initialized with a set of `TaskInterceptor`s
  and then takes care of asynchronous execution for you.
  */
-public class TaskManager {
+public class TaskManager: SharedLoggerEnabled {
 
     /**
      Thes log tags can be passed to filter the logs produced by the TaskManager
@@ -147,17 +147,17 @@ public class TaskManager {
             }
 
             guard let handle = handle else {
-                Logger.shared.log("\(T.self) operation => handle dead", tags: TaskManager.kOpQTags)
+                strongSelf.log("operation => handle dead", tags: TaskManager.kOpQTags)
                 return
             }
 
             guard let task = task else {
-                Logger.shared.log("\(handle) operation => task dead", tags: TaskManager.kOpQTags)
+                strongSelf.log("\(handle) operation => task dead", tags: TaskManager.kOpQTags)
                 return
             }
 
             guard !operation.isCancelled else {
-                Logger.shared.log("\(handle) operation => operation cancelled", tags: TaskManager.kOpQTags)
+                strongSelf.log("\(handle) operation => operation cancelled", tags: TaskManager.kOpQTags)
                 return
             }
 
@@ -177,7 +177,7 @@ public class TaskManager {
                 return strongSelf.interceptTask(task, handle: handle, operation: data.operation)
             }
 
-            Logger.shared.log("adding \(handle) for \(T.self) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
+            strongSelf.log("adding \(handle) for \(T.self) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
 
             let data = TaskData(
                 operation: operation,
@@ -203,7 +203,7 @@ public class TaskManager {
             self.launchTimeoutWork(for: handle, withTimeout: timeout)
         }
 
-        Logger.shared.log("executing \(handle) (\(T.self)) at \(self.startTime.elapsed)", tags: TaskManager.kOpQTags)
+        self.log("executing \(handle) (\(T.self)) at \(self.startTime.elapsed)", tags: TaskManager.kOpQTags)
 
         task.execute { [weak self, weak task, weak handle, weak operation] result in
 
@@ -213,14 +213,14 @@ public class TaskManager {
             }
 
             guard let handle = handle else {
-                Logger.shared.log("\(T.self) handle dead", tags: TaskManager.kCbOpQTags)
+                strongSelf.log("\(T.self) handle dead", tags: TaskManager.kCbOpQTags)
                 return
             }
 
-            Logger.shared.log("executed \(handle) (\(T.self)) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kCbOpQTags)
+            strongSelf.log("executed \(handle) (\(T.self)) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kCbOpQTags)
 
             guard let task = task else {
-                Logger.shared.log("\(handle) \(T.self) task dead", tags: TaskManager.kCbOpQTags)
+                strongSelf.log("\(handle) \(T.self) task dead", tags: TaskManager.kCbOpQTags)
                 return
             }
 
@@ -231,7 +231,7 @@ public class TaskManager {
                     return
                 }
                 guard let handle = handle else {
-                    Logger.shared.log("\(T.self).execute => handle dead", tags: TaskManager.kTkQTags)
+                    strongSelf.log("\(T.self).execute => handle dead", tags: TaskManager.kTkQTags)
                     return
                 }
 
@@ -248,7 +248,7 @@ public class TaskManager {
                     var requeueTask = memo.requeueTask
                     var suspendQueue = memo.suspendQueue
                     if interceptor.shouldExecute(after: result, from: task, with: handle) {
-                        Logger.shared.log("should intercept \(handle) with \(interceptor.self) on \(result)", tags: TaskManager.kTkQTags)
+                        strongSelf.log("should intercept \(handle) with \(interceptor.self) on \(result)", tags: TaskManager.kTkQTags)
                         indices.append(index)
                         requeueTask = memo.requeueTask || interceptor.configuration.requeuesTask
                         suspendQueue = memo.suspendQueue || interceptor.configuration.suspendsTaskQueue
@@ -271,19 +271,19 @@ public class TaskManager {
                 }
 
                 guard let operation = operation, !operation.isCancelled else {
-                    Logger.shared.log("\(handle) \(T.self).execute => operation dead or cancelled", tags: TaskManager.kTkQTags)
+                    strongSelf.log("\(handle) \(T.self).execute => operation dead or cancelled", tags: TaskManager.kTkQTags)
                     return
                 }
 
                 if let data = strongSelf.pendingTasks.removeValue(forKey: handle) {
                     assert(data.operation === operation)
                     data.operation.markFinished()
-                    Logger.shared.log("\(T.self) finishing \(handle) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
+                    strongSelf.log("\(T.self) finishing \(handle) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
                     strongSelf.taskQueue.async {
                         completionHandler?(result)
                     }
                 } else {
-                    Logger.shared.log("\(T.self) => \(handle) already removed", tags: TaskManager.kTkQTags)
+                    strongSelf.log("\(T.self) => \(handle) already removed", tags: TaskManager.kTkQTags)
                 }
             }
         }
@@ -309,7 +309,7 @@ public class TaskManager {
         var executeInterceptorIndices: [Int] = []
         var handles = [handle]
         for (index, interceptor) in self.interceptors.enumerated() {
-            Logger.shared.log("intercepting \(handle) with \(interceptor)", tags: TaskManager.kInQTags)
+            self.log("intercepting \(handle) with \(interceptor)", tags: TaskManager.kInQTags)
             switch interceptor.intercept(task: task, currentBatchCount: self.tasksToBatch[index]?.count ?? 0) {
             case .forceExecute:
                 shouldBeForceExecuted = true
@@ -329,13 +329,13 @@ public class TaskManager {
         }
 
         if shouldBeIgnored && !shouldBeForceExecuted {
-            Logger.shared.log("ignoring \(T.self) with \(handle) at \(self.startTime.elapsed)", tags: TaskManager.kTkQTags)
+            self.log("ignoring \(T.self) with \(handle) at \(self.startTime.elapsed)", tags: TaskManager.kTkQTags)
             self.cancel(handle: handle, with: nil)
             return .ignore
         }
 
         if let index = interceptorIndexHoldingTask, !shouldBeForceExecuted {
-            Logger.shared.log("holding \(T.self) with \(handle) at \(self.startTime.elapsed)", tags: TaskManager.kTkQTags)
+            self.log("holding \(T.self) with \(handle) at \(self.startTime.elapsed)", tags: TaskManager.kTkQTags)
             self.tasksToBatch[index] = self.tasksToBatch[index] ?? []
             self.tasksToBatch[index]?.append(Weak(handle))
             return .ignore
@@ -350,7 +350,7 @@ public class TaskManager {
             self.tasksToBatch[index] = nil
         }
 
-        Logger.shared.log("carrying on \(T.self) with \(handles) at \(self.startTime.elapsed)", tags: TaskManager.kTkQTags)
+        self.log("carrying on \(T.self) with \(handles) at \(self.startTime.elapsed)", tags: TaskManager.kTkQTags)
         return .execute(handles)
     }
 
@@ -361,21 +361,21 @@ public class TaskManager {
 
         func interceptAndStart(data: TaskData, on handle: OwnedTaskHandle, manager: TaskManager) {
             guard manager.interceptors.count > 0 else {
-                Logger.shared.log("starting operation for \(handle) at \(manager.startTime.elapsed)", tags: TaskManager.kTkQTags)
+                self.log("starting operation for \(handle) at \(manager.startTime.elapsed)", tags: TaskManager.kTkQTags)
                 manager.taskOperationQueue.addOperation(data.operation)
                 return
             }
             guard case let .execute(handles) = data.intercept(data) else {
-                Logger.shared.log("ignoring operation for \(handle) at \(manager.startTime.elapsed)", tags: TaskManager.kTkQTags)
+                self.log("ignoring operation for \(handle) at \(manager.startTime.elapsed)", tags: TaskManager.kTkQTags)
                 return
             }
 
             for handle in handles {
                 guard let operation = manager.pendingTasks[handle]?.operation else {
-                    Logger.shared.log("\(handle) not found", tags: TaskManager.kTkQTags)
+                    self.log("\(handle) not found", tags: TaskManager.kTkQTags)
                     return
                 }
-                Logger.shared.log("adding operation to \(handle) at \(manager.startTime.elapsed)", tags: TaskManager.kTkQTags)
+                self.log("adding operation to \(handle) at \(manager.startTime.elapsed)", tags: TaskManager.kTkQTags)
                 manager.taskOperationQueue.addOperation(operation)
             }
         }
@@ -385,18 +385,18 @@ public class TaskManager {
             interceptAndStart(data: data, on: handle, manager: self)
             return
         }
-        Logger.shared.log("\(handle) will add operation \(interval)", tags: TaskManager.kTkQTags)
+        self.log("\(handle) will add operation \(interval)", tags: TaskManager.kTkQTags)
         self.taskQueue.asyncAfter(deadline: .now() + interval) { [weak self, weak handle, weak data] in
             guard let strongSelf = self else {
                 Logger.shared.log("manager dead", tags: TaskManager.kTkQTags)
                 return
             }
             guard let handle = handle else {
-                Logger.shared.log("handle dead", tags: TaskManager.kTkQTags)
+                strongSelf.log("handle dead", tags: TaskManager.kTkQTags)
                 return
             }
             guard let data = data, !data.operation.isCancelled else {
-                Logger.shared.log("\(handle) operation dead or cancelled", tags: TaskManager.kTkQTags)
+                strongSelf.log("\(handle) operation dead or cancelled", tags: TaskManager.kTkQTags)
                 return
             }
 
@@ -407,20 +407,20 @@ public class TaskManager {
     private func launchTimeoutWork(for handle: OwnedTaskHandle, withTimeout timeout: DispatchTimeInterval) {
         self.taskQueue.async { [weak self, weak handle] in
             guard let handle = handle else {
-                Logger.shared.log("handle dead", tags: TaskManager.kTkQTags)
+                self?.log("handle dead", tags: TaskManager.kTkQTags)
                 return
             }
             guard let data = self?.pendingTasks[handle] else {
-                Logger.shared.log("\(handle) data unavailable", tags: TaskManager.kTkQTags)
+                self?.log("\(handle) data unavailable", tags: TaskManager.kTkQTags)
                 return
             }
             let timeoutWorkItem = DispatchWorkItem { [weak self, weak handle, weak data] in
                 guard let handle = handle else {
-                    Logger.shared.log("handle dead", tags: TaskManager.kTkQTags)
+                    self?.log("handle dead", tags: TaskManager.kTkQTags)
                     return
                 }
                 guard let workItem = data?.timeoutWorkItem, !workItem.isCancelled else {
-                    Logger.shared.log("\(handle) timeoutWorkItem cancelled", tags: TaskManager.kTkQTags)
+                    self?.log("\(handle) timeoutWorkItem cancelled", tags: TaskManager.kTkQTags)
                     return
                 }
                 self?.removeAndCancel(handle: handle, with: .timedOut)
@@ -450,14 +450,14 @@ public class TaskManager {
                 return
             }
 
-            Logger.shared.log("\(indices), requeue: \(requeueTask), suspend: \(suspendQueue), \(finishedHandle as Any)", tags: TaskManager.kTkQTags)
+            strongSelf.log("\(indices), requeue: \(requeueTask), suspend: \(suspendQueue), \(finishedHandle as Any)", tags: TaskManager.kTkQTags)
 
             if requeueTask {
                 guard let handle = finishedHandle else {
-                    Logger.shared.log("handle dead, cannot requeue", tags: TaskManager.kTkQTags)
+                    strongSelf.log("handle dead, cannot requeue", tags: TaskManager.kTkQTags)
                     return
                 }
-                Logger.shared.log("saving handle \(handle) to requeue list", tags: TaskManager.kTkQTags)
+                strongSelf.log("saving handle \(handle) to requeue list", tags: TaskManager.kTkQTags)
                 strongSelf.tasksToRequeue.insert(handle)
 
                 // Associate this handle with the interceptors only if it's supposed to be requeued
@@ -470,12 +470,12 @@ public class TaskManager {
             // No need to run executors that are already executing
             let interceptorIndices = Set(indices).subtracting(strongSelf.executingInterceptors)
             guard interceptorIndices.count > 0 else {
-                Logger.shared.log("already executing \(strongSelf.executingInterceptors)", tags: TaskManager.kTkQTags)
+                strongSelf.log("already executing \(strongSelf.executingInterceptors)", tags: TaskManager.kTkQTags)
                 return
             }
 
             if suspendQueue {
-                Logger.shared.log("suspending task queue at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
+                strongSelf.log("suspending task queue at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
                 strongSelf.taskOperationQueue.isSuspended = true
             }
 
@@ -486,7 +486,7 @@ public class TaskManager {
 
                 // If interceptor is immediate than mark it and move on
                 if interceptor.configuration.isImmediate {
-                    Logger.shared.log("adding immediate interceptor \(interceptor.self)", tags: TaskManager.kTkQTags)
+                    strongSelf.log("adding immediate interceptor \(interceptor.self)", tags: TaskManager.kTkQTags)
                     immediateInterceptorIndices.insert(index)
                     continue
                 }
@@ -500,7 +500,7 @@ public class TaskManager {
                         return
                     }
 
-                    Logger.shared.log("executing interceptor \(interceptor.self) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kInQTags)
+                    strongSelf.log("executing interceptor \(interceptor.self) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kInQTags)
 
                     interceptor.execute { [weak self] maybeError in
 
@@ -512,19 +512,20 @@ public class TaskManager {
                         }
 
                         guard !interceptorWorkItem.isCancelled else {
-                            Logger.shared.log("\(interceptor.self) cancelled", tags: TaskManager.kCbInQTags)
+                            strongSelf.log("\(interceptor.self) cancelled", tags: TaskManager.kCbInQTags)
                             return
                         }
 
-                        Logger.shared.log("executed interceptor \(interceptor.self) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kCbInQTags)
+                        strongSelf.log("executed interceptor \(interceptor.self) at \(strongSelf.startTime.elapsed)", tags: TaskManager.kCbInQTags)
 
                         // Get off of whichever queue interceptor execute completed on
                         strongSelf.taskQueue.async { [weak self] in
-                            Logger.shared.log("removing queued interceptor \(interceptor.self)", tags: TaskManager.kTkQTags)
                             guard let strongSelf = self else {
                                 Logger.shared.log("manager dead", tags: TaskManager.kTkQTags)
                                 return
                             }
+
+                            strongSelf.log("removing queued interceptor \(interceptor.self)", tags: TaskManager.kTkQTags)
 
                             if let error = maybeError {
                                 strongSelf.cancelAssociatedTasksForInterceptor(at: index, with: .interceptorFailed(error))
@@ -547,7 +548,7 @@ public class TaskManager {
                             interceptorWorkItem.cancel()
 
                             guard let timeoutWorkItem = maybeTimeoutWorkItem, !timeoutWorkItem.isCancelled else {
-                                Logger.shared.log("\(interceptor.self) timeout work cancelled", tags: TaskManager.kTkQTags)
+                                self?.log("\(interceptor.self) timeout work cancelled", tags: TaskManager.kTkQTags)
                                 return
                             }
 
@@ -556,7 +557,7 @@ public class TaskManager {
                                 return
                             }
 
-                            Logger.shared.log("interceptor \(interceptor.self) timed out at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
+                            strongSelf.log("interceptor \(interceptor.self) timed out at \(strongSelf.startTime.elapsed)", tags: TaskManager.kTkQTags)
 
                             strongSelf.taskQueue.async {
                                 strongSelf.cancelAssociatedTasksForInterceptor(at: index, with: .interceptorTimedOut("\(interceptor)"))
@@ -576,7 +577,7 @@ public class TaskManager {
 
             // If we only had immediate interceptors make sure queue is suspended and requeue tasks
             if strongSelf.executingInterceptors.count == 0 {
-                Logger.shared.log("unsuspending task queue", tags: TaskManager.kTkQTags)
+                strongSelf.log("unsuspending task queue", tags: TaskManager.kTkQTags)
                 strongSelf.taskOperationQueue.isSuspended = false
                 strongSelf.requeueTasks()
             }
@@ -589,7 +590,7 @@ public class TaskManager {
         }
         for handle in self.tasksToRequeue {
             if let data = self.pendingTasks[handle] {
-                Logger.shared.log("requeueing \(handle)", tags: TaskManager.kTkQTags)
+                self.log("requeueing \(handle)", tags: TaskManager.kTkQTags)
                 data.operation.markFinished()
                 data.operation = TaskOperation(executor: data.operation.executor)
                 data.operation.markReady()
@@ -606,7 +607,7 @@ public class TaskManager {
         DispatchQueue.concurrentPerform(iterations: indicies.count) { index in
             let semaphore = DispatchSemaphore(value: 0)
             let interceptor = self.interceptors[index]
-            Logger.shared.log("executing immediate interceptor \(interceptor.self)", tags: TaskManager.kInQTags)
+            self.log("executing immediate interceptor \(interceptor.self)", tags: TaskManager.kInQTags)
             var maybeError: TaskError?
             interceptor.execute { error in
                 if let error = error {
@@ -620,10 +621,10 @@ public class TaskManager {
                 semaphore.wait()
             }
             guard let error = maybeError else {
-                Logger.shared.log("executed immediate interceptor \(interceptor.self)", tags: TaskManager.kInQTags)
+                self.log("executed immediate interceptor \(interceptor.self)", tags: TaskManager.kInQTags)
                 return
             }
-            Logger.shared.log("immediate interceptor \(interceptor.self) failed with: \(error)", tags: TaskManager.kInQTags)
+            self.log("immediate interceptor \(interceptor.self) failed with: \(error)", tags: TaskManager.kInQTags)
             self.taskQueue.async { [weak self] in
                 self?.cancelAssociatedTasksForInterceptor(at: index, with: .interceptorFailed(error))
             }
@@ -637,10 +638,10 @@ public class TaskManager {
         var allTheData: [TaskData] = []
         for handle in self.interceptorAssoiciatedHandles[index] ?? Set<OwnedTaskHandle>() {
             if let data = self.pendingTasks.removeValue(forKey: handle) {
-                Logger.shared.log("removed handle \(handle) for interceptor \(index)", tags: TaskManager.kTkQTags)
+                self.log("removed handle \(handle) for interceptor \(index)", tags: TaskManager.kTkQTags)
                 allTheData.append(data)
                 if self.tasksToRequeue.remove(handle) != nil {
-                    Logger.shared.log("removing \(handle) from requeue list", tags: TaskManager.kTkQTags)
+                    self.log("removing \(handle) from requeue list", tags: TaskManager.kTkQTags)
                 }
             }
         }
@@ -670,10 +671,10 @@ public class TaskManager {
             __dispatch_assert_queue(self.taskQueue)
         }
         guard let data = self.pendingTasks.removeValue(forKey: handle) else {
-            Logger.shared.log("\(handle) already removed", tags: TaskManager.kTkQTags)
+            self.log("\(handle) already removed", tags: TaskManager.kTkQTags)
             return
         }
-        Logger.shared.log("removed \(handle) at \(self.startTime.elapsed) with error \(error as Any)", tags: TaskManager.kTkQTags)
+        self.log("removed \(handle) at \(self.startTime.elapsed) with error \(error as Any)", tags: TaskManager.kTkQTags)
         data.operation.cancel()
         guard let error = error else {
             return
@@ -690,7 +691,7 @@ public class TaskManager {
                 return
             }
             guard let handle = handle else {
-                Logger.shared.log("handle dead", tags: TaskManager.kTkQTags)
+                strongSelf.log("handle dead", tags: TaskManager.kTkQTags)
                 return
             }
             strongSelf.removeAndCancel(handle: handle, with: error)
@@ -704,7 +705,7 @@ public class TaskManager {
                 return
             }
             guard let handle = handle else {
-                Logger.shared.log("handle dead", tags: TaskManager.kTkQTags)
+                strongSelf.log("handle dead", tags: TaskManager.kTkQTags)
                 return
             }
             if let data = strongSelf.pendingTasks[handle] {
@@ -716,10 +717,10 @@ public class TaskManager {
     func taskState(for handle: OwnedTaskHandle) -> TaskState {
         let maybeOperation = self.taskQueue.sync { () -> TaskOperation? in
             guard let data = self.pendingTasks[handle] else {
-                Logger.shared.log("\(handle) not found", tags: TaskManager.kTkQTags)
+                self.log("\(handle) not found", tags: TaskManager.kTkQTags)
                 return nil
             }
-            Logger.shared.log("\(handle) operation state is \(data.operation.state)", tags: TaskManager.kTkQTags)
+            self.log("\(handle) operation state is \(data.operation.state)", tags: TaskManager.kTkQTags)
             return data.operation
         }
         guard let operation = maybeOperation else {

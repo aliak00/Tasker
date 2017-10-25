@@ -19,7 +19,7 @@ import Foundation
 public protocol SharedLoggerEnabled: LoggerEnabled {}
 
 extension SharedLoggerEnabled {
-    var logger: Logger {
+    public var logger: Logger {
         return Logger.shared
     }
 }

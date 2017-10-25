@@ -17,6 +17,7 @@
 import Foundation
 
 public protocol LoggerEnabled {
+    static var LogTag: String { get }
     var logger: Logger { get }
     func log<T>(_ object: @autoclosure () -> T, _ file: String, _ function: String, _ line: Int)
     func log<T>(_ object: @autoclosure () -> T, tag: String, _ file: String, _ function: String, _ line: Int)
@@ -24,17 +25,21 @@ public protocol LoggerEnabled {
 }
 
 extension LoggerEnabled {
-    func log<T>(_ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+    public static var LogTag: String {
+        return String(describing: type(of: self))
+    }
+
+    public func log<T>(_ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
         self.log(object(), tags: [], file, function, line)
     }
 
-    func log<T>(_ object: @autoclosure () -> T, tag: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+    public func log<T>(_ object: @autoclosure () -> T, tag: String, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
         self.log(object(), tags: [tag], file, function, line)
     }
 
-    func log<T>(_ object: @autoclosure () -> T, tags: [String], _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+    public func log<T>(_ object: @autoclosure () -> T, tags: [String], _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
         var tags = tags
-        tags.append(String(describing: type(of: self)))
+        tags.append(Self.LogTag)
         self.logger.log(object(), tags: tags, file, function, line)
     }
 }
