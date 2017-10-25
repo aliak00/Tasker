@@ -1,0 +1,53 @@
+/*
+ Copyright 2017 Ali Akhtarzada
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+import Quick
+import Nimble
+
+@testable import Swooft
+
+private class Interceptor: TaskInterceptor {
+    func intercept<T>(task: inout T, currentBatchCount _: Int) -> InterceptCommand where T : Task {
+        guard let task = task as? URLInterceptor.DataTask else {
+            return .execute
+        }
+        task.request.addValue("hahaha", forHTTPHeaderField: "hahaha")
+        return .execute
+    }
+}
+
+class URLInterceptorTests: QuickSpec {
+
+    override func spec() {
+
+        describe("test") {
+            fit("should") {
+                Logger.shared.addTransport { print($0) }
+                let urlInterceptor = URLInterceptor(interceptors: [Interceptor()], configuration: URLSessionConfiguration.default)
+                let task = urlInterceptor.session.dataTask(with: URL(string: "http://www.example.com")!) { data, response, error in
+                    print(data as Any)
+                    print(response as Any)
+                    print(error as Any)
+                }
+                task.resume()
+//                task.cancel()
+
+                ensure(task.state.rawValue).becomes(URLSessionTask.State.completed.rawValue)
+
+            }
+        }
+    }
+}

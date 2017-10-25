@@ -50,7 +50,7 @@ public protocol TaskInterceptor {
      This is called on every task and allows you to tell the task manager how to treat
      this task based on the `InterceptCommand` that you return
      */
-    func intercept<T: Task>(task: T, currentBatchCount: Int) -> InterceptCommand
+    func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand
 
     /**
      Return true if you want this interceptor to be executed
@@ -73,7 +73,7 @@ public protocol TaskInterceptor {
 }
 
 public extension TaskInterceptor {
-    func intercept<T: Task>(task _: T, currentBatchCount _: Int) -> InterceptCommand {
+    func intercept<T: Task>(task _: inout T, currentBatchCount _: Int) -> InterceptCommand {
         return .execute
     }
 

@@ -120,7 +120,7 @@ class TaskInterceptorTests: QuickSpec {
             }
         }
 
-        describe("interceptor") {
+        describe("intercept") {
 
             it("should be called with task") {
                 let interceptor = InterceptorSpy()
@@ -129,6 +129,20 @@ class TaskInterceptorTests: QuickSpec {
                 manager.add(task: task)
                 ensure(interceptor.interceptCallCount).becomes(1)
                 expect(interceptor.interceptCallData[0].weakAnyTask.anyTask) === task
+            }
+
+            it("should modify original task") {
+                let interceptor = InterceptorSpy()
+                interceptor.interceptBlock = { anyTask, _ in
+                    let task = anyTask.internalTask as! SuccessTaskSpy
+                    task.executeCallCount = 100
+                    return .execute
+                }
+                let manager = TaskManagerSpy(interceptors: [interceptor])
+                let task = SuccessTaskSpy()
+                manager.add(task: task)
+                ensure(interceptor.interceptCallCount).becomes(1)
+                ensure(task.executeCallCount).becomes(101)
             }
         }
     }

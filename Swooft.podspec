@@ -39,6 +39,9 @@ A group of libraries that provide some utility
     collections.subspec 'LinkedList' do |linkedlist|
       linkedlist.source_files  = ['Swooft/Sources/Collections/LinkedList/**/*.swift']
     end
+    collections.subspec 'SynchronizedDictionary' do |synchronizeddictionary|
+      synchronizeddictionary.source_files  = ['Swooft/Sources/Collections/SynchronizedDictionary/**/*.swift']
+    end
   end
 
   s.subspec 'Atomics' do |atomics|
@@ -70,6 +73,12 @@ A group of libraries that provide some utility
   s.subspec 'AsyncTask' do |asynctask|
     asynctask.source_files = ['Swooft/Sources/AsyncTask/**/*.swift']
     asynctask.dependency 'Swooft/Tasker'
+  end
+
+  s.subspec 'URLInterceptor' do |urlinterceptor|
+    urlinterceptor.source_files = ['Swooft/Sources/URLInterceptor/**/*.swift']
+    urlinterceptor.dependency 'Swooft/Tasker'
+    urlinterceptor.dependency 'Swooft/Collections/SynchronizedDictionary'
   end
 
 end

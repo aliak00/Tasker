@@ -84,6 +84,7 @@ private class GetProfileTask: Task, UserDependent {
 // internal user is still present, will set set the user in the task to something
 // valid and re-execute
 private class ValidateUserInterceptor: TaskInterceptor {
+
     weak var user: User?
     init(user: User) {
         self.user = user

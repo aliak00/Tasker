@@ -16,7 +16,11 @@
 
 import Foundation
 
+struct NoError: Error {}
+let noError = NoError()
+
 public enum Result<T> {
+
     case success(T)
     case failure(Error)
 
@@ -32,5 +36,14 @@ public enum Result<T> {
             return error
         }
         return nil
+    }
+
+    func materialize() throws -> T {
+        switch self {
+        case .success(let value):
+            return value
+        case .failure(let error):
+            throw error
+        }
     }
 }

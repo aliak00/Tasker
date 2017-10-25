@@ -25,7 +25,7 @@ class BatchingInterceptor: TaskInterceptor {
         return TaskInterceptorConfiguration(isImmediate: true, requeuesTask: true, suspendsTaskQueue: false)
     }
 
-    func intercept<T: Task>(task _: T, currentBatchCount: Int) -> InterceptCommand {
+    func intercept<T: Task>(task _: inout T, currentBatchCount: Int) -> InterceptCommand {
         return currentBatchCount < 9 ? .hold : .execute
     }
 }
