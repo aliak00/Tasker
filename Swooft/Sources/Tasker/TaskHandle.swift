@@ -16,7 +16,7 @@
 
 import Foundation
 
-public protocol TaskHandle {
+public protocol TaskHandle: class {
     func cancel()
     func start()
     var state: TaskState { get }

@@ -16,11 +16,10 @@
 
 import Foundation
 
-public protocol SharedLoggerEnabled: LoggerEnabled {}
-
-extension SharedLoggerEnabled {
-    public var logger: Logger {
-        return Logger.shared
-    }
+public enum LogLevel: String {
+    case debug = "D"
+    case info = "I"
+    case verbose = "V"
+    case error = "E"
+    case warn = "W"
 }
-

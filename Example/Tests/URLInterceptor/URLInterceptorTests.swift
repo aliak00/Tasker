@@ -34,8 +34,7 @@ class URLInterceptorTests: QuickSpec {
     override func spec() {
 
         describe("test") {
-            fit("should") {
-                Logger.shared.addTransport { print($0) }
+            it("should") {
                 let urlInterceptor = URLInterceptor(interceptors: [Interceptor()], configuration: URLSessionConfiguration.default)
                 let task = urlInterceptor.session.dataTask(with: URL(string: "http://www.example.com")!) { data, response, error in
                     print(data as Any)

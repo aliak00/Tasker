@@ -32,9 +32,12 @@ class LoggerTests: QuickSpec {
                 logger.outputTags = true
 
                 logger.addTransport { log += $0 }
-                logger.log("something", tags: tags)
+                logger.log("something", tags: tags, force: true)
+
+                logger.dispatchGroup.wait()
 
                 expect(log).to(contain(tags))
+                print(log)
             }
 
             it("should not log tags if not requested") {
@@ -46,6 +49,8 @@ class LoggerTests: QuickSpec {
 
                 logger.addTransport { log += $0 }
                 logger.log("something", tags: tags)
+
+                logger.dispatchGroup.wait()
 
                 expect(log).toNot(contain(tags))
             }
@@ -64,6 +69,8 @@ class LoggerTests: QuickSpec {
                 logger.log(log1, tag: tag1)
                 logger.log(log2, tag: tag2)
 
+                logger.dispatchGroup.wait()
+
                 expect(log).to(contain(log1))
                 expect(log).toNot(contain(log2))
             }
@@ -81,6 +88,8 @@ class LoggerTests: QuickSpec {
                 logger.filterIf(tag: tag1)
                 logger.log(log1, tag: tag1)
                 logger.log(log2, tag: tag2)
+
+                logger.dispatchGroup.wait()
 
                 expect(log).toNot(contain(log1))
                 expect(log).to(contain(log2))
@@ -105,6 +114,8 @@ class LoggerTests: QuickSpec {
                 logger.log(log1, tag: tag1)
                 logger.log(log2, tag: tag2)
                 logger.log(log3, tag: tag3)
+
+                logger.dispatchGroup.wait()
 
                 expect(log).toNot(contain(log1))
                 expect(log).to(contain(log2))

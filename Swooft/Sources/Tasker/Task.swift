@@ -22,7 +22,6 @@ public protocol Task: class {
     typealias ResultCallback = (TaskResult) -> Void
     func execute(completionHandler: @escaping ResultCallback)
     var timeout: DispatchTimeInterval? { get }
-
     func didCancel(with _: TaskError)
 }
 
