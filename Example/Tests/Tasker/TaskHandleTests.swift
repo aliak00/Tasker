@@ -42,7 +42,7 @@ class TaskHandleTests: QuickSpec {
                 ensure(handle.state).doesNotBecome(.finished)
                 expect(handle.state) == TaskState.pending
                 handle.start()
-                expect(handle.state) == TaskState.executing
+                ensure(handle.state).becomes(.finished)
             }
         }
     }

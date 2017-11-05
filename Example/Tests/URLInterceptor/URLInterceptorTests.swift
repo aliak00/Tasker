@@ -37,15 +37,14 @@ class URLInterceptorTests: QuickSpec {
             it("should") {
                 let urlInterceptor = URLInterceptor(interceptors: [Interceptor()], configuration: URLSessionConfiguration.default)
                 let task = urlInterceptor.session.dataTask(with: URL(string: "http://www.example.com")!) { data, response, error in
-                    print(data as Any)
-                    print(response as Any)
-                    print(error as Any)
+                    print("# 1", data as Any)
+                    print("# 2", response as Any)
+                    print("# 3", error as Any)
                 }
                 task.resume()
-//                task.cancel()
+                task.cancel()
 
                 ensure(task.state.rawValue).becomes(URLSessionTask.State.completed.rawValue)
-
             }
         }
     }

@@ -86,6 +86,20 @@ struct Ensure<T: Equatable> {
             XCTFail("did not expect \(value)", file: self.file, line: self.line)
         }
     }
+
+    func stays(_ value: T) {
+        var lastValue = self.block()
+        var passed = lastValue == value
+        let start = Date()
+        while Date().timeIntervalSince(start) < 0.25 && passed {
+            sleep(for: .milliseconds(1))
+            lastValue = self.block()
+            passed = lastValue == value
+        }
+        if lastValue != value {
+            XCTFail("expected to remain \(value), but became \(lastValue)", file: self.file, line: self.line)
+        }
+    }
 }
 
 func ensure<T: Equatable>(_ block: @escaping @autoclosure () -> T, _ line: UInt = #line, _ file: StaticString = #file) -> Ensure<T> {

@@ -83,20 +83,21 @@ private class GetProfileTask: Task, UserDependent {
 // This interceptor will take any task that is UserDependent and then if it's own
 // internal user is still present, will set set the user in the task to something
 // valid and re-execute
-private class ValidateUserInterceptor: TaskInterceptor {
+private class ValidateUserReactor: TaskReactor {
 
     weak var user: User?
     init(user: User) {
         self.user = user
     }
 
-    var configuration: TaskInterceptorConfiguration {
-        return TaskInterceptorConfiguration(isImmediate: false, requeuesTask: true, suspendsTaskQueue: true)
+    var configuration: TaskReactorConfiguration {
+        return TaskReactorConfiguration(isImmediate: false, requeuesTask: true, suspendsTaskQueue: true)
     }
 
     func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with _: TaskHandle) -> Bool where T: Task {
         return result.failureValue is UserInvalid && (task as? UserDependent)?.weakUser.value === self.user
     }
+
     func execute(done: @escaping (Error?) -> Void) {
         guard let user = self.user else {
             done(UserDead())
@@ -108,11 +109,11 @@ private class ValidateUserInterceptor: TaskInterceptor {
 }
 
 // This interceptor will take any task that is retriable, and re-execute it
-private class RetryInterceptor: TaskInterceptor {
+private class RetryReactor: TaskReactor {
     var counter: [Int: Int] = [:]
 
-    var configuration: TaskInterceptorConfiguration {
-        return TaskInterceptorConfiguration(isImmediate: true, requeuesTask: true, suspendsTaskQueue: false)
+    var configuration: TaskReactorConfiguration {
+        return TaskReactorConfiguration(isImmediate: true, requeuesTask: true, suspendsTaskQueue: false)
     }
 
     func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with handle: TaskHandle) -> Bool where T: Task {
@@ -146,7 +147,7 @@ class ScenarioValidatingRetryingTests: QuickSpec {
             expect(user.id) == User.ID.invalid
 
             // Create manager that validates and retries
-            let manager = TaskManagerSpy(interceptors: [ValidateUserInterceptor(user: user), RetryInterceptor()])
+            let manager = TaskManagerSpy(reactors: [ValidateUserReactor(user: user), RetryReactor()])
 
             // Run tasks that fail randomly
             let numTasks = 20

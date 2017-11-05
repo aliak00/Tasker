@@ -41,8 +41,8 @@ class TaskManagerSpy {
         self.completionHandlerCallData.removeAll()
     }
 
-    init(interceptors: [TaskInterceptor] = []) {
-        self.taskManager = TaskManager(interceptors: interceptors)
+    init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
+        self.taskManager = TaskManager(interceptors: interceptors, reactors: reactors)
     }
 
     @discardableResult

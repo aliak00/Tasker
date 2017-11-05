@@ -20,11 +20,6 @@ import Nimble
 
 // This interceptor will take any task that is retriable, and re-execute it
 class BatchingInterceptor: TaskInterceptor {
-
-    var configuration: TaskInterceptorConfiguration {
-        return TaskInterceptorConfiguration(isImmediate: true, requeuesTask: true, suspendsTaskQueue: false)
-    }
-
     func intercept<T: Task>(task _: inout T, currentBatchCount: Int) -> InterceptCommand {
         return currentBatchCount < 9 ? .hold : .execute
     }

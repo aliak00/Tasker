@@ -17,9 +17,9 @@
 import Foundation
 
 private extension DispatchTime {
-    var elapsed: String {
+    var elapsed: Double {
         let nanoTime = DispatchTime.now().uptimeNanoseconds - self.uptimeNanoseconds
-        return String(format: "%.2f", Double(nanoTime) / 1_000_000)
+        return Double(nanoTime) / 1_000_000
     }
 }
 
@@ -43,7 +43,11 @@ private extension DispatchTime {
  */
 public class Logger {
     /// Shared logger object
-    public static let shared = Logger()
+    public static let shared: Logger = {
+        let logger = Logger()
+        logger.addTransport { print($0) }
+        return logger
+    }()
 
     private var transports: [(String) -> Void] = []
     private var allowedTags = Set<String>()
@@ -184,7 +188,7 @@ public class Logger {
                 tagsString = ",\(explicitTags.joined(separator: ","))"
             }
 
-            let output = "[\(level.rawValue):\(timestamp)][\(thread):\(threadID),\(fileName):\(line),\(functionName)\(tagsString)] => \(string)"
+            let output = "[\(level.rawValue):\(String(format: "%.2f", timestamp))][\(thread):\(threadID),\(fileName):\(line),\(functionName)\(tagsString)] => \(string)"
 
             self?.historyBuffer?.append(output)
 

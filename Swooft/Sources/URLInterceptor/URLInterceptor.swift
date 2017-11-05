@@ -41,11 +41,12 @@ public class URLInterceptor {
         self.session = URLSession(configuration: copyOfConfig)
 
         URLInterceptor.globalStore[ref] = self.taskManager
-        print("added global task manager")
+        log(from: self, "added task manager with global key \(ref)")
     }
 
     deinit {
-        URLInterceptor.globalStore[String(describing: ObjectIdentifier(self.taskManager).hashValue)] = nil
-        print("removed global task manager")
+        let ref = String(describing: ObjectIdentifier(self.taskManager).hashValue)
+        URLInterceptor.globalStore[ref] = nil
+        log(from: self, "removed task manager with global key \(ref)")
     }
 }

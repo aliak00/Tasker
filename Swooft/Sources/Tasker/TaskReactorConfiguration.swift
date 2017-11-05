@@ -16,16 +16,7 @@
 
 import Foundation
 
-//enum InterceptorExecutionStyle {
-//    /// The interceptor is asynchronous, manager will fire it off and continue execution
-//    case asynchronous
-//    /// The interceptor is asynchronous, but the manager will wait till it's done callback is called before continuing
-//    case waitForCompletion
-//    /// The interceptor is immediate, the manager will assume it is done when it returns
-//    case immediate
-//}
-
-public struct TaskInterceptorConfiguration {
+public struct TaskReactorConfiguration {
     let isImmediate: Bool
     let timeout: DispatchTimeInterval?
     let requeuesTask: Bool
@@ -43,5 +34,5 @@ public struct TaskInterceptorConfiguration {
         self.suspendsTaskQueue = suspendsTaskQueue
     }
 
-    static let `default` = TaskInterceptorConfiguration()
+    static let `default` = TaskReactorConfiguration()
 }

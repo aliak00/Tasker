@@ -22,15 +22,19 @@ class URLInterceptorProtocol: URLProtocol {
     }()
 
     override class func canInit(with request: URLRequest) -> Bool {
-        print("canInit \(request.allHTTPHeaderFields)")
-        guard let value = request.allHTTPHeaderFields?[URLInterceptor.key] else {
+        guard let taskManagerKey = request.allHTTPHeaderFields?[URLInterceptor.key] else {
+            log(from: self, "URLInterceptor key \(URLInterceptor.key) not found in request \(request)")
             return false
         }
-        return URLInterceptor.globalStore[value] != nil
+        guard let _ = URLInterceptor.globalStore[taskManagerKey] else {
+            log(from: self, "TaskManager key \(taskManagerKey) not found in request \(request)")
+            return false
+        }
+        log(from: self, "will proceed with \(request)")
+        return true
     }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        print("canonicalRequest \(request)")
         return request
     }
 
@@ -43,9 +47,9 @@ class URLInterceptorProtocol: URLProtocol {
     weak var handle: TaskHandle?
 
     override func startLoading() {
-        print("startLoading \(self.request)")
+        log(from: self, "starting \(self.request)")
         struct URLInterceptorFailed: Error {}
-        guard let value = request.allHTTPHeaderFields?[URLInterceptor.key], let taskManager = URLInterceptor.globalStore[value] else {
+        guard let key = request.allHTTPHeaderFields?[URLInterceptor.key], let taskManager = URLInterceptor.globalStore[key] else {
             self.client?.urlProtocol(self, didFailWithError: URLInterceptorFailed())
             return
         }
@@ -65,7 +69,6 @@ class URLInterceptorProtocol: URLProtocol {
                 }
                 strongSelf.client?.urlProtocolDidFinishLoading(strongSelf)
             } catch {
-                print(error)
                 if case TaskError.cancelled = error {
                     task?.task?.cancel()
                 }
@@ -75,7 +78,7 @@ class URLInterceptorProtocol: URLProtocol {
     }
 
     override func stopLoading() {
-        print("stopLoading \(self.request)")
+        log(from: self, "stopping \(self.request)")
         self.handle?.cancel()
     }
 }

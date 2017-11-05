@@ -46,5 +46,5 @@ public func log<T, S>(
 ) {
     var tags = tags
     tags.append("\(S.self)")
-    log(level: .info, object(), tag: tag, tags: tags, force: force, file: file, function: function, line: line)
+    log(level: level, object(), tag: tag, tags: tags, force: force, file: file, function: function, line: line)
 }

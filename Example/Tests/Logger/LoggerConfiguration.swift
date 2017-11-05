@@ -15,11 +15,15 @@
  */
 
 import Foundation
+import Quick
+import Nimble
+@testable import Swooft
 
-public enum TaskError: Error {
-    case reactorFailed(Error)
-    case reactorTimedOut(String)
-    case cancelled
-    case timedOut
-    case unknown
+class LoggerConfiguration: QuickConfiguration {
+    override class func configure(_ configuration: Configuration) {
+        configuration.afterEach {
+            Logger.shared.dispatchGroup.wait()
+        }
+    }
 }
+
