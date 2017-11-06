@@ -557,7 +557,7 @@ public class TaskManager {
                             }
 
                             if let error = maybeError {
-                                strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorFailed(error))
+                                strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorFailed(type: type(of: reactor), error: error))
                             }
 
                             strongSelf.removeExecutingReactor(at: index)
@@ -589,7 +589,7 @@ public class TaskManager {
 
                             log(from: strongSelf, "reactor \(index) timed out", tags: TaskManager.kTkQTags)
 
-                            strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorTimedOut(type(of: reactor)))
+                            strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorTimedOut(type: type(of: reactor)))
                             strongSelf.removeExecutingReactor(at: index)
                         }
                     }
@@ -639,12 +639,12 @@ public class TaskManager {
             var maybeError: TaskError?
             reactor.execute { error in
                 if let error = error {
-                    maybeError = .reactorFailed(error)
+                    maybeError = .reactorFailed(type: type(of: reactor), error: error)
                 }
                 semaphore.signal()
             }
             if let timeout = reactor.configuration.timeout, semaphore.wait(timeout: .now() + timeout) == .timedOut {
-                maybeError = .reactorTimedOut(type(of: reactor))
+                maybeError = .reactorTimedOut(type: type(of: reactor))
             } else {
                 semaphore.wait()
             }
@@ -654,7 +654,7 @@ public class TaskManager {
             }
             log(from: self, "immediate reactor \(reactor.self) failed with: \(error)", tags: TaskManager.kReQTags)
             self.taskQueue.async { [weak self] in
-                self?.cancelAssociatedTasksForReactor(at: index, with: .reactorFailed(error))
+                self?.cancelAssociatedTasksForReactor(at: index, with: .reactorFailed(type: type(of: reactor), error: error))
             }
         }
     }
