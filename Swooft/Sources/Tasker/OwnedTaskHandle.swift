@@ -39,6 +39,10 @@ class OwnedTaskHandle: TaskHandle {
     public var state: TaskState {
         return self.owner?.taskState(for: self) ?? .finished
     }
+
+    func discard() {
+        self.owner?.cancel(handle: self, with: nil)
+    }
 }
 
 extension OwnedTaskHandle: CustomStringConvertible {
