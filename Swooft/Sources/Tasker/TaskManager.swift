@@ -229,7 +229,7 @@ public class TaskManager {
                     return
                 }
                 guard let task = task else {
-                    log(level: .verbose, from: strongSelf, "\task.execute => task for \(handle) dead", tags: TaskManager.kCbOpQTags)
+                    log(level: .verbose, from: strongSelf, "task.execute => task for \(handle) dead", tags: TaskManager.kCbOpQTags)
                     return
                 }
 
@@ -272,7 +272,7 @@ public class TaskManager {
                 }
 
                 guard let operation = operation, !operation.isCancelled else {
-                    log(level: .verbose, from: strongSelf, "\(T.self).execute => operation for \(handle) dead or cancelled", tags: TaskManager.kTkQTags)
+                    log(level: .verbose, from: strongSelf, "task.execute => operation for \(handle) dead or cancelled", tags: TaskManager.kTkQTags)
                     return
                 }
 
