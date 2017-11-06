@@ -30,7 +30,7 @@ class TaskReactorTests: QuickSpec {
                 let manager = TaskManagerSpy(reactors: [reactor])
                 manager.add(task: SuccessTaskSpy())
                 ensure(manager.completionHandlerCallCount).becomes(1)
-                expect(manager.completionHandlerCallData[0]).to(failWith(TaskError.reactorTimedOut("")))
+                expect(manager.completionHandlerCallData[0]).to(failWith(TaskError.reactorTimedOut(ReactorSpy.self)))
             }
 
             it("should complete reactor if under timeout") {
@@ -39,7 +39,7 @@ class TaskReactorTests: QuickSpec {
                 let manager = TaskManagerSpy(reactors: [reactor])
                 manager.add(task: SuccessTaskSpy())
                 ensure(manager.completionHandlerCallCount).becomes(1)
-                expect(manager.completionHandlerCallData[0]).toNot(failWith(TaskError.reactorTimedOut("")))
+                expect(manager.completionHandlerCallData[0]).toNot(failWith(TaskError.reactorTimedOut(ReactorSpy.self)))
             }
 
             it("should re-execute tasks if reactor says requeue") {

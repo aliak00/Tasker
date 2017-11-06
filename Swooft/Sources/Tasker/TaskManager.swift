@@ -589,7 +589,7 @@ public class TaskManager {
 
                             log(from: strongSelf, "reactor \(index) timed out", tags: TaskManager.kTkQTags)
 
-                            strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorTimedOut("\(reactor)"))
+                            strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorTimedOut(type(of: reactor)))
                             strongSelf.removeExecutingReactor(at: index)
                         }
                     }
@@ -644,7 +644,7 @@ public class TaskManager {
                 semaphore.signal()
             }
             if let timeout = reactor.configuration.timeout, semaphore.wait(timeout: .now() + timeout) == .timedOut {
-                maybeError = .reactorTimedOut("\(reactor)")
+                maybeError = .reactorTimedOut(type(of: reactor))
             } else {
                 semaphore.wait()
             }

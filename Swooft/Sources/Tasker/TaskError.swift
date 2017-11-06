@@ -18,7 +18,7 @@ import Foundation
 
 public enum TaskError: Error {
     case reactorFailed(Error)
-    case reactorTimedOut(String)
+    case reactorTimedOut(TaskReactor.Type)
     case cancelled
     case timedOut
     case unknown
