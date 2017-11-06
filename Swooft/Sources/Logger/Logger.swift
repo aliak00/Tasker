@@ -45,7 +45,6 @@ public class Logger {
     /// Shared logger object
     public static let shared: Logger = {
         let logger = Logger()
-        logger.addTransport { print($0) }
         return logger
     }()
 
