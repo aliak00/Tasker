@@ -208,10 +208,15 @@ public class TaskManager {
                 return
             }
 
+            guard let operation = operation, !operation.isCancelled else {
+                log(level: .verbose, from: strongSelf, "executed \(handle) but operation dead or cancelled", tags: TaskManager.kTkQTags)
+                return
+            }
+
             log(from: strongSelf, "did execute \(handle)", tags: TaskManager.kCbOpQTags)
 
             // Get off whatever thread the task called the callback on
-            strongSelf.taskQueue.async { [weak handle] in
+            strongSelf.taskQueue.async { [weak handle, weak operation] in
                 guard let strongSelf = self else {
                     log(level: .verbose, from: self, "\(T.self).execute => manager dead", tags: TaskManager.kTkQTags)
                     return
@@ -268,16 +273,16 @@ public class TaskManager {
                     return
                 }
 
-                log(from: strongSelf, "will finish \(handle)", tags: TaskManager.kTkQTags)
+                log(level: .verbose, from: strongSelf, "will finish \(handle)", tags: TaskManager.kTkQTags)
                 if let data = strongSelf.data(for: handle, remove: true) {
                     assert(data.operation === operation)
                     data.operation.markFinished()
-                    log(from: strongSelf, "did finish \(handle)", tags: TaskManager.kTkQTags)
+                    log(level: .verbose, from: strongSelf, "did finish \(handle)", tags: TaskManager.kTkQTags)
                     strongSelf.taskQueue.async {
                         completionHandler?(result)
                     }
                 } else {
-                    log(from: strongSelf, "did not finish \(handle)", tags: TaskManager.kTkQTags)
+                    log(level: .verbose, from: strongSelf, "did not finish \(handle)", tags: TaskManager.kTkQTags)
                 }
             }
         }
@@ -369,28 +374,21 @@ public class TaskManager {
         }
     }
 
-    private func launchTimeoutWork(for handle: OwnedTaskHandle, withTimeout timeout: DispatchTimeInterval) -> DispatchWorkItem? {
-        var timeoutWorkItemHandle: DispatchWorkItem?
-        self.taskQueue.async { [weak self, weak handle] in
+    private func launchTimeoutWork(for handle: OwnedTaskHandle, withTimeout timeout: DispatchTimeInterval) -> DispatchWorkItem {
+        var timeoutWorkItem: DispatchWorkItem!
+        timeoutWorkItem = DispatchWorkItem { [weak self, weak handle] in
             guard let handle = handle else {
                 log(level: .verbose, from: self, "handle dead", tags: TaskManager.kTkQTags)
                 return
             }
-            let timeoutWorkItem = DispatchWorkItem { [weak self, weak handle] in
-                guard let handle = handle else {
-                    log(level: .verbose, from: self, "handle dead", tags: TaskManager.kTkQTags)
-                    return
-                }
-                guard let workItem = timeoutWorkItemHandle, !workItem.isCancelled else {
-                    log(from: self, "\(handle) timeoutWorkItem cancelled", tags: TaskManager.kTkQTags)
-                    return
-                }
-                self?.removeAndCancel(handle: handle, with: .timedOut)
+            guard !timeoutWorkItem.isCancelled else {
+                log(level: .verbose, from: self, "\(handle) timeoutWorkItem cancelled", tags: TaskManager.kTkQTags)
+                return
             }
-            timeoutWorkItemHandle = timeoutWorkItem
-            self?.taskQueue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem)
+            self?.removeAndCancel(handle: handle, with: .timedOut)
         }
-        return timeoutWorkItemHandle
+        self.taskQueue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem)
+        return timeoutWorkItem
     }
 
     private func launchReactors (at indices: [Int], on finishedHandle: OwnedTaskHandle, requeueTask: Bool, suspendQueue: Bool) {
@@ -629,8 +627,8 @@ public class TaskManager {
         guard let data = self.data(for: handle, remove: true) else {
             return
         }
-        data.operation.cancel()
         log(from: self, "removed \(handle) with error \(error as Any)", tags: TaskManager.kTkQTags)
+        data.operation.cancel()
         guard let error = error else {
             return
         }
@@ -641,7 +639,7 @@ public class TaskManager {
     }
 
     func cancel(handle: OwnedTaskHandle, with error: TaskError?) {
-        log(from: self, "will cancel \(handle)", tags: TaskManager.kClrTags)
+        log(from: self, "cancelling \(handle)", tags: TaskManager.kClrTags)
         self.taskQueue.async { [weak self, weak handle] in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)

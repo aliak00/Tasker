@@ -23,7 +23,6 @@ class TaskerConfiguration: QuickConfiguration {
     override class func configure(_ configuration: Configuration) {
         configuration.afterEach {
             OwnedTaskHandle.counter.value = 0
-            TaskManager.counter.value = 0
         }
     }
 }

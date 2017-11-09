@@ -20,13 +20,6 @@ import Nimble
 
 @testable import Swooft
 
-struct Weak<T: AnyObject> {
-    weak var value: T?
-    init(_ value: T) {
-        self.value = value
-    }
-}
-
 typealias SuccessTaskSpy = TaskSpy<Void>
 
 func failWith<T>(_ expectedError: Error) -> Predicate<Result<T>> {

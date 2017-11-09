@@ -17,7 +17,6 @@
 		E116719B1FABBD7D00F1E3BC /* TaskReactorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E116719A1FABBD7D00F1E3BC /* TaskReactorTests.swift */; };
 		E172FCD01F96AB6D00317E56 /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E172FCCF1F96AB6D00317E56 /* LoggerTests.swift */; };
 		E17C3FB31F5372E30002ADFF /* RingBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C3FB21F5372E30002ADFF /* RingBufferTests.swift */; };
-		E18AD0EC1F50B3AD00757478 /* TaskerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E61F50B3AD00757478 /* TaskerConfiguration.swift */; };
 		E18AD0ED1F50B3AD00757478 /* ScenarioBatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */; };
 		E18AD0EE1F50B3AD00757478 /* ScenarioValidatingRetryingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E81F50B3AD00757478 /* ScenarioValidatingRetryingTests.swift */; };
 		E18AD0EF1F50B3AD00757478 /* TaskHandleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E91F50B3AD00757478 /* TaskHandleTests.swift */; };
@@ -32,6 +31,7 @@
 		E18AD1041F50B40900757478 /* Ensure.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1011F50B40900757478 /* Ensure.swift */; };
 		E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1021F50B40900757478 /* KitchenSink.swift */; };
 		E18AD1061F50B40900757478 /* YieldingIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1031F50B40900757478 /* YieldingIterator.swift */; };
+		E1BAC6AC1FB3D56100442308 /* TaskerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BAC6AB1FB3D56000442308 /* TaskerConfiguration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +51,6 @@
 		E116719A1FABBD7D00F1E3BC /* TaskReactorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskReactorTests.swift; sourceTree = "<group>"; };
 		E172FCCF1F96AB6D00317E56 /* LoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
 		E17C3FB21F5372E30002ADFF /* RingBufferTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBufferTests.swift; sourceTree = "<group>"; };
-		E18AD0E61F50B3AD00757478 /* TaskerConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskerConfiguration.swift; sourceTree = "<group>"; };
 		E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenarioBatchingTests.swift; sourceTree = "<group>"; };
 		E18AD0E81F50B3AD00757478 /* ScenarioValidatingRetryingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenarioValidatingRetryingTests.swift; sourceTree = "<group>"; };
 		E18AD0E91F50B3AD00757478 /* TaskHandleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskHandleTests.swift; sourceTree = "<group>"; };
@@ -66,6 +65,7 @@
 		E18AD1011F50B40900757478 /* Ensure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ensure.swift; sourceTree = "<group>"; };
 		E18AD1021F50B40900757478 /* KitchenSink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KitchenSink.swift; sourceTree = "<group>"; };
 		E18AD1031F50B40900757478 /* YieldingIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YieldingIterator.swift; sourceTree = "<group>"; };
+		E1BAC6AB1FB3D56000442308 /* TaskerConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskerConfiguration.swift; sourceTree = "<group>"; };
 		E8BBF77C8B1AB741F355F151 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,7 +124,6 @@
 				E103B3281F574DB1000F3F70 /* Profiler */,
 				E17C3FB01F5371300002ADFF /* Collections */,
 				E18AD1071F50B8D400757478 /* Logger */,
-				E18AD0F41F50B3DE00757478 /* Doubles */,
 				E18AD0F31F50B3C600757478 /* AsyncTask */,
 				E18AD0F21F50B3B800757478 /* Utils */,
 				E18AD0E51F50B39100757478 /* Tasker */,
@@ -204,9 +203,10 @@
 		E18AD0E51F50B39100757478 /* Tasker */ = {
 			isa = PBXGroup;
 			children = (
-				E18AD0E61F50B3AD00757478 /* TaskerConfiguration.swift */,
+				E1BAC6A91FB3D01500442308 /* Doubles */,
 				E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */,
 				E18AD0E81F50B3AD00757478 /* ScenarioValidatingRetryingTests.swift */,
+				E1BAC6AB1FB3D56000442308 /* TaskerConfiguration.swift */,
 				E18AD0E91F50B3AD00757478 /* TaskHandleTests.swift */,
 				E18AD0EA1F50B3AD00757478 /* TaskInterceptorTests.swift */,
 				E18AD0EB1F50B3AD00757478 /* TaskManagerTests.swift */,
@@ -228,22 +228,10 @@
 		E18AD0F31F50B3C600757478 /* AsyncTask */ = {
 			isa = PBXGroup;
 			children = (
+				E1BAC6AA1FB3D03700442308 /* Doubles */,
 				E18AD0FF1F50B40100757478 /* AsyncTaskTests.swift */,
 			);
 			path = AsyncTask;
-			sourceTree = "<group>";
-		};
-		E18AD0F41F50B3DE00757478 /* Doubles */ = {
-			isa = PBXGroup;
-			children = (
-				E18AD0F51F50B3F600757478 /* AsyncTaskSpy.swift */,
-				E18AD0F61F50B3F600757478 /* DummyTask.swift */,
-				E18AD0F71F50B3F600757478 /* InterceptorSpy.swift */,
-				E18AD0F81F50B3F600757478 /* TaskManagerSpy.swift */,
-				E18AD0F91F50B3F600757478 /* TaskSpy.swift */,
-				E11671961FAB6E1F00F1E3BC /* ReactorSpy.swift */,
-			);
-			path = Doubles;
 			sourceTree = "<group>";
 		};
 		E18AD1071F50B8D400757478 /* Logger */ = {
@@ -253,6 +241,26 @@
 				E11671981FABBCD500F1E3BC /* LoggerConfiguration.swift */,
 			);
 			path = Logger;
+			sourceTree = "<group>";
+		};
+		E1BAC6A91FB3D01500442308 /* Doubles */ = {
+			isa = PBXGroup;
+			children = (
+				E18AD0F61F50B3F600757478 /* DummyTask.swift */,
+				E18AD0F71F50B3F600757478 /* InterceptorSpy.swift */,
+				E18AD0F81F50B3F600757478 /* TaskManagerSpy.swift */,
+				E18AD0F91F50B3F600757478 /* TaskSpy.swift */,
+				E11671961FAB6E1F00F1E3BC /* ReactorSpy.swift */,
+			);
+			path = Doubles;
+			sourceTree = "<group>";
+		};
+		E1BAC6AA1FB3D03700442308 /* Doubles */ = {
+			isa = PBXGroup;
+			children = (
+				E18AD0F51F50B3F600757478 /* AsyncTaskSpy.swift */,
+			);
+			path = Doubles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -389,7 +397,6 @@
 				E18AD0F11F50B3AD00757478 /* TaskManagerTests.swift in Sources */,
 				E18AD0FB1F50B3F600757478 /* DummyTask.swift in Sources */,
 				E18AD0FE1F50B3F600757478 /* TaskSpy.swift in Sources */,
-				E18AD0EC1F50B3AD00757478 /* TaskerConfiguration.swift in Sources */,
 				E18AD0F01F50B3AD00757478 /* TaskInterceptorTests.swift in Sources */,
 				E18AD0ED1F50B3AD00757478 /* ScenarioBatchingTests.swift in Sources */,
 				E18AD0EF1F50B3AD00757478 /* TaskHandleTests.swift in Sources */,
@@ -409,6 +416,7 @@
 				E18AD1001F50B40100757478 /* AsyncTaskTests.swift in Sources */,
 				E11671991FABBCD500F1E3BC /* LoggerConfiguration.swift in Sources */,
 				E17C3FB31F5372E30002ADFF /* RingBufferTests.swift in Sources */,
+				E1BAC6AC1FB3D56100442308 /* TaskerConfiguration.swift in Sources */,
 				E11671971FAB6E1F00F1E3BC /* ReactorSpy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
