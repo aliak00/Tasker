@@ -52,4 +52,3 @@ public protocol TaskInterceptor {
      */
     func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand
 }
-

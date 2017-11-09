@@ -82,7 +82,7 @@ class TaskReactorTests: QuickSpec {
 
                 // First let it hang, it should pause the queue then we can call the callback later to finish the interceptor
                 reactor.executeBlock = { reactor.executeCallCount == 0 ? () : $0(nil) }
-                reactor.shouldExecuteBlock = { _,_,_  in reactor.shouldExecuteCallCount == 0 }
+                reactor.shouldExecuteBlock = { _, _, _ in reactor.shouldExecuteCallCount == 0 }
 
                 let manager = TaskManagerSpy(reactors: [reactor])
                 manager.add(task: kDummyTask)
@@ -114,4 +114,3 @@ class TaskReactorTests: QuickSpec {
         }
     }
 }
-

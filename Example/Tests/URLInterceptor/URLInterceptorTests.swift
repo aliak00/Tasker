@@ -20,7 +20,7 @@ import Nimble
 @testable import Swooft
 
 private class Interceptor: TaskInterceptor {
-    func intercept<T>(task: inout T, currentBatchCount _: Int) -> InterceptCommand where T : Task {
+    func intercept<T>(task: inout T, currentBatchCount _: Int) -> InterceptCommand where T: Task {
         guard let task = task as? URLInterceptor.DataTask else {
             return .execute
         }

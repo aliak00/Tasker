@@ -399,7 +399,7 @@ public class TaskManager {
         return timeoutWorkItem
     }
 
-    private func launchReactors (at indices: [Int], on finishedHandle: OwnedTaskHandle, requeueTask: Bool, suspendQueue: Bool) {
+    private func launchReactors(at indices: [Int], on finishedHandle: OwnedTaskHandle, requeueTask: Bool, suspendQueue: Bool) {
         //
         // Executing the reactors involves the following:
         //

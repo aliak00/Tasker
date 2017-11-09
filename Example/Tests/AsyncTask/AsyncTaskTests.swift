@@ -30,7 +30,7 @@ class AsyncTaskTests: QuickSpec {
         describe("async") {
 
             it("should call execute") {
-                let task = AsyncTaskSpy { }
+                let task = AsyncTaskSpy {}
                 task.async()
                 ensure(task.completionHandlerCallCount).becomes(1)
             }

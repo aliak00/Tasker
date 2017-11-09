@@ -40,9 +40,9 @@ public enum Result<T> {
 
     func materialize() throws -> T {
         switch self {
-        case .success(let value):
+        case let .success(value):
             return value
-        case .failure(let error):
+        case let .failure(error):
             throw error
         }
     }

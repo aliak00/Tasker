@@ -21,6 +21,7 @@ public struct LinkedListIterator<Element>: IteratorProtocol {
     init(list: LinkedList<Element>) {
         self.current = list.tail
     }
+
     public mutating func next() -> Element? {
         defer { self.current = self.current?.next }
         return self.current?.value

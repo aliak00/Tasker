@@ -33,7 +33,7 @@ class InterceptorSpy: TaskInterceptor {
     var interceptCallCount = 0
     var interceptCallData: [(weakAnyTask: WeakAnyTask, currentBatchCount: Int)] = []
     var interceptCallResultData: [InterceptCommand] = []
-    var interceptBlock: (AnyTask<Any>, Int) -> InterceptCommand = { _,_  in .execute }
+    var interceptBlock: (AnyTask<Any>, Int) -> InterceptCommand = { _, _ in .execute }
 
     func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand {
         defer { self.interceptCallCount += 1 }

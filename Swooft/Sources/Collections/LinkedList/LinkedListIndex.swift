@@ -21,12 +21,14 @@ public struct LinkedListIndex<Element>: Comparable {
     init(node: LinkedListNode<Element>?) {
         self.node = node
     }
+
     public static func < (lhs: LinkedListIndex, rhs: LinkedListIndex) -> Bool {
         guard let next = lhs.node?.next else {
             return false
         }
         return next === rhs.node
     }
+
     public static func == (lhs: LinkedListIndex, rhs: LinkedListIndex) -> Bool {
         return lhs.node === rhs.node
     }

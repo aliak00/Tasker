@@ -27,6 +27,7 @@ private class User {
         case valid
         case invalid
     }
+
     var id: ID = .invalid
     var profile: UserProfile?
 }
@@ -38,6 +39,7 @@ private struct RandomFailure: Error {}
 private protocol Retriable {
     var maxRetryCount: Int { get }
 }
+
 private protocol UserDependent {
     var weakUser: Weak<User> { get }
 }
@@ -49,6 +51,7 @@ private class UserTask: Task, UserDependent, Retriable {
     init(user: User) {
         self.weakUser = Weak(user)
     }
+
     func execute(completionHandler: @escaping ResultCallback) {
         guard self.weakUser.value?.id == .valid else {
             completionHandler(.failure(UserInvalid()))
@@ -70,6 +73,7 @@ private class GetProfileTask: Task, UserDependent {
         self.weakUser = Weak(user)
         self.profile = profile
     }
+
     func execute(completionHandler: @escaping ResultCallback) {
         guard let user = self.weakUser.value, user.id == .valid else {
             completionHandler(.failure(UserInvalid()))

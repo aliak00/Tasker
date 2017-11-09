@@ -73,7 +73,7 @@ public class Logger {
 
      - parameter logHistorySize: How many entried to keep in the history
      */
-    public init(logHistorySize: Int? = nil, fileLookupMemoCapacity: Int? = 100) {
+    public init(logHistorySize: Int? = nil) {
         if let logHistorySize = logHistorySize {
             self.historyBuffer = RingBuffer(capacity: logHistorySize)
         } else {
