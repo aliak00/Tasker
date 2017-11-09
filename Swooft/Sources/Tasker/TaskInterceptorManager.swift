@@ -34,7 +34,12 @@ class TaskInterceptorManager {
         return self.interceptors.count
     }
 
-    func intercept<T: Task>(task: inout T, for handle: OwnedTaskHandle, after interval: DispatchTimeInterval?, completion: @escaping (InterceptTaskResult) -> Void) {
+    func intercept<T: Task>(
+        task: inout T,
+        for handle: OwnedTaskHandle,
+        after interval: DispatchTimeInterval?,
+        completion: @escaping (InterceptTaskResult) -> Void
+    ) {
         if let interval = interval {
             self.interceptorQueue.asyncAfter(deadline: .now() + interval) { [task] in
                 var task = task
@@ -77,7 +82,6 @@ class TaskInterceptorManager {
                 fallthrough
             case .execute:
                 interceptorIndicesRequestingExecute.append(index)
-                break
             case .discard:
                 shouldBeIgnored = true
                 interceptorIndexHoldingTask = nil

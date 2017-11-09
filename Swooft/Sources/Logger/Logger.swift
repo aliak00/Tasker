@@ -29,7 +29,7 @@ private struct SynchronizedData {
     var transports: [(String) -> Void] = []
     var allowedTags = Set<String>()
     var ignoredTags = Set<String>()
-    var historyBuffer: RingBuffer<String>? = nil
+    var historyBuffer: RingBuffer<String>?
 }
 
 /**

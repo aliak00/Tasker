@@ -26,7 +26,7 @@ class URLInterceptorProtocol: URLProtocol {
             log(from: self, "URLInterceptor key \(URLInterceptor.key) not found in request \(request)")
             return false
         }
-        guard let _ = URLInterceptor.globalStore[taskManagerKey] else {
+        guard URLInterceptor.globalStore[taskManagerKey] != nil else {
             log(from: self, "TaskManager key \(taskManagerKey) not found in request \(request)")
             return false
         }
