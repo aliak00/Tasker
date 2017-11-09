@@ -21,7 +21,7 @@ import Nimble
 
 class TaskerConfiguration: QuickConfiguration {
     override class func configure(_ configuration: Configuration) {
-        configuration.afterEach {
+        configuration.beforeEach {
             OwnedTaskHandle.counter.value = 0
         }
     }

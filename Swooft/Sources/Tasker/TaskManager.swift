@@ -78,6 +78,7 @@ public class TaskManager {
 
     private let taskQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.tasks")
     private let reactorQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.reactors", attributes: [.concurrent])
+    private let dispatchGroup = DispatchGroup()
 
     private let reactors: [TaskReactor]
     private let interceptorManager: TaskInterceptorManager
@@ -183,6 +184,11 @@ public class TaskManager {
         return handle
     }
 
+    public func waitTillAllTasksFinished() {
+        self.taskOperationQueue.waitUntilAllOperationsAreFinished()
+        self.dispatchGroup.wait()
+    }
+
     private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: TaskOperation, completionHandler: T.ResultCallback?) {
 
         let timeoutWorkItem: DispatchWorkItem?
@@ -194,7 +200,9 @@ public class TaskManager {
 
         log(from: self, "will execute \(handle)", tags: TaskManager.kOpQTags)
 
+        self.dispatchGroup.enter()
         task.execute { [weak self, weak task, weak handle, weak operation] result in
+            defer { self?.dispatchGroup.leave() }
 
             timeoutWorkItem?.cancel()
 
@@ -629,6 +637,7 @@ public class TaskManager {
         }
         log(from: self, "removed \(handle) with error \(error as Any)", tags: TaskManager.kTkQTags)
         data.operation.cancel()
+        data.operation.markFinished()
         guard let error = error else {
             return
         }
