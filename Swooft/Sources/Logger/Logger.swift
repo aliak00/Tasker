@@ -23,6 +23,15 @@ private extension DispatchTime {
     }
 }
 
+private struct SynchronizedData {
+    var enabled: Bool = false
+    var outputTags: Bool = false
+    var transports: [(String) -> Void] = []
+    var allowedTags = Set<String>()
+    var ignoredTags = Set<String>()
+    var historyBuffer: RingBuffer<String>? = nil
+}
+
 /**
  A logging class that can be told where to log to via transports.
 
@@ -49,10 +58,8 @@ public class Logger {
         return logger
     }()
 
-    private var transports: [(String) -> Void] = []
-    private var allowedTags = Set<String>()
-    private var ignoredTags = Set<String>()
-    private var historyBuffer: RingBuffer<String>?
+    private var data = SynchronizedData()
+
     private let startTime = DispatchTime.now()
     private let queue = DispatchQueue(label: "Swooft.Logger", qos: .utility)
 
@@ -63,10 +70,32 @@ public class Logger {
     public let dispatchGroup = DispatchGroup()
 
     /// Set to true if you want the tags to be printed as well
-    public var outputTags = false
+    public var outputTags: Bool {
+        get {
+            return self.queue.sync {
+                return self.data.outputTags
+            }
+        }
+        set {
+            self.queue.async { [weak self] in
+                self?.data.outputTags = newValue
+            }
+        }
+    }
 
     /// If this is true then it ignores all logs
-    public var enabled = false
+    public var enabled: Bool {
+        get {
+            return self.queue.sync {
+                return self.data.enabled
+            }
+        }
+        set {
+            self.queue.async { [weak self] in
+                self?.data.enabled = newValue
+            }
+        }
+    }
 
     /**
      Initializes a Logger object
@@ -75,9 +104,7 @@ public class Logger {
      */
     public init(logHistorySize: Int? = nil) {
         if let logHistorySize = logHistorySize {
-            self.historyBuffer = RingBuffer(capacity: logHistorySize)
-        } else {
-            self.historyBuffer = nil
+            self.data.historyBuffer = RingBuffer(capacity: logHistorySize)
         }
     }
 
@@ -89,35 +116,39 @@ public class Logger {
      */
     public func addTransport(_ transport: @escaping (String) -> Void) {
         self.queue.sync {
-            self.transports.append(transport)
+            self.data.transports.append(transport)
         }
     }
 
     /// Filters log messages unless they are tagged with `tag`
     public func filterUnless(tag: String) {
-        _ = self.queue.async {
-            self.allowedTags.insert(tag)
+        _ = self.queue.async { [weak self] in
+            self?.data.allowedTags.insert(tag)
         }
     }
 
     /// Filters log messages unless they are tagged with any of `tags`
     public func filterUnless(tags: [String]) {
-        self.queue.async {
-            self.allowedTags = self.allowedTags.union(tags)
+        self.queue.async { [weak self] in
+            if let union = self?.data.allowedTags.union(tags) {
+                self?.data.allowedTags = union
+            }
         }
     }
 
     /// Filters log messages if they are tagged with `tag`
     public func filterIf(tag: String) {
-        _ = self.queue.async {
-            self.ignoredTags.insert(tag)
+        _ = self.queue.async { [weak self] in
+            self?.data.ignoredTags.insert(tag)
         }
     }
 
     /// Filters log messages if they are tagged with any of `tags`
     public func filterIf(tags: [String]) {
-        self.queue.async {
-            self.ignoredTags = self.ignoredTags.union(tags)
+        self.queue.async { [weak self] in
+            if let union = self?.data.ignoredTags.union(tags) {
+                self?.data.ignoredTags = union
+            }
         }
     }
 
@@ -131,12 +162,6 @@ public class Logger {
         self.log(object(), tags: [tag], force: force, file, function, line)
     }
 
-    private func data() -> (enabled: Bool, outputTags: Bool, transports: [(String) -> Void], allowedTags: Set<String>, ignoredTags: Set<String>) {
-        return self.queue.sync {
-            return (self.enabled, self.outputTags, self.transports, self.allowedTags, self.ignoredTags)
-        }
-    }
-
     /**
      Logs any `T` by using string interpolation
 
@@ -144,7 +169,9 @@ public class Logger {
      - parameter tags: a set of tags to apply to this log
      */
     public func log<T>(level: LogLevel = .info, _ object: @autoclosure () -> T, tags explicitTags: [String] = [], force: Bool = false, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-        let data = self.data()
+        let data = self.queue.sync {
+            return self.data
+        }
         guard data.enabled || force || data.transports.count > 0 else {
             return
         }
@@ -190,7 +217,7 @@ public class Logger {
 
             let output = "[\(level.rawValue):\(String(format: "%.2f", timestamp))][\(thread):\(threadID),\(fileName):\(line),\(functionName)\(tagsString)] => \(string)"
 
-            self?.historyBuffer?.append(output)
+            self?.data.historyBuffer?.append(output)
 
             if shouldOutputToTransports {
                 for transport in data.transports {
