@@ -72,11 +72,11 @@ struct Ensure<T: Equatable> {
         }
     }
 
-    func doesNotBecome(_ value: T) {
+    func doesNotBecome(_ value: T, for seconds: Double = 0.1) {
         var passed = false
         var changed = false
         let start = Date()
-        while Date().timeIntervalSince(start) < 0.25 || changed {
+        while Date().timeIntervalSince(start) < seconds || changed {
             sleep(for: .milliseconds(1))
             let previousPassed = passed
             passed = self.block() == value
@@ -87,11 +87,11 @@ struct Ensure<T: Equatable> {
         }
     }
 
-    func stays(_ value: T) {
+    func stays(_ value: T, for seconds: Double = 0.1) {
         var lastValue = self.block()
         var passed = lastValue == value
         let start = Date()
-        while Date().timeIntervalSince(start) < 0.25 && passed {
+        while Date().timeIntervalSince(start) < seconds && passed {
             sleep(for: .milliseconds(1))
             lastValue = self.block()
             passed = lastValue == value

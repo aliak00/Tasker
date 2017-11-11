@@ -36,7 +36,7 @@ class AsyncTaskTests: QuickSpec {
             }
 
             it("should get cancelled error") {
-                let task = AsyncTaskSpy { sleep(for: .milliseconds(10)) }
+                let task = AsyncTaskSpy { sleep(for: .milliseconds(5)) }
                 let handle = task.async()
                 handle.cancel()
                 ensure(task.completionHandlerCallCount).becomes(1)
@@ -44,8 +44,8 @@ class AsyncTaskTests: QuickSpec {
             }
 
             it("should timeout after deadline reached") {
-                let task = AsyncTaskSpy { sleep(for: .milliseconds(10)) }
-                let handle = task.async(timeout: .milliseconds(5))
+                let task = AsyncTaskSpy { sleep(for: .milliseconds(5)) }
+                let handle = task.async(timeout: .milliseconds(1))
                 ensure(task.completionHandlerCallCount).becomes(1)
                 expect(task.completionHandlerCallData[0]).to(failWith(TaskError.timedOut))
                 ensure(handle.state).becomes(.finished)
@@ -72,10 +72,10 @@ class AsyncTaskTests: QuickSpec {
             }
 
             it("should timeout after deadline reached") {
-                let task = AsyncTaskSpy { sleep(for: .milliseconds(10)) }
+                let task = AsyncTaskSpy { sleep(for: .milliseconds(5)) }
                 var maybeError: Error?
                 do {
-                    try task.await(timeout: .milliseconds(5))
+                    try task.await(timeout: .milliseconds(1))
                 } catch {
                     maybeError = error
                 }
