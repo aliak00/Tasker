@@ -18,7 +18,7 @@ import Foundation
 
 public func log<T>(
     level: LogLevel = .info,
-    _ object: @autoclosure () -> T,
+    _ object: @escaping @autoclosure () -> T,
     tag: String? = nil,
     tags: [String] = [],
     force: Bool = false,
@@ -36,7 +36,7 @@ public func log<T>(
 public func log<T, S>(
     level: LogLevel = .info,
     from _: S?,
-    _ object: @autoclosure () -> T,
+    _ object: @escaping @autoclosure () -> T,
     tag: String? = nil,
     tags: [String] = [],
     force: Bool = false,
@@ -45,6 +45,6 @@ public func log<T, S>(
     line: Int = #line
 ) {
     var tags = tags
-    tags.append("\(S.self)")
+    tags.append(String(describing: S.self))
     log(level: level, object(), tag: tag, tags: tags, force: force, file: file, function: function, line: line)
 }

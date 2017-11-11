@@ -185,8 +185,10 @@ public class TaskManager {
     }
 
     public func waitTillAllTasksFinished() {
+        log(level: .verbose, from: self, "begin waiting")
         self.taskOperationQueue.waitUntilAllOperationsAreFinished()
         self.dispatchGroup.wait()
+        log(level: .verbose, from: self, "end waiting")
     }
 
     private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: TaskOperation, completionHandler: T.ResultCallback?) {

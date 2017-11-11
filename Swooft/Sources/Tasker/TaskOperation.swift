@@ -18,14 +18,8 @@ import Foundation
 
 class TaskOperation: Operation {
 
+    private let queue = DispatchQueue(label: "Swooft.Tasker.TaskOperation", attributes: [.concurrent])
     let executor: (_ operation: TaskOperation) -> Void
-
-    //
-    // Recursive lock is necessary here because our overrided getters lock and get the state
-    // and our state setter sends out KVO notifactions that the NSOperationQueue reacts to
-    // by querying our getters. If it's a normal lock we get a deadlock
-    //
-    private var lock = NSRecursiveLock()
 
     enum State {
         case pending
@@ -33,7 +27,7 @@ class TaskOperation: Operation {
         case executing
         case finished
 
-        func keyPath() -> String {
+        var keyPath: String {
             switch self {
             case .ready:
                 return "isReady"
@@ -47,27 +41,40 @@ class TaskOperation: Operation {
         }
     }
 
-    var state: State {
-        self.lock.lock()
-        defer { self.lock.unlock() }
-        return self._state
+    private var _state: State = .pending
+    private(set) var state: State {
+        get {
+            return self.queue.sync {
+                return self._state
+            }
+        }
+
+        set(newValue) {
+            self.setState(to: newValue)
+        }
     }
 
-    private var _state: State = .pending {
-        willSet {
-            guard self.state != newValue else {
-                return
-            }
-            willChangeValue(forKey: newValue.keyPath())
-            willChangeValue(forKey: self.state.keyPath())
+    @discardableResult
+    private func setState(to newState: State, if pred: (State) -> Bool = { _ in true }) -> Bool {
+        let oldValue = self.state
+        guard oldValue != newState else {
+            return false
         }
-        didSet {
-            guard self.state != oldValue else {
-                return
+
+        willChangeValue(forKey: oldValue.keyPath)
+        willChangeValue(forKey: newState.keyPath)
+        let didSet = self.queue.sync(flags: .barrier) { () -> Bool in
+            if pred(self._state) {
+                self._state = newState
+                return true
             }
-            didChangeValue(forKey: oldValue.keyPath())
-            didChangeValue(forKey: self.state.keyPath())
+            return false
         }
+        if didSet {
+            didChangeValue(forKey: oldValue.keyPath)
+            didChangeValue(forKey: newState.keyPath)
+        }
+        return didSet
     }
 
     init(executor: @escaping (TaskOperation) -> Void) {
@@ -75,58 +82,25 @@ class TaskOperation: Operation {
     }
 
     public override func start() {
-        // Set to execute only if not already cancelled
-        do {
-            self.lock.lock()
-            defer { self.lock.unlock() }
-
-            guard !self.isCancelled else {
-                self._state = .finished
-                return
-            }
-
-            self._state = .executing
+        if self.setState(to: .executing, if: { _ in !self.isCancelled } ) {
+            self.executor(self)
+        } else {
+            self.state = .finished
         }
-
-        self.executor(self)
     }
 
     func markReady() {
-        self.lock.lock()
-        defer { self.lock.unlock() }
-
-        guard self._state == .pending && !self.isCancelled else {
-            return
-        }
-
-        self._state = .ready
+        self.setState(to: .ready, if: { $0 == .pending && !self.isCancelled } )
     }
 
     func markFinished() {
-        self.lock.lock()
-        defer { self.lock.unlock() }
-        self._state = .finished
-    }
-
-    public override func cancel() {
-        self.lock.lock()
-        defer { self.lock.unlock() }
-
-        guard self._state != .finished && !self.isCancelled else {
-            return
-        }
-
-        // This sets operation as ready if not there yet and ensures isCancelled returns true
-        // which results in the queue calling start where a check for isCancelled sets the
-        // operation's state to finished
-        super.cancel()
+        self.state = .finished
     }
 
     public override var isReady: Bool {
-        self.lock.lock()
-        defer { self.lock.unlock() }
-        // Check super.ready because it reports on dependent operations
-        return super.isReady && self._state == .ready
+        return self.queue.sync {
+            return super.isReady && self._state == .ready
+        }
     }
 
     public override var isExecuting: Bool {

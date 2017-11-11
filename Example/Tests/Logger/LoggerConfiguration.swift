@@ -22,7 +22,7 @@ import Nimble
 class LoggerConfiguration: QuickConfiguration {
     override class func configure(_ configuration: Configuration) {
         configuration.afterEach {
-            Logger.shared.dispatchGroup.wait()
+            Logger.shared.waitTillAllLogsTransported()
         }
     }
 }

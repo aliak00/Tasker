@@ -141,6 +141,40 @@ class ProfilerTests: QuickSpec {
 
                 print(profiler.results)
             }
+
+            xit("tasks") {
+                let configuration = ProfilerConfiguration(threadCount: 2, sampleCount: 10)
+                let profiler = Profiler(label: "", configuration: configuration)
+
+                let taskManager = TaskManager()
+                func noop(_: String) {}
+                Logger.shared.addTransport { noop($0) }
+                profiler.profile(tag: "with logging") {
+
+                    var handles: [TaskHandle] = []
+                    for _ in 0..<400 {
+                        handles.append(taskManager.add(task: DummyTask()))
+                    }
+                    taskManager.waitTillAllTasksFinished()
+                    for handle in handles {
+                        assert(handle.state == .finished)
+                    }
+                }
+
+                Logger.shared.removeTransports()
+                profiler.profile(tag: "without logging") {
+                    var handles: [TaskHandle] = []
+                    for _ in 0..<400 {
+                        handles.append(taskManager.add(task: DummyTask()))
+                    }
+                    taskManager.waitTillAllTasksFinished()
+                    for handle in handles {
+                        assert(handle.state == .finished)
+                    }
+                }
+
+                print(profiler.results)
+            }
         }
     }
 }
