@@ -20,8 +20,6 @@ import Nimble
 
 @testable import Swooft
 
-typealias SuccessTaskSpy = TaskSpy<Void>
-
 func failWith<T>(_ expectedError: Error) -> Predicate<Result<T>> {
     let domain = (expectedError as NSError).domain
     return Predicate.simple("get <failure(\(domain).\(expectedError))>") { expression in

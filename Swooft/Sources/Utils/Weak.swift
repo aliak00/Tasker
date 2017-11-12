@@ -35,7 +35,7 @@ public struct Weak<T: AnyObject> {
     /**
      - parameter value: the value to store weakly
      */
-    public init(_ value: T) {
+    public init(_ value: T?) {
         self.value = value
     }
 }

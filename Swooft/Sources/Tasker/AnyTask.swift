@@ -16,22 +16,27 @@
 
 import Foundation
 
-public class AnyTask<T>: Task {
+public class AnyTask: Task {
 
-    public typealias SuccessValue = T
+    public typealias SuccessValue = Any
 
-    var executeBlock: (@escaping ResultCallback) -> Void
+    var executeThunk: (@escaping ResultCallback) -> Void
+    var internalTask: AnyObject?
 
-    var internalTask: Any?
-
-    init(timeout: DispatchTimeInterval? = nil, executeBlock: (@escaping (@escaping ResultCallback) -> Void)) {
-        self.executeBlock = executeBlock
+    public init<T>(timeout: DispatchTimeInterval? = nil, executeBlock: (@escaping (@escaping (Result<T>) -> Void) -> Void)) {
+        self.executeThunk = { cb in
+            executeBlock { result in
+                cb(AnyResult(result))
+            }
+        }
         self.timeout = timeout
     }
 
-    init<U: Task>(task: U) where U.SuccessValue == SuccessValue {
-        self.executeBlock = { cb in
-            task.execute(completion: cb)
+    public init<U: Task>(_ task: U) {
+        self.executeThunk = { cb in
+            task.execute { result in
+                cb(AnyResult(result))
+            }
         }
         self.timeout = task.timeout
         self.internalTask = task
@@ -40,17 +45,7 @@ public class AnyTask<T>: Task {
     public var timeout: DispatchTimeInterval?
 
     public func execute(completion: @escaping ResultCallback) {
-        self.executeBlock(completion)
+        self.executeThunk(completion)
     }
 }
 
-extension AnyTask where T == Any {
-    convenience init<U: Task>(task: U) {
-        self.init(timeout: task.timeout) { cb in
-            task.execute { result in
-                cb(AnyResult(result))
-            }
-        }
-        self.internalTask = task
-    }
-}

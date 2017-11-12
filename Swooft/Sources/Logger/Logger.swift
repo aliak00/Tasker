@@ -175,11 +175,12 @@ public class Logger {
      - parameter object: autoclosure statment to be logged
      - parameter tags: a set of tags to apply to this log
      */
-    public func log<T>(level: LogLevel = .info, _ object: @escaping @autoclosure () -> T, tags explicitTags: [String] = [], force: Bool = false, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+    public func log<T>(level: LogLevel = .info, _ object: @autoclosure () -> T, tags explicitTags: [String] = [], force: Bool = false, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
 
         let thread = Thread.isMainThread ? "UI" : "BG"
         let threadID = pthread_mach_thread_np(pthread_self())
         let timestamp = self.startTime.elapsed
+        let string = "\(object())"
 
         self.dispatchGroup.enter()
         self.queue.async { [weak self] in
@@ -192,8 +193,6 @@ public class Logger {
             guard (strongSelf._enabled && strongSelf.transports.count > 0) || force else {
                 return
             }
-
-            let string = "\(object())"
 
             let functionName = function.components(separatedBy: "(").first ?? ""
             let fileName: String = {

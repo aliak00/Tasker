@@ -16,28 +16,21 @@
 
 @testable import Swooft
 
-//
-// This is needed because InterceptorSpy stores tasks that are passed to it
-// and TaskSpy stores the interceptors that are passed to it so you get a
-// retain cycle
-//
-class WeakAnyTask {
-    weak var anyTask: AnyObject?
-    init<T: Task>(task: T) {
-        self.anyTask = task
-    }
-}
-
 class InterceptorSpy: TaskInterceptor {
 
-    var interceptCallCount = 0
-    var interceptCallData: [(weakAnyTask: WeakAnyTask, currentBatchCount: Int)] = []
+    var interceptCallCount: Int {
+        return self.interceptCallData.count
+    }
+    var interceptCallData: [(weakAnyTask: Weak<AnyObject>, currentBatchCount: Int)] = []
     var interceptCallResultData: [InterceptCommand] = []
-    var interceptBlock: (AnyTask<Any>, Int) -> InterceptCommand = { _, _ in .execute }
+    var interceptBlock: (AnyTask, Int) -> InterceptCommand = { _, _ in .execute }
 
     func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand {
-        defer { self.interceptCallCount += 1 }
-        self.interceptCallData.append((WeakAnyTask(task: task), currentBatchCount))
-        return self.interceptBlock(AnyTask(task: task), currentBatchCount)
+        let anyTask = AnyTask(task)
+        defer {
+            let weakAnyTask = Weak(anyTask.internalTask)
+            self.interceptCallData.append((weakAnyTask, currentBatchCount))
+        }
+        return self.interceptBlock(anyTask, currentBatchCount)
     }
 }

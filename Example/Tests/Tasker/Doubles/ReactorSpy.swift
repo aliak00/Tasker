@@ -24,25 +24,31 @@ class ReactorSpy: TaskReactor {
         self.configuration = configuration
     }
 
-    var executeCallCount = 0
+    var executeCallCount: Int {
+        return self.executeCallData.count
+    }
     var executeCallData: [(Error?) -> Void] = []
     var executeBlock: (@escaping (Error?) -> Void) -> Void = { _ in }
 
-    var shouldExecuteCallCount = 0
-    var shouldExecuteCallData: [(anyResult: AnyResult, anyTask: WeakAnyTask, handle: TaskHandle)] = []
-    var shouldExecuteBlock: (AnyResult, AnyTask<Any>, TaskHandle) -> Bool = { _, _, _ in true }
+    var shouldExecuteCallCount: Int {
+        return self.shouldExecuteCallData.count
+    }
+    var shouldExecuteCallData: [(anyResult: AnyResult, weakAnyTask: Weak<AnyObject>, handle: TaskHandle)] = []
+    var shouldExecuteBlock: (AnyResult, AnyTask, TaskHandle) -> Bool = { _, _, _ in true }
 
     func execute(done: @escaping (Error?) -> Void) {
-        self.executeCallData.append(done)
+        defer {
+            self.executeCallData.append(done)
+        }
         self.executeBlock(done)
-        self.executeCallCount += 1
     }
 
     func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with handle: TaskHandle) -> Bool where T: Task {
-        defer { self.shouldExecuteCallCount += 1 }
         let anyResult = AnyResult(result)
-        let anyTask = AnyTask<Any>(task: task)
-        self.shouldExecuteCallData.append((anyResult, WeakAnyTask(task: task), handle))
+        let anyTask = AnyTask(task)
+        defer {
+            self.shouldExecuteCallData.append((anyResult, Weak(anyTask.internalTask), handle))
+        }
         return self.shouldExecuteBlock(anyResult, anyTask, handle)
     }
 }

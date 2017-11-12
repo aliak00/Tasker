@@ -19,27 +19,14 @@ import Quick
 import Nimble
 @testable import Swooft
 
-private class TaskManagerSpyConfiguration: QuickConfiguration {
-    override class func configure(_ configuration: Configuration) {
-        configuration.afterEach {
-            TaskManagerSpy.shared.reset()
-        }
-    }
-}
-
 class TaskManagerSpy {
-
-    static let shared = TaskManagerSpy()
 
     let taskManager: TaskManager
 
-    var completionCallCount: Int = 0
-    var completionCallData: [AnyResult] = []
-
-    func reset() {
-        self.completionHandlerCallCount = 0
-        self.completionCallData.removeAll()
+    var completionCallCount: Int {
+        return self.completionCallData.count
     }
+    var completionCallData: [AnyResult] = []
 
     init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
         self.taskManager = TaskManager(interceptors: interceptors, reactors: reactors)
@@ -56,9 +43,10 @@ class TaskManagerSpy {
             guard let strongSelf = self else {
                 return
             }
-            strongSelf.completionCallData.append(AnyResult(result))
+            defer {
+                strongSelf.completionCallData.append(AnyResult(result))
+            }
             completion(result)
-            strongSelf.completionCallCount += 1
         }
     }
 }

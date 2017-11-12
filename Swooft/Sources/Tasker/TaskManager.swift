@@ -18,13 +18,13 @@ import Foundation
 
 private class TaskData {
     fileprivate var operation: TaskOperation
-    fileprivate let anyTask: AnyTask<Any>
+    fileprivate let anyTask: AnyTask
     fileprivate let completionErrorCallback: (TaskError) -> Void
     fileprivate let intercept: (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
 
     init(
         operation: TaskOperation,
-        anyTask: AnyTask<Any>,
+        anyTask: AnyTask,
         completionErrorCallback: @escaping (TaskError) -> Void,
         intercept: @escaping (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
     ) {
@@ -168,7 +168,7 @@ public class TaskManager {
 
             let data = TaskData(
                 operation: operation,
-                anyTask: AnyTask(task: task),
+                anyTask: AnyTask(task),
                 completionErrorCallback: { completion?(.failure($0)) },
                 intercept: intercept
             )
