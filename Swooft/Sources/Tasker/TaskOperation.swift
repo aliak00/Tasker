@@ -83,7 +83,13 @@ class TaskOperation: Operation {
 
     public override func start() {
         if self.setState(to: .executing, if: { _ in !self.isCancelled } ) {
-            self.executor(self)
+            self.queue.async { [weak self] in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.executor(strongSelf)
+            }
+
         } else {
             self.state = .finished
         }
