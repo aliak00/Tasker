@@ -23,10 +23,6 @@ class AsyncTaskTests: QuickSpec {
 
     override func spec() {
 
-        afterEach {
-            AsyncTaskShared.taskManager.waitTillAllTasksFinished()
-        }
-
         describe("async") {
 
             it("should call execute") {

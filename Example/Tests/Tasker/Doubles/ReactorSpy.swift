@@ -47,7 +47,7 @@ class ReactorSpy: TaskReactor {
         let anyResult = AnyResult(result)
         let anyTask = AnyTask(task)
         defer {
-            self.shouldExecuteCallData.append((anyResult, Weak(anyTask.internalTask), handle))
+            self.shouldExecuteCallData.append((anyResult, Weak(task as AnyObject), handle))
         }
         return self.shouldExecuteBlock(anyResult, anyTask, handle)
     }

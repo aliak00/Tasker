@@ -41,6 +41,8 @@ private class TaskData {
  */
 public class TaskManager {
 
+    public static let shared = TaskManager()
+
     /**
      Thes log tags can be passed to filter the logs produced by the TaskManager
 

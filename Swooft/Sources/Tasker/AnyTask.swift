@@ -23,13 +23,25 @@ public class AnyTask: Task {
     var executeThunk: (@escaping ResultCallback) -> Void
     var internalTask: AnyObject?
 
-    public init<T>(timeout: DispatchTimeInterval? = nil, executeBlock: (@escaping (@escaping (Result<T>) -> Void) -> Void)) {
-        self.executeThunk = { cb in
-            executeBlock { result in
-                cb(AnyResult(result))
+    public init<T>(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping (Result<T>) -> Void) -> Void)) {
+        self.executeThunk = { callback in
+            execute { result in
+                callback(AnyResult(result))
             }
         }
         self.timeout = timeout
+    }
+
+    public convenience init<T>(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> Result<T>) {
+        self.init(timeout: timeout) { callback in
+            callback(execute())
+        }
+    }
+
+    public convenience init<T>(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> T) {
+        self.init(timeout: timeout) { callback in
+            callback(.success(execute()))
+        }
     }
 
     public init<U: Task>(_ task: U) {

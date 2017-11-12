@@ -16,14 +16,6 @@
 
 import Foundation
 
-//
-// This is here because you cannot have stored static data in generic classes and it's convenient to be able
-// to access the shared task manager for testing puposes.
-//
-struct AsyncTaskShared {
-    static let taskManager = TaskManager()
-}
-
 private class _AsyncTask<T>: Task {
 
     typealias SuccessValue = T
@@ -59,7 +51,7 @@ public class AsyncTask<T> {
     private var taskManager: TaskManager
 
     public init(taskManager: TaskManager? = nil, execute: @escaping (@escaping (Result<T>) -> Void) -> Void) {
-        self.taskManager = taskManager ?? AsyncTaskShared.taskManager
+        self.taskManager = taskManager ?? TaskManager.shared
         self.execute = execute
     }
 

@@ -28,7 +28,7 @@ class InterceptorSpy: TaskInterceptor {
     func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand {
         let anyTask = AnyTask(task)
         defer {
-            let weakAnyTask = Weak(anyTask.internalTask)
+            let weakAnyTask = Weak(task as AnyObject)
             self.interceptCallData.append((weakAnyTask, currentBatchCount))
         }
         return self.interceptBlock(anyTask, currentBatchCount)
