@@ -40,11 +40,11 @@ class AsyncTaskSpy<T> {
         after interval: DispatchTimeInterval? = nil,
         queue: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,
-        completionHandler: ((Result<T>) -> Void)? = nil
+        completion: ((Result<T>) -> Void)? = nil
     ) -> TaskHandle {
         return self.asyncTask.async(after: interval, queue: queue, timeout: timeout) { result in
             self.completionHandlerCallData.append(result)
-            completionHandler?(result)
+            completion?(result)
             self.completionHandlerCallCount += 1
         }
     }

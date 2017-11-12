@@ -113,14 +113,14 @@ public class TaskManager {
      - parameter task: the task to run
      - parameter startImmediately: set this to false if you want to call start on the `TaskHandle` that's returned
      - parameter after: set this to some value if you want the task to start running after some interval
-     - parameter completionHandler: called after the task is done with the result of `Task.execute`
+     - parameter completion: called after the task is done with the result of `Task.execute`
      */
     @discardableResult
     public func add<T: Task>(
         task: T,
         startImmediately: Bool = true,
         after interval: DispatchTimeInterval? = nil,
-        completionHandler: T.ResultCallback? = nil
+        completion: T.ResultCallback? = nil
     ) -> TaskHandle {
 
         let handle = OwnedTaskHandle(owner: self)
@@ -147,7 +147,7 @@ public class TaskManager {
                 return
             }
 
-            strongSelf.execute(task: task, handle: handle, operation: operation, completionHandler: completionHandler)
+            strongSelf.execute(task: task, handle: handle, operation: operation, completion: completion)
         }
 
         log(from: self, "will add \(handle) - task: \(T.self), interval: \(String(describing: interval))", tags: TaskManager.kClrTags)
@@ -169,7 +169,7 @@ public class TaskManager {
             let data = TaskData(
                 operation: operation,
                 anyTask: AnyTask(task: task),
-                completionErrorCallback: { completionHandler?(.failure($0)) },
+                completionErrorCallback: { completion?(.failure($0)) },
                 intercept: intercept
             )
 
@@ -191,7 +191,7 @@ public class TaskManager {
         log(level: .verbose, from: self, "end waiting")
     }
 
-    private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: TaskOperation, completionHandler: T.ResultCallback?) {
+    private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: TaskOperation, completion: T.ResultCallback?) {
 
         let timeoutWorkItem: DispatchWorkItem?
         if let timeout = task.timeout {
@@ -289,7 +289,7 @@ public class TaskManager {
                     data.operation.markFinished()
                     log(level: .verbose, from: strongSelf, "did finish \(handle)", tags: TaskManager.kTkQTags)
                     strongSelf.taskQueue.async {
-                        completionHandler?(result)
+                        completion?(result)
                     }
                 } else {
                     log(level: .verbose, from: strongSelf, "did not finish \(handle)", tags: TaskManager.kTkQTags)

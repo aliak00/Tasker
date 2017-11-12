@@ -29,8 +29,8 @@ class TaskHandleTests: QuickSpec {
                 let handle = manager.add(task: kDummyTask)
                 handle.cancel()
                 expect(handle.state) == TaskState.finished
-                ensure(manager.completionHandlerCallCount).becomes(1)
-                expect(manager.completionHandlerCallData[0]).to(failWith(TaskError.cancelled))
+                ensure(manager.completionCallCount).becomes(1)
+                expect(manager.completionCallData[0]).to(failWith(TaskError.cancelled))
             }
         }
 
@@ -39,8 +39,7 @@ class TaskHandleTests: QuickSpec {
             it("should start a task") {
                 let manager = TaskManagerSpy()
                 let handle = manager.add(task: kDummyTask, startImmediately: false)
-                ensure(handle.state).doesNotBecome(.finished)
-                expect(handle.state) == TaskState.pending
+                ensure(handle.state).stays(.pending)
                 handle.start()
                 ensure(handle.state).becomes(.finished)
             }

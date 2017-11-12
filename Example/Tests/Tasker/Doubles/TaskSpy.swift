@@ -45,10 +45,10 @@ class TaskSpy<T>: Task {
         kTaskSpyCounter.getAndDecrement()
     }
 
-    func execute(completionHandler: @escaping ResultCallback) {
+    func execute(completion: @escaping ResultCallback) {
         let wrappedcompletionHandler: ResultCallback = { result in
             self.executeCallBackData.append(AnyResult(result))
-            completionHandler(result)
+            completion(result)
         }
         self.executeBlock(wrappedcompletionHandler)
         self.executeCallCount += 1

@@ -31,7 +31,7 @@ public class AnyTask<T>: Task {
 
     init<U: Task>(task: U) where U.SuccessValue == SuccessValue {
         self.executeBlock = { cb in
-            task.execute(completionHandler: cb)
+            task.execute(completion: cb)
         }
         self.timeout = task.timeout
         self.internalTask = task
@@ -39,8 +39,8 @@ public class AnyTask<T>: Task {
 
     public var timeout: DispatchTimeInterval?
 
-    public func execute(completionHandler: @escaping ResultCallback) {
-        self.executeBlock(completionHandler)
+    public func execute(completion: @escaping ResultCallback) {
+        self.executeBlock(completion)
     }
 }
 

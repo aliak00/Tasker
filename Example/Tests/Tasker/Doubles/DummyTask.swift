@@ -11,8 +11,8 @@ import Swooft
 
 class DummyTask: Task {
     typealias SuccessValue = Void
-    func execute(completionHandler: @escaping (Result<Void>) -> Void) {
-        completionHandler(.success(()))
+    func execute(completion: @escaping (Result<Void>) -> Void) {
+        completion(.success(()))
     }
 }
 

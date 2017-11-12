@@ -29,8 +29,8 @@ class TaskReactorTests: QuickSpec {
                 reactor.executeBlock = { sleep(for: .milliseconds(10)); $0(nil) }
                 let manager = TaskManagerSpy(reactors: [reactor])
                 manager.add(task: SuccessTaskSpy())
-                ensure(manager.completionHandlerCallCount).becomes(1)
-                expect(manager.completionHandlerCallData[0]).to(failWith(TaskError.reactorTimedOut(type: ReactorSpy.self)))
+                ensure(manager.completionCallCount).becomes(1)
+                expect(manager.completionCallData[0]).to(failWith(TaskError.reactorTimedOut(type: ReactorSpy.self)))
             }
 
             it("should complete reactor if under timeout") {
@@ -38,8 +38,8 @@ class TaskReactorTests: QuickSpec {
                 reactor.executeBlock = { sleep(for: .milliseconds(5)); $0(nil) }
                 let manager = TaskManagerSpy(reactors: [reactor])
                 manager.add(task: SuccessTaskSpy())
-                ensure(manager.completionHandlerCallCount).becomes(1)
-                expect(manager.completionHandlerCallData[0]).toNot(failWith(TaskError.reactorTimedOut(type: ReactorSpy.self)))
+                ensure(manager.completionCallCount).becomes(1)
+                expect(manager.completionCallData[0]).toNot(failWith(TaskError.reactorTimedOut(type: ReactorSpy.self)))
             }
 
             it("should re-execute tasks if reactor says requeue") {
@@ -66,7 +66,7 @@ class TaskReactorTests: QuickSpec {
                     manager.add(task: task)
                 }
 
-                ensure(manager.completionHandlerCallCount).becomes(numTasks)
+                ensure(manager.completionCallCount).becomes(numTasks)
 
                 for (index, task) in tasks.enumerated() {
                     if index % 2 == 0 {
@@ -104,7 +104,7 @@ class TaskReactorTests: QuickSpec {
 
                 reactor.executeCallData[0](nil)
 
-                ensure(manager.completionHandlerCallCount).becomes(handles.count + 1)
+                ensure(manager.completionCallCount).becomes(handles.count + 1)
 
                 for (handle, task) in handles {
                     expect(handle.state) == TaskState.finished

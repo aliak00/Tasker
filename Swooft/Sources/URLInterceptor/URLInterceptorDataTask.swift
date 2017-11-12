@@ -28,10 +28,10 @@ extension URLInterceptor {
 
         public typealias SuccessValue = (data: Data?, response: URLResponse?, error: Error?)
 
-        public func execute(completionHandler: @escaping (Result<(data: Data?, response: URLResponse?, error: Error?)>) -> Void) {
+        public func execute(completion: @escaping (Result<(data: Data?, response: URLResponse?, error: Error?)>) -> Void) {
             self.task = URLSession.shared.dataTask(with: self.request) { data, response, error in
                 let value: SuccessValue = (data, response, error)
-                completionHandler(.success(value))
+                completion(.success(value))
             }
 
             self.task?.resume()

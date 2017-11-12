@@ -49,13 +49,13 @@ class TaskManagerTests: QuickSpec {
             it("should call completion callback") {
                 let manager = TaskManagerSpy()
                 manager.add(task: kDummyTask)
-                ensure(manager.completionHandlerCallCount).becomes(1)
+                ensure(manager.completionCallCount).becomes(1)
             }
 
             it("should not execute if not told to") {
                 let manager = TaskManagerSpy()
                 let handle = manager.add(task: kDummyTask, startImmediately: false)
-                ensure(handle.state).doesNotBecome(.finished)
+                ensure(handle.state).stays(.pending)
             }
 
             it("should call completion callback after given interval") {
@@ -69,7 +69,7 @@ class TaskManagerTests: QuickSpec {
                 }
 
                 manager.add(task: task, after: interval)
-                ensure(manager.completionHandlerCallCount).becomes(1)
+                ensure(manager.completionCallCount).becomes(1)
                 expect(didStartAfter) > shouldStartAfter
             }
         }
@@ -79,7 +79,7 @@ class TaskManagerTests: QuickSpec {
             it("should call all callbacks") {
                 let manager = TaskManagerSpy()
                 manager.launch(task: SuccessTaskSpy(), count: 100)
-                ensure(manager.completionHandlerCallCount).becomes(100)
+                ensure(manager.completionCallCount).becomes(100)
             }
 
             it("should execute all tasks") {

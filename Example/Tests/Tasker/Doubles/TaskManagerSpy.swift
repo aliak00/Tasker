@@ -33,12 +33,12 @@ class TaskManagerSpy {
 
     let taskManager: TaskManager
 
-    var completionHandlerCallCount: Int = 0
-    var completionHandlerCallData: [AnyResult] = []
+    var completionCallCount: Int = 0
+    var completionCallData: [AnyResult] = []
 
     func reset() {
         self.completionHandlerCallCount = 0
-        self.completionHandlerCallData.removeAll()
+        self.completionCallData.removeAll()
     }
 
     init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
@@ -50,15 +50,15 @@ class TaskManagerSpy {
         task: T,
         startImmediately: Bool = true,
         after interval: DispatchTimeInterval? = nil,
-        completionHandler: (@escaping (T.TaskResult) -> Void) = { _ in }
+        completion: (@escaping (T.TaskResult) -> Void) = { _ in }
     ) -> TaskHandle {
         return self.taskManager.add(task: task, startImmediately: startImmediately, after: interval) { [weak self] result in
             guard let strongSelf = self else {
                 return
             }
-            strongSelf.completionHandlerCallData.append(AnyResult(result))
-            completionHandler(result)
-            strongSelf.completionHandlerCallCount += 1
+            strongSelf.completionCallData.append(AnyResult(result))
+            completion(result)
+            strongSelf.completionCallCount += 1
         }
     }
 }

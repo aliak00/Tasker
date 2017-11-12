@@ -37,10 +37,10 @@ private class _AsyncTask<T>: Task {
         self.timeout = timeout
     }
 
-    func execute(completionHandler: @escaping ResultCallback) {
+    func execute(completion: @escaping ResultCallback) {
         let execute = {
             self.asyncTask.execute { result in
-                completionHandler(result)
+                completion(result)
             }
         }
         if let queue = self.queue {
@@ -80,12 +80,12 @@ public class AsyncTask<T> {
         after interval: DispatchTimeInterval? = nil,
         queue: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,
-        completionHandler: ((Result<T>) -> Void)? = nil
+        completion: ((Result<T>) -> Void)? = nil
     ) -> TaskHandle {
         return self.taskManager.add(
             task: _AsyncTask<T>(asyncTask: self, queue: queue, timeout: timeout),
             after: interval,
-            completionHandler: completionHandler
+            completion: completion
         )
     }
 

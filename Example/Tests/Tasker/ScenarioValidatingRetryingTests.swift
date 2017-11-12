@@ -52,16 +52,16 @@ private class UserTask: Task, UserDependent, Retriable {
         self.weakUser = Weak(user)
     }
 
-    func execute(completionHandler: @escaping ResultCallback) {
+    func execute(completion: @escaping ResultCallback) {
         guard self.weakUser.value?.id == .valid else {
-            completionHandler(.failure(UserInvalid()))
+            completion(.failure(UserInvalid()))
             return
         }
         guard arc4random_uniform(2) != 0 else {
-            completionHandler(.failure(RandomFailure()))
+            completion(.failure(RandomFailure()))
             return
         }
-        completionHandler(.success(()))
+        completion(.success(()))
     }
 }
 
@@ -74,13 +74,13 @@ private class GetProfileTask: Task, UserDependent {
         self.profile = profile
     }
 
-    func execute(completionHandler: @escaping ResultCallback) {
+    func execute(completion: @escaping ResultCallback) {
         guard let user = self.weakUser.value, user.id == .valid else {
-            completionHandler(.failure(UserInvalid()))
+            completion(.failure(UserInvalid()))
             return
         }
 
-        completionHandler(.success(self.profile))
+        completion(.success(self.profile))
     }
 }
 
@@ -160,7 +160,7 @@ class ScenarioValidatingRetryingTests: QuickSpec {
             }
 
             // All of them should have completed (after retries/refresh) and user should be valid
-            ensure(manager.completionHandlerCallCount).becomes(numTasks)
+            ensure(manager.completionCallCount).becomes(numTasks)
             expect(user.id) == User.ID.valid
 
             // Invalidate user and try GetProfileTask
