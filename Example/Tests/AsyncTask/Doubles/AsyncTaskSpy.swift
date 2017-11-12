@@ -20,8 +20,10 @@ import Swooft
 class AsyncTaskSpy<T> {
     var asyncTask: AsyncTask<T>
 
-    var completionHandlerCallCount = 0
-    var completionHandlerCallData: [Result<T>] = []
+    var completionCallCount: Int {
+        return self.completionCallData.count
+    }
+    var completionCallData: [Result<T>] = []
 
     public init(execute: @escaping (@escaping (Result<T>) -> Void) -> Void) {
         self.asyncTask = AsyncTask(execute: execute)
@@ -43,23 +45,21 @@ class AsyncTaskSpy<T> {
         completion: ((Result<T>) -> Void)? = nil
     ) -> TaskHandle {
         return self.asyncTask.async(after: interval, queue: queue, timeout: timeout) { result in
-            self.completionHandlerCallData.append(result)
+            defer {
+                self.completionCallData.append(result)
+            }
             completion?(result)
-            self.completionHandlerCallCount += 1
         }
     }
 
     @discardableResult
     public func await(queue: DispatchQueue? = nil, timeout: DispatchTimeInterval? = nil) throws -> T {
-        defer {
-            self.completionHandlerCallCount += 1
-        }
         do {
             let value = try self.asyncTask.await(queue: queue, timeout: timeout)
-            self.completionHandlerCallData.append(.success(value))
+            self.completionCallData.append(.success(value))
             return value
         } catch {
-            self.completionHandlerCallData.append(.failure(error))
+            self.completionCallData.append(.failure(error))
             throw error
         }
     }

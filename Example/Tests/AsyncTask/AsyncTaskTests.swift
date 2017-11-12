@@ -28,22 +28,22 @@ class AsyncTaskTests: QuickSpec {
             it("should call execute") {
                 let task = AsyncTaskSpy {}
                 task.async()
-                ensure(task.completionHandlerCallCount).becomes(1)
+                ensure(task.completionCallCount).becomes(1)
             }
 
             it("should get cancelled error") {
                 let task = AsyncTaskSpy { sleep(for: .milliseconds(5)) }
                 let handle = task.async()
                 handle.cancel()
-                ensure(task.completionHandlerCallCount).becomes(1)
-                expect(task.completionHandlerCallData[0]).to(failWith(TaskError.cancelled))
+                ensure(task.completionCallCount).becomes(1)
+                expect(task.completionCallData[0]).to(failWith(TaskError.cancelled))
             }
 
             it("should timeout after deadline reached") {
                 let task = AsyncTaskSpy { sleep(for: .milliseconds(5)) }
                 let handle = task.async(timeout: .milliseconds(1))
-                ensure(task.completionHandlerCallCount).becomes(1)
-                expect(task.completionHandlerCallData[0]).to(failWith(TaskError.timedOut))
+                ensure(task.completionCallCount).becomes(1)
+                expect(task.completionCallData[0]).to(failWith(TaskError.timedOut))
                 ensure(handle.state).becomes(.finished)
             }
         }
@@ -54,7 +54,7 @@ class AsyncTaskTests: QuickSpec {
                 let task = AsyncTaskSpy { true }
                 let value = try! task.await()
                 expect(value).to(beTrue())
-                ensure(task.completionHandlerCallCount).stays(1)
+                ensure(task.completionCallCount).stays(1)
             }
 
             it("should turn async in to sync") {
@@ -64,7 +64,7 @@ class AsyncTaskTests: QuickSpec {
                 }
                 let value = try! task.await()
                 expect(value).to(equal(3))
-                ensure(task.completionHandlerCallCount).stays(1)
+                ensure(task.completionCallCount).stays(1)
             }
 
             it("should timeout after deadline reached") {
@@ -76,7 +76,7 @@ class AsyncTaskTests: QuickSpec {
                     maybeError = error
                 }
                 expect(maybeError).to(matchError(TaskError.timedOut))
-                ensure(task.completionHandlerCallCount).stays(1)
+                ensure(task.completionCallCount).stays(1)
             }
         }
     }
