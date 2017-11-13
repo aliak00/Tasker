@@ -18,7 +18,7 @@ import Foundation
 import Swooft
 
 
-class AsyncTaskSpy<T>: TaskSpy<T> {
+class AsyncAwaitSpy<T>: TaskSpy<T> {
 
     var completionCallCount: Int {
         return self.completionCallData.count

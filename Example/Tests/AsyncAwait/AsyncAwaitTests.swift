@@ -19,12 +19,12 @@ import Nimble
 
 @testable import Swooft
 
-class AsyncTaskTests: QuickSpec {
+class AsyncAwaitTests: QuickSpec {
 
     override func spec() {
 
         it("should work") {
-            let task = AsyncTaskSpy { () -> Int in
+            let task = AsyncAwaitSpy { () -> Int in
                 let one = try! TaskSpy<Int> { callback in
                     sleep(for: .milliseconds(1))
                     callback(.success(1))
@@ -43,13 +43,13 @@ class AsyncTaskTests: QuickSpec {
         describe("async") {
 
             it("should call execute") {
-                let task = AsyncTaskSpy {}
+                let task = AsyncAwaitSpy {}
                 task.async()
                 ensure(task.completionCallCount).becomes(1)
             }
 
             it("should get cancelled error") {
-                let task = AsyncTaskSpy { sleep(for: .milliseconds(5)) }
+                let task = AsyncAwaitSpy { sleep(for: .milliseconds(5)) }
                 let handle = task.async()
                 handle.cancel()
                 ensure(task.completionCallCount).becomes(1)
@@ -57,7 +57,7 @@ class AsyncTaskTests: QuickSpec {
             }
 
             it("should timeout after deadline reached") {
-                let task = AsyncTaskSpy { sleep(for: .milliseconds(5)) }
+                let task = AsyncAwaitSpy { sleep(for: .milliseconds(5)) }
                 let handle = task.async(timeout: .milliseconds(1))
                 ensure(task.completionCallCount).becomes(1)
                 expect(task.completionCallData[0]).to(failWith(TaskError.timedOut))
@@ -79,14 +79,14 @@ class AsyncTaskTests: QuickSpec {
         describe("await") {
 
             it("should return value") {
-                let task = AsyncTaskSpy { true }
+                let task = AsyncAwaitSpy { true }
                 let value = try! task.await()
                 expect(value).to(beTrue())
                 ensure(task.completionCallCount).stays(1)
             }
 
             it("should turn async in to sync") {
-                let task = AsyncTaskSpy { () -> Int in
+                let task = AsyncAwaitSpy { () -> Int in
                     sleep(for: .milliseconds(1))
                     return 3
                 }
@@ -96,7 +96,7 @@ class AsyncTaskTests: QuickSpec {
             }
 
             it("should timeout after deadline reached") {
-                let task = AsyncTaskSpy { sleep(for: .milliseconds(5)) }
+                let task = AsyncAwaitSpy { sleep(for: .milliseconds(5)) }
                 var maybeError: Error?
                 do {
                     try task.await(timeout: .milliseconds(1))

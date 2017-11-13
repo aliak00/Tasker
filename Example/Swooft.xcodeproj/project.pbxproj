@@ -22,12 +22,12 @@
 		E18AD0EF1F50B3AD00757478 /* TaskHandleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E91F50B3AD00757478 /* TaskHandleTests.swift */; };
 		E18AD0F01F50B3AD00757478 /* TaskInterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0EA1F50B3AD00757478 /* TaskInterceptorTests.swift */; };
 		E18AD0F11F50B3AD00757478 /* TaskManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0EB1F50B3AD00757478 /* TaskManagerTests.swift */; };
-		E18AD0FA1F50B3F600757478 /* AsyncTaskSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0F51F50B3F600757478 /* AsyncTaskSpy.swift */; };
+		E18AD0FA1F50B3F600757478 /* AsyncAwaitSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0F51F50B3F600757478 /* AsyncAwaitSpy.swift */; };
 		E18AD0FB1F50B3F600757478 /* DummyTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0F61F50B3F600757478 /* DummyTask.swift */; };
 		E18AD0FC1F50B3F600757478 /* InterceptorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0F71F50B3F600757478 /* InterceptorSpy.swift */; };
 		E18AD0FD1F50B3F600757478 /* TaskManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0F81F50B3F600757478 /* TaskManagerSpy.swift */; };
 		E18AD0FE1F50B3F600757478 /* TaskSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0F91F50B3F600757478 /* TaskSpy.swift */; };
-		E18AD1001F50B40100757478 /* AsyncTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0FF1F50B40100757478 /* AsyncTaskTests.swift */; };
+		E18AD1001F50B40100757478 /* AsyncAwaitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0FF1F50B40100757478 /* AsyncAwaitTests.swift */; };
 		E18AD1041F50B40900757478 /* Ensure.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1011F50B40900757478 /* Ensure.swift */; };
 		E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1021F50B40900757478 /* KitchenSink.swift */; };
 		E18AD1061F50B40900757478 /* YieldingIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1031F50B40900757478 /* YieldingIterator.swift */; };
@@ -56,12 +56,12 @@
 		E18AD0E91F50B3AD00757478 /* TaskHandleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskHandleTests.swift; sourceTree = "<group>"; };
 		E18AD0EA1F50B3AD00757478 /* TaskInterceptorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskInterceptorTests.swift; sourceTree = "<group>"; };
 		E18AD0EB1F50B3AD00757478 /* TaskManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManagerTests.swift; sourceTree = "<group>"; };
-		E18AD0F51F50B3F600757478 /* AsyncTaskSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTaskSpy.swift; sourceTree = "<group>"; };
+		E18AD0F51F50B3F600757478 /* AsyncAwaitSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncAwaitSpy.swift; sourceTree = "<group>"; };
 		E18AD0F61F50B3F600757478 /* DummyTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyTask.swift; sourceTree = "<group>"; };
 		E18AD0F71F50B3F600757478 /* InterceptorSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterceptorSpy.swift; sourceTree = "<group>"; };
 		E18AD0F81F50B3F600757478 /* TaskManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManagerSpy.swift; sourceTree = "<group>"; };
 		E18AD0F91F50B3F600757478 /* TaskSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskSpy.swift; sourceTree = "<group>"; };
-		E18AD0FF1F50B40100757478 /* AsyncTaskTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTaskTests.swift; sourceTree = "<group>"; };
+		E18AD0FF1F50B40100757478 /* AsyncAwaitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncAwaitTests.swift; sourceTree = "<group>"; };
 		E18AD1011F50B40900757478 /* Ensure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ensure.swift; sourceTree = "<group>"; };
 		E18AD1021F50B40900757478 /* KitchenSink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KitchenSink.swift; sourceTree = "<group>"; };
 		E18AD1031F50B40900757478 /* YieldingIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YieldingIterator.swift; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 				E103B3281F574DB1000F3F70 /* Profiler */,
 				E17C3FB01F5371300002ADFF /* Collections */,
 				E18AD1071F50B8D400757478 /* Logger */,
-				E18AD0F31F50B3C600757478 /* AsyncTask */,
+				E18AD0F31F50B3C600757478 /* AsyncAwait */,
 				E18AD0F21F50B3B800757478 /* Utils */,
 				E18AD0E51F50B39100757478 /* Tasker */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
@@ -225,13 +225,13 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		E18AD0F31F50B3C600757478 /* AsyncTask */ = {
+		E18AD0F31F50B3C600757478 /* AsyncAwait */ = {
 			isa = PBXGroup;
 			children = (
 				E1BAC6AA1FB3D03700442308 /* Doubles */,
-				E18AD0FF1F50B40100757478 /* AsyncTaskTests.swift */,
+				E18AD0FF1F50B40100757478 /* AsyncAwaitTests.swift */,
 			);
-			path = AsyncTask;
+			path = AsyncAwait;
 			sourceTree = "<group>";
 		};
 		E18AD1071F50B8D400757478 /* Logger */ = {
@@ -258,7 +258,7 @@
 		E1BAC6AA1FB3D03700442308 /* Doubles */ = {
 			isa = PBXGroup;
 			children = (
-				E18AD0F51F50B3F600757478 /* AsyncTaskSpy.swift */,
+				E18AD0F51F50B3F600757478 /* AsyncAwaitSpy.swift */,
 			);
 			path = Doubles;
 			sourceTree = "<group>";
@@ -412,8 +412,8 @@
 				E103B3381F5C596F000F3F70 /* CacheTests.swift in Sources */,
 				E172FCD01F96AB6D00317E56 /* LoggerTests.swift in Sources */,
 				E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */,
-				E18AD0FA1F50B3F600757478 /* AsyncTaskSpy.swift in Sources */,
-				E18AD1001F50B40100757478 /* AsyncTaskTests.swift in Sources */,
+				E18AD0FA1F50B3F600757478 /* AsyncAwaitSpy.swift in Sources */,
+				E18AD1001F50B40100757478 /* AsyncAwaitTests.swift in Sources */,
 				E11671991FABBCD500F1E3BC /* LoggerConfiguration.swift in Sources */,
 				E17C3FB31F5372E30002ADFF /* RingBufferTests.swift in Sources */,
 				E1BAC6AC1FB3D56100442308 /* TaskerConfiguration.swift in Sources */,
