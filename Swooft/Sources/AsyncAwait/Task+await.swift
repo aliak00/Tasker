@@ -19,7 +19,7 @@ import Foundation
 extension Task {
     public func await(
         with taskManager: TaskManager? = nil,
-        queue: DispatchQueue? = nil,
+        queue _: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil
     ) throws -> SuccessValue {
         let semaphore = DispatchSemaphore(value: 0)

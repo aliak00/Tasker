@@ -82,7 +82,7 @@ class TaskOperation: Operation {
     }
 
     public override func start() {
-        if self.setState(to: .executing, if: { _ in !self.isCancelled } ) {
+        if self.setState(to: .executing, if: { _ in !self.isCancelled }) {
             self.queue.async { [weak self] in
                 guard let strongSelf = self else {
                     return
@@ -96,7 +96,7 @@ class TaskOperation: Operation {
     }
 
     func markReady() {
-        self.setState(to: .ready, if: { $0 == .pending && !self.isCancelled } )
+        self.setState(to: .ready, if: { $0 == .pending && !self.isCancelled })
     }
 
     func markFinished() {

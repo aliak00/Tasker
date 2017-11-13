@@ -26,6 +26,7 @@ class TaskManagerSpy {
     var completionCallCount: Int {
         return self.completionCallData.count
     }
+
     var completionCallData: [AnyResult] = []
 
     init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {

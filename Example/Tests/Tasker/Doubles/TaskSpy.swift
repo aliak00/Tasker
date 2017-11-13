@@ -41,6 +41,7 @@ class TaskSpy<T>: AnyTask<T> {
     var executeCallCount: Int {
         return self.executeCallBackData.count
     }
+
     var executeCallBackData: [AnyResult] = []
 
     override init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping ResultCallback) -> Void)) {
@@ -72,4 +73,3 @@ class TaskSpy<T>: AnyTask<T> {
         self.executeThunk(wrappedcompletion)
     }
 }
-

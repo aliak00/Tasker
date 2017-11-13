@@ -17,12 +17,12 @@
 import Foundation
 import Swooft
 
-
 class AsyncAwaitSpy<T>: TaskSpy<T> {
 
     var completionCallCount: Int {
         return self.completionCallData.count
     }
+
     var completionCallData: [Result<T>] = []
 
     convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> Result<T>) {

@@ -72,4 +72,3 @@ extension AnyTask where T == Any {
         self.internalTask = task
     }
 }
-

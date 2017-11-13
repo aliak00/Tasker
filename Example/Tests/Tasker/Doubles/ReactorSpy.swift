@@ -27,6 +27,7 @@ class ReactorSpy: TaskReactor {
     var executeCallCount: Int {
         return self.executeCallData.count
     }
+
     var executeCallData: [(Error?) -> Void] = []
     var executeBlock: (@escaping (Error?) -> Void) -> Void = { _ in }
 

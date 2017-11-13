@@ -45,10 +45,9 @@ public class Logger {
     /// Shared logger object
     public static let shared: Logger = {
         let logger = Logger()
-//        logger.addTransport { print($0) }
+        //        logger.addTransport { print($0) }
         return logger
     }()
-
 
     private let startTime = DispatchTime.now()
     private let queue = DispatchQueue(label: "Swooft.Logger", qos: .utility)

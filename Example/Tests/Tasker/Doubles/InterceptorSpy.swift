@@ -21,6 +21,7 @@ class InterceptorSpy: TaskInterceptor {
     var interceptCallCount: Int {
         return self.interceptCallData.count
     }
+
     var interceptCallData: [(anyTask: AnyTask<Any>, currentBatchCount: Int)] = []
     var interceptCallResultData: [InterceptCommand] = []
     var interceptBlock: (AnyTask<Any>, Int) -> InterceptCommand = { _, _ in .execute }

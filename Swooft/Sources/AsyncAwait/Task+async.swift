@@ -21,7 +21,7 @@ extension Task {
     public func async(
         with taskManager: TaskManager? = nil,
         after interval: DispatchTimeInterval? = nil,
-        queue: DispatchQueue? = nil,
+        queue _: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,
         completion: ResultCallback? = nil
     ) -> TaskHandle {
