@@ -21,7 +21,7 @@ public class URLInterceptor {
     static var globalStore = SynchronizedDictionary<String, TaskManager>()
 
     static let key: String = {
-        return "com.swooft.URLInterceptor.\(String(UUID().uuidString.prefix(6)))"
+        return "Swooft.URLInterceptor.\(String(UUID().uuidString.prefix(6)))"
     }()
 
     let taskManager: TaskManager

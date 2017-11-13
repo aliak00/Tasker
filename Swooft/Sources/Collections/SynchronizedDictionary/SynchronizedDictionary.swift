@@ -18,11 +18,11 @@ import Foundation
 
 public class SynchronizedDictionary<Key: Hashable, Value> {
     var dictionary: [Key: Value] = [:]
-    let queue = DispatchQueue(label: "com.swooft.collections.SynchronizedDictionary")
+    let queue = DispatchQueue(label: "Swooft.Collections.SynchronizedDictionary")
 
     public init() {}
 
-    subscript(key: Key) -> Value? {
+    public subscript(key: Key) -> Value? {
         get {
             return self.queue.sync {
                 return self.dictionary[key]

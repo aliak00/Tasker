@@ -21,7 +21,7 @@ public class Cache<Key: Hashable, Value> {
     typealias List = LinkedList<Key>
     var lru = List()
     var store: [Key: (node: List.Node, value: Value)] = [:]
-    let queue = DispatchQueue(label: "Swooft.Cache")
+    let queue = DispatchQueue(label: "Swooft.Collections.Cache")
 
     let capacity: Int
 
