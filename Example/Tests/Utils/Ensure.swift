@@ -48,11 +48,11 @@ import Quick
  */
 
 struct Ensure<T: Equatable> {
-    let block: () -> T
+    let block: () -> T?
     let line: UInt
     let file: StaticString
 
-    init(block: @escaping () -> T, line: UInt, file: StaticString) {
+    init(block: @escaping () -> T?, line: UInt, file: StaticString) {
         self.block = block
         self.line = line
         self.file = file
@@ -68,7 +68,11 @@ struct Ensure<T: Equatable> {
             passed = lastValue == value
         }
         if !passed {
-            XCTFail("expected \(value), got \(lastValue)", file: self.file, line: self.line)
+            var string = "nil"
+            if let lastValue = lastValue {
+                string = "\(lastValue)"
+            }
+            XCTFail("expected \(value), got \(string)", file: self.file, line: self.line)
         }
     }
 
@@ -97,11 +101,15 @@ struct Ensure<T: Equatable> {
             passed = lastValue == value
         }
         if lastValue != value {
-            XCTFail("expected to remain \(value), but became \(lastValue)", file: self.file, line: self.line)
+            var string = "nil"
+            if let lastValue = lastValue {
+                string = "\(lastValue)"
+            }
+            XCTFail("expected to remain \(value), but became \(string)", file: self.file, line: self.line)
         }
     }
 }
 
-func ensure<T: Equatable>(_ block: @escaping @autoclosure () -> T, _ line: UInt = #line, _ file: StaticString = #file) -> Ensure<T> {
+func ensure<T: Equatable>(_ block: @escaping @autoclosure () -> T?, _ line: UInt = #line, _ file: StaticString = #file) -> Ensure<T> {
     return Ensure(block: block, line: line, file: file)
 }

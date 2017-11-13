@@ -21,16 +21,17 @@ class InterceptorSpy: TaskInterceptor {
     var interceptCallCount: Int {
         return self.interceptCallData.count
     }
-    var interceptCallData: [(weakAnyTask: Weak<AnyObject>, currentBatchCount: Int)] = []
+    var interceptCallData: [(anyTask: AnyTask<Any>, currentBatchCount: Int)] = []
     var interceptCallResultData: [InterceptCommand] = []
-    var interceptBlock: (AnyTask, Int) -> InterceptCommand = { _, _ in .execute }
+    var interceptBlock: (AnyTask<Any>, Int) -> InterceptCommand = { _, _ in .execute }
 
     func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand {
-        let anyTask = AnyTask(task)
+        let anyTask = AnyTask<Any>(task)
+        let result = self.interceptBlock(anyTask, currentBatchCount)
         defer {
-            let weakAnyTask = Weak(task as AnyObject)
-            self.interceptCallData.append((weakAnyTask, currentBatchCount))
+            self.interceptCallData.append((anyTask, currentBatchCount))
+            self.interceptCallResultData.append(result)
         }
-        return self.interceptBlock(anyTask, currentBatchCount)
+        return result
     }
 }

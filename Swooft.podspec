@@ -70,8 +70,8 @@ A group of libraries that provide some utility
     tasker.dependency 'Swooft/Utils/Weak'
   end
 
-  s.subspec 'AsyncTask' do |asynctask|
-    asynctask.source_files = ['Swooft/Sources/AsyncTask/**/*.swift']
+  s.subspec 'AsyncAwait' do |asynctask|
+    asynctask.source_files = ['Swooft/Sources/AsyncAwait/**/*.swift']
     asynctask.dependency 'Swooft/Tasker'
   end
 

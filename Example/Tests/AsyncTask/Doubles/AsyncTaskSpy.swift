@@ -17,34 +17,34 @@
 import Foundation
 import Swooft
 
-class AsyncTaskSpy<T> {
-    var asyncTask: AsyncTask<T>
+
+class AsyncTaskSpy<T>: TaskSpy<T> {
 
     var completionCallCount: Int {
         return self.completionCallData.count
     }
     var completionCallData: [Result<T>] = []
 
-    public init(execute: @escaping (@escaping (Result<T>) -> Void) -> Void) {
-        self.asyncTask = AsyncTask(execute: execute)
+    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> Result<T>) {
+        self.init(timeout: timeout) { completion in
+            completion(execute())
+        }
     }
 
-    public init(execute: @escaping () -> Result<T>) {
-        self.asyncTask = AsyncTask(execute: execute)
-    }
-
-    public init(execute: @escaping () -> T) {
-        self.asyncTask = AsyncTask(execute: execute)
+    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> T) {
+        self.init(timeout: timeout) { completion in
+            completion(.success(execute()))
+        }
     }
 
     @discardableResult
-    public func async(
+    func async(
         after interval: DispatchTimeInterval? = nil,
         queue: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,
         completion: ((Result<T>) -> Void)? = nil
     ) -> TaskHandle {
-        return self.asyncTask.async(after: interval, queue: queue, timeout: timeout) { result in
+        return super.async(with: nil, after: interval, queue: queue, timeout: timeout) { result in
             defer {
                 self.completionCallData.append(result)
             }
@@ -53,9 +53,9 @@ class AsyncTaskSpy<T> {
     }
 
     @discardableResult
-    public func await(queue: DispatchQueue? = nil, timeout: DispatchTimeInterval? = nil) throws -> T {
+    func await(queue: DispatchQueue? = nil, timeout: DispatchTimeInterval? = nil) throws -> T {
         do {
-            let value = try self.asyncTask.await(queue: queue, timeout: timeout)
+            let value = try super.await(queue: queue, timeout: timeout)
             self.completionCallData.append(.success(value))
             return value
         } catch {

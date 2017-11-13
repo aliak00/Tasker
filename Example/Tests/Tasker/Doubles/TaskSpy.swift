@@ -37,29 +37,39 @@ extension TaskSpy where T == Void {
 
 typealias SuccessTaskSpy = TaskSpy<Void>
 
-class TaskSpy<T>: Task {
-    typealias SuccessValue = T
-
-    var executeCallCount = 0
-    var executeBlock: (ResultCallback) -> Void
+class TaskSpy<T>: AnyTask<T> {
+    var executeCallCount: Int {
+        return self.executeCallBackData.count
+    }
     var executeCallBackData: [AnyResult] = []
 
-    init(executeBlock: (@escaping (ResultCallback) -> Void)) {
-        self.executeBlock = executeBlock
+    override init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping ResultCallback) -> Void)) {
+        super.init(timeout: timeout, execute: execute)
         kTaskSpyCounter.getAndIncrement()
+    }
+
+    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> Result<T>) {
+        self.init(timeout: timeout) { completion in
+            completion(execute())
+        }
+    }
+
+    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> T) {
+        self.init(timeout: timeout) { completion in
+            completion(.success(execute()))
+        }
     }
 
     deinit {
         kTaskSpyCounter.getAndDecrement()
     }
 
-    func execute(completion: @escaping ResultCallback) {
-        let wrappedcompletionHandler: ResultCallback = { result in
-            self.executeCallBackData.append(AnyResult(result))
+    override func execute(completion: @escaping ResultCallback) {
+        let wrappedcompletion: ResultCallback = { result in
             completion(result)
+            self.executeCallBackData.append(AnyResult(result))
         }
-        self.executeBlock(wrappedcompletionHandler)
-        self.executeCallCount += 1
+        self.executeThunk(wrappedcompletion)
     }
 }
 

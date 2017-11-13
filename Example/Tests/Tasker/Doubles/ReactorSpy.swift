@@ -33,8 +33,8 @@ class ReactorSpy: TaskReactor {
     var shouldExecuteCallCount: Int {
         return self.shouldExecuteCallData.count
     }
-    var shouldExecuteCallData: [(anyResult: AnyResult, weakAnyTask: Weak<AnyObject>, handle: TaskHandle)] = []
-    var shouldExecuteBlock: (AnyResult, AnyTask, TaskHandle) -> Bool = { _, _, _ in true }
+    var shouldExecuteCallData: [(anyResult: AnyResult, weakAnyTask: Weak<AnyTask<Any>>, handle: TaskHandle)] = []
+    var shouldExecuteBlock: (AnyResult, AnyTask<Any>, TaskHandle) -> Bool = { _, _, _ in true }
 
     func execute(done: @escaping (Error?) -> Void) {
         defer {
@@ -45,9 +45,9 @@ class ReactorSpy: TaskReactor {
 
     func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with handle: TaskHandle) -> Bool where T: Task {
         let anyResult = AnyResult(result)
-        let anyTask = AnyTask(task)
+        let anyTask = AnyTask<Any>(task)
         defer {
-            self.shouldExecuteCallData.append((anyResult, Weak(task as AnyObject), handle))
+            self.shouldExecuteCallData.append((anyResult, Weak(anyTask), handle))
         }
         return self.shouldExecuteBlock(anyResult, anyTask, handle)
     }

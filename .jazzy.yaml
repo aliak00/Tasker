@@ -21,7 +21,7 @@ xcodebuild_arguments: [
 ]
 
 custom_categories:
-  - name: AsyncTask
+  - name: AsyncAwait
     children:
       - AsyncTask
   - name: Atomics

@@ -18,13 +18,13 @@ import Foundation
 
 private class TaskData {
     fileprivate var operation: TaskOperation
-    fileprivate let anyTask: AnyTask
+    fileprivate let anyTask: AnyTask<Any>
     fileprivate let completionErrorCallback: (TaskError) -> Void
     fileprivate let intercept: (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
 
     init(
         operation: TaskOperation,
-        anyTask: AnyTask,
+        anyTask: AnyTask<Any>,
         completionErrorCallback: @escaping (TaskError) -> Void,
         intercept: @escaping (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
     ) {
@@ -122,6 +122,7 @@ public class TaskManager {
         task: T,
         startImmediately: Bool = true,
         after interval: DispatchTimeInterval? = nil,
+        timeout: DispatchTimeInterval? = nil,
         completion: T.ResultCallback? = nil
     ) -> TaskHandle {
 
@@ -149,7 +150,7 @@ public class TaskManager {
                 return
             }
 
-            strongSelf.execute(task: task, handle: handle, operation: operation, completion: completion)
+            strongSelf.execute(task: task, handle: handle, operation: operation, timeout: timeout ?? task.timeout, completion: completion)
         }
 
         log(from: self, "will add \(handle) - task: \(T.self), interval: \(String(describing: interval))", tags: TaskManager.kClrTags)
@@ -193,10 +194,10 @@ public class TaskManager {
         log(level: .verbose, from: self, "end waiting")
     }
 
-    private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: TaskOperation, completion: T.ResultCallback?) {
+    private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: TaskOperation, timeout: DispatchTimeInterval?, completion: T.ResultCallback?) {
 
         let timeoutWorkItem: DispatchWorkItem?
-        if let timeout = task.timeout {
+        if let timeout = timeout {
             timeoutWorkItem = self.launchTimeoutWork(for: handle, withTimeout: timeout)
         } else {
             timeoutWorkItem = nil

@@ -3,7 +3,7 @@ PODS:
   - Quick (1.2.0)
   - SwiftFormat/CLI (0.30.0)
   - Swooft (0.1.0):
-    - Swooft/AsyncTask (= 0.1.0)
+    - Swooft/AsyncAwait (= 0.1.0)
     - Swooft/Atomics (= 0.1.0)
     - Swooft/Collections (= 0.1.0)
     - Swooft/Logger (= 0.1.0)
@@ -12,7 +12,7 @@ PODS:
     - Swooft/Tasker (= 0.1.0)
     - Swooft/URLInterceptor (= 0.1.0)
     - Swooft/Utils (= 0.1.0)
-  - Swooft/AsyncTask (0.1.0):
+  - Swooft/AsyncAwait (0.1.0):
     - Swooft/Tasker
   - Swooft/Atomics (0.1.0)
   - Swooft/Collections (0.1.0):
@@ -56,7 +56,7 @@ SPEC CHECKSUMS:
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   SwiftFormat: 51ff30f86e1ef438babbda2e0f3e1e8f53b4e942
-  Swooft: c3c5dd77b1519ae37bb10a79d0b130b7446cc157
+  Swooft: 78119d776c098e57bde33b6a36bd763ba85a79d5
 
 PODFILE CHECKSUM: 72726bc6beb9265f0aede21898e6adb86b6cad19
 
