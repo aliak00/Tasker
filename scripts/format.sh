@@ -13,5 +13,15 @@ if [[ -z "${TRAVIS}" ]]; then
         --allman false \
         --disable redundantReturn \
         --enable redundantGet \
-        --enable spaceAroundBraces
+        --enable spaceAroundBraces \
+        --header "\
+\n\
+ Copyright {year} Ali Akhtarzada\n\
+\n\
+ Licensed under the Apache License, Version 2.0 (the 'License');\n\
+ you may not use this file except in compliance with the License.\n\
+ You may obtain a copy of the License at\n\
+\n\
+ http://www.apache.org/licenses/LICENSE-2.0\n\
+"
 fi
