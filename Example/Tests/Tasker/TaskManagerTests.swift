@@ -41,7 +41,7 @@ class TaskManagerTests: QuickSpec {
 
             it("should execute it") {
                 let manager = TaskManagerSpy()
-                let task = SuccessTaskSpy()
+                let task = TaskSpy { $0(.success(())) }
                 manager.add(task: task)
                 ensure(task.executeCallCount).becomes(1)
             }
@@ -78,13 +78,13 @@ class TaskManagerTests: QuickSpec {
 
             it("should call all callbacks") {
                 let manager = TaskManagerSpy()
-                manager.launch(task: SuccessTaskSpy(), count: 100)
+                manager.launch(task: TaskSpy { $0(.success(())) }, count: 100)
                 ensure(manager.completionCallCount).becomes(100)
             }
 
             it("should execute all tasks") {
                 let manager = TaskManagerSpy()
-                let (_, tasks) = manager.launch(task: SuccessTaskSpy(), count: 100)
+                let (_, tasks) = manager.launch(task: TaskSpy { $0(.success(())) }, count: 100)
                 for task in tasks {
                     ensure(task.executeCallCount).becomes(1)
                 }
@@ -92,7 +92,7 @@ class TaskManagerTests: QuickSpec {
 
             it("should make all handles finished") {
                 let manager = TaskManagerSpy()
-                let (handles, _) = manager.launch(task: SuccessTaskSpy(), count: 100)
+                let (handles, _) = manager.launch(task: TaskSpy { $0(.success(())) }, count: 100)
                 for handle in handles {
                     ensure(handle.state).becomes(TaskState.finished)
                 }

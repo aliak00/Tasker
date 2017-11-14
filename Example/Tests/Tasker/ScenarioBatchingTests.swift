@@ -35,7 +35,7 @@ class ScenarioBatchingTests: QuickSpec {
                 manager.add(task: TaskSpy { $0(.success(i)) })
             }
             ensure(manager.completionCallCount).stays(0)
-            manager.add(task: SuccessTaskSpy())
+            manager.add(task: TaskSpy { $0(.success(())) })
             ensure(manager.completionCallCount).becomes(10)
         }
     }

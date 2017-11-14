@@ -29,14 +29,6 @@ private class TaskSpyConfiguration: QuickConfiguration {
     }
 }
 
-extension TaskSpy where T == Void {
-    convenience init() {
-        self.init { $0(.success(())) }
-    }
-}
-
-typealias SuccessTaskSpy = TaskSpy<Void>
-
 class TaskSpy<T>: AnyTask<T> {
     var executeCallCount: Int {
         return self.executeCallBackData.count

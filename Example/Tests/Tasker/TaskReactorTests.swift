@@ -28,7 +28,7 @@ class TaskReactorTests: QuickSpec {
                 let reactor = ReactorSpy(configuration: TaskReactorConfiguration(timeout: .milliseconds(5), requeuesTask: true))
                 reactor.executeBlock = { sleep(for: .milliseconds(10)); $0(nil) }
                 let manager = TaskManagerSpy(reactors: [reactor])
-                manager.add(task: SuccessTaskSpy())
+                manager.add(task: TaskSpy { $0(.success(())) })
                 ensure(manager.completionCallCount).becomes(1)
                 expect(manager.completionCallData[0]).to(failWith(TaskError.reactorTimedOut(type: ReactorSpy.self)))
             }
@@ -37,7 +37,7 @@ class TaskReactorTests: QuickSpec {
                 let reactor = ReactorSpy(configuration: TaskReactorConfiguration(timeout: .milliseconds(10)))
                 reactor.executeBlock = { sleep(for: .milliseconds(5)); $0(nil) }
                 let manager = TaskManagerSpy(reactors: [reactor])
-                manager.add(task: SuccessTaskSpy())
+                manager.add(task: TaskSpy { $0(.success(())) })
                 ensure(manager.completionCallCount).becomes(1)
                 expect(manager.completionCallData[0]).toNot(failWith(TaskError.reactorTimedOut(type: ReactorSpy.self)))
             }
@@ -91,9 +91,9 @@ class TaskReactorTests: QuickSpec {
                 ensure(reactor.executeCallData.count).becomes(1)
 
                 // Run tasks that ask to be reactored and then not
-                var handles: [(TaskHandle, SuccessTaskSpy)] = []
+                var handles: [(TaskHandle, TaskSpy<Void>)] = []
                 for _ in (0..<50).yielded(by: .milliseconds(1)) {
-                    let task = SuccessTaskSpy()
+                    let task = TaskSpy { $0(.success(())) }
                     handles.append((manager.add(task: task), task))
                 }
 
