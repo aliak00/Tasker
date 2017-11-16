@@ -31,13 +31,13 @@ class LockingProfilerTests: QuickSpec {
                 lockb.unlock()
             }
 
-            let lockc = PThreadMutex(kind: .normal)
+            let lockc = PosixLock(kind: .normal)
             profiler.profile(tag: "plock") {
                 lockc.lock()
                 lockc.unlock()
             }
 
-            let lockd = PThreadMutex(kind: .recursive)
+            let lockd = PosixLock(kind: .recursive)
             profiler.profile(tag: "precursivelock") {
                 lockd.lock()
                 lockd.unlock()

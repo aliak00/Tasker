@@ -35,7 +35,7 @@ private extension Int32 {
     }
 }
 
-public final class PThreadMutex: NSLocking {
+public final class PosixLock: NSLocking {
 
     public enum Kind {
         case `default`
