@@ -10,18 +10,18 @@
 
 import Foundation
 
-class AsyncOperation: Operation {
+public class AsyncOperation: Operation {
     private let lock: NSLocking = NSLock()
 
     static let sharedQueue = DispatchQueue(label: "Swooft.Operation", attributes: [.concurrent])
 
-    enum State {
+    public enum State {
         case ready
         case executing
         case finished
     }
 
-    var state: State {
+    public var state: State {
         return self.lock.withScope {
             if _finished {
                 return .finished
@@ -35,11 +35,11 @@ class AsyncOperation: Operation {
 
     let executor: (AsyncOperation) -> Void
 
-    init(executor: @escaping (AsyncOperation) -> Void) {
+    public init(executor: @escaping (AsyncOperation) -> Void) {
         self.executor = executor
     }
 
-    override var isAsynchronous: Bool {
+    override public var isAsynchronous: Bool {
         return true
     }
 
@@ -48,7 +48,7 @@ class AsyncOperation: Operation {
     }
 
     private var _executing: Bool = false
-    private(set) override var isExecuting: Bool {
+    private(set) override public var isExecuting: Bool {
         get {
             return self.lock.withScope {
                 self._executing
@@ -71,7 +71,7 @@ class AsyncOperation: Operation {
     }
 
     private var _finished: Bool = false
-    private(set) override var isFinished: Bool {
+    private(set) override public var isFinished: Bool {
         get {
             return self.lock.withScope {
                 self._finished
@@ -92,7 +92,7 @@ class AsyncOperation: Operation {
         }
     }
 
-    override func start() {
+    override public func start() {
         willChangeValue(forKey: KVOKey.isExecuting.rawValue)
         willChangeValue(forKey: KVOKey.isFinished.rawValue)
         let didSet = self.lock.withScope { () -> (executing: Bool, finished: Bool) in
@@ -118,7 +118,7 @@ class AsyncOperation: Operation {
         }
     }
 
-    func finish() {
+    public func finish() {
         willChangeValue(forKey: KVOKey.isExecuting.rawValue)
         willChangeValue(forKey: KVOKey.isFinished.rawValue)
         let didSet = self.lock.withScope { () -> (executing: Bool, finished: Bool) in
@@ -142,7 +142,7 @@ class AsyncOperation: Operation {
         }
     }
 
-    override func cancel() {
+    override public func cancel() {
         super.cancel()
         willChangeValue(forKey: KVOKey.isExecuting.rawValue)
         willChangeValue(forKey: KVOKey.isFinished.rawValue)
