@@ -95,16 +95,16 @@ public class AsyncOperation: Operation {
     override public func start() {
         willChangeValue(forKey: KVOKey.isExecuting.rawValue)
         willChangeValue(forKey: KVOKey.isFinished.rawValue)
-        let didSet = self.lock.withScope { () -> (executing: Bool, finished: Bool) in
+        let executing = self.lock.withScope { () -> Bool in
             if self.isCancelled {
                 self._finished = true
-                return (false, true)
+                return false
             } else {
                 self._executing = true
-                return (true, false)
+                return true
             }
         }
-        if didSet.executing {
+        if executing {
             didChangeValue(forKey: KVOKey.isExecuting.rawValue)
             AsyncOperation.sharedQueue.async { [weak self] in
                 guard let strongSelf = self else {
@@ -112,8 +112,7 @@ public class AsyncOperation: Operation {
                 }
                 strongSelf.executor(strongSelf)
             }
-        }
-        if didSet.finished {
+        } else {
             didChangeValue(forKey: KVOKey.isFinished.rawValue)
         }
     }
