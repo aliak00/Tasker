@@ -15,17 +15,20 @@ private class TaskData {
     fileprivate let anyTask: AnyTask<Any>
     fileprivate let completionErrorCallback: (TaskError) -> Void
     fileprivate let intercept: (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
+    fileprivate let completionQueue: DispatchQueue?
 
     init(
         operation: AsyncOperation,
         anyTask: AnyTask<Any>,
         completionErrorCallback: @escaping (TaskError) -> Void,
-        intercept: @escaping (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
+        intercept: @escaping (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void,
+        completionQueue: DispatchQueue?
     ) {
         self.operation = operation
         self.anyTask = anyTask
         self.completionErrorCallback = completionErrorCallback
         self.intercept = intercept
+        self.completionQueue = completionQueue
     }
 }
 
@@ -117,6 +120,7 @@ public class TaskManager {
         startImmediately: Bool = true,
         after interval: DispatchTimeInterval? = nil,
         timeout: DispatchTimeInterval? = nil,
+        completeOn completionQueue: DispatchQueue? = nil,
         completion: T.ResultCallback? = nil
     ) -> TaskHandle {
 
@@ -147,7 +151,7 @@ public class TaskManager {
             strongSelf.execute(task: task, handle: handle, operation: operation, timeout: timeout ?? task.timeout, completion: completion)
         }
 
-        log(from: self, "will add \(handle) - task: \(T.self), interval: \(String(describing: interval))", tags: TaskManager.kClrTags)
+        log(from: self, "will add \(handle) - task: \(T.self), interval: \(String(describing: interval)), completionQueue: \(completionQueue?.label)", tags: TaskManager.kClrTags)
 
         self.taskQueue.async { [weak self] in
             guard let strongSelf = self else {
@@ -167,7 +171,8 @@ public class TaskManager {
                 operation: operation,
                 anyTask: AnyTask(task),
                 completionErrorCallback: { completion?(.failure($0)) },
-                intercept: intercept
+                intercept: intercept,
+                completionQueue: completionQueue
             )
 
             strongSelf.pendingTasks[handle] = data
@@ -285,7 +290,7 @@ public class TaskManager {
                     assert(data.operation === operation)
                     data.operation.finish()
                     log(level: .verbose, from: strongSelf, "did finish \(handle)", tags: TaskManager.kTkQTags)
-                    strongSelf.taskQueue.async {
+                    (data.completionQueue ?? strongSelf.taskQueue).async {
                         completion?(result)
                     }
                 } else {
@@ -606,8 +611,8 @@ public class TaskManager {
             }
         }
         self.reactorAssoiciatedHandles[index]?.removeAll()
-        self.taskQueue.async {
-            for data in allTheData {
+        for data in allTheData {
+            (data.completionQueue ?? self.taskQueue).async {
                 data.completionErrorCallback(error)
             }
         }
@@ -638,7 +643,7 @@ public class TaskManager {
             return
         }
         data.anyTask.didCancel(with: error)
-        self.taskQueue.async {
+        (data.completionQueue ?? self.taskQueue).async {
             data.completionErrorCallback(error)
         }
     }

@@ -58,16 +58,17 @@ class AsyncAwaitTests: QuickSpec {
                 ensure(handle.state).becomes(.finished)
             }
 
-            //            it("should call completion on specified queue") {
-            //                let queue = DispatchQueue(label: "Swooft.Tests.AsyncTask")
-            //                let key = DispatchSpecificKey<Void>()
-            //                queue.setSpecific(key: key, value: ())
-            //                let task = AsyncTaskSpy {
-            //                    expect(DispatchQueue.getSpecific(key: key)).toNot(beNil())
-            //                }
-            //                task.async(queue: queue)
-            //                ensure(task.completionCallCount).becomes(1)
-            //            }
+            it("should call completion on specified queue") {
+                let queue = DispatchQueue(label: "Swooft.Tests.AsyncTask")
+                let key = DispatchSpecificKey<Void>()
+                queue.setSpecific(key: key, value: ())
+                let task = AsyncAwaitSpy {}
+                task.async(queue: queue) { _ in
+                    expect(DispatchQueue.getSpecific(key: key)).toNot(beNil())
+                }
+                expect(task.completionCallCount).toEventually(equal(1))
+                ensure(task.completionCallCount).becomes(1)
+            }
         }
 
         describe("await") {
@@ -101,15 +102,15 @@ class AsyncAwaitTests: QuickSpec {
                 ensure(task.completionCallCount).stays(1)
             }
 
-            //            it("should call completion on specified queue") {
-            //                let queue = DispatchQueue(label: "Swooft.Tests.AsyncTask")
-            //                let key = DispatchSpecificKey<Void>()
-            //                queue.setSpecific(key: key, value: ())
-            //                let task = AsyncTaskSpy {
-            //                    expect(DispatchQueue.getSpecific(key: key)).toNot(beNil())
-            //                }
-            //                _ = try! task.await(queue: queue)
-            //            }
+//                        it("should call completion on specified queue") {
+//                            let queue = DispatchQueue(label: "Swooft.Tests.AsyncTask")
+//                            let key = DispatchSpecificKey<Void>()
+//                            queue.setSpecific(key: key, value: ())
+//                            let task = AsyncTaskSpy {
+//                                expect(DispatchQueue.getSpecific(key: key)).toNot(beNil())
+//                            }
+//                            _ = try! task.await(queue: queue)
+//                        }
         }
     }
 }

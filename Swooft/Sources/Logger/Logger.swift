@@ -38,8 +38,8 @@ private extension DispatchTime {
 public class Logger {
     /// Shared logger object
     public static let shared: Logger = {
-        let logger = Logger()
-//        logger.addTransport { print($0) }
+        let logger = Logger(synchronousOutput: false)
+        //        logger.addTransport { print($0) }
         return logger
     }()
 
@@ -49,6 +49,7 @@ public class Logger {
 
     private var _enabled: Bool = true
     private var _outputTags: Bool = false
+    private let synchronousOutput: Bool
     private var transports: [(String) -> Void] = []
     private var allowedTags = Set<String>()
     private var ignoredTags = Set<String>()
@@ -59,10 +60,11 @@ public class Logger {
 
      - parameter logHistorySize: How many entried to keep in the history
      */
-    public init(logHistorySize: Int? = nil) {
+    public init(logHistorySize: Int? = nil, synchronousOutput: Bool = false) {
         if let logHistorySize = logHistorySize {
             self.historyBuffer = RingBuffer(capacity: logHistorySize)
         }
+        self.synchronousOutput = synchronousOutput
         self.enabled = true
     }
 
@@ -180,60 +182,99 @@ public class Logger {
         let timestamp = self.startTime.elapsed
         let string = "\(object())"
 
+        if synchronousOutput {
+            self.queue.sync {
+                self.synclog(
+                    thread: thread,
+                    threadID: threadID,
+                    timestamp: timestamp,
+                    level: level,
+                    string: string,
+                    tags: explicitTags,
+                    force: force,
+                    file: file,
+                    function: function,
+                    line: line
+                )
+            }
+            return
+        }
+
         self.dispatchGroup.enter()
         self.queue.async { [weak self] in
-            defer {
-                self?.dispatchGroup.leave()
+            self?.synclog(
+                thread: thread,
+                threadID: threadID,
+                timestamp: timestamp,
+                level: level,
+                string: string,
+                tags: explicitTags,
+                force: force,
+                file: file,
+                function: function,
+                line: line
+            )
+            self?.dispatchGroup.leave()
+        }
+    }
+
+    private func synclog(
+        thread: String,
+        threadID: mach_port_t,
+        timestamp: Double,
+        level: LogLevel = .info,
+        string: String,
+        tags explicitTags: [String] = [],
+        force: Bool = false,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        guard (self._enabled && self.transports.count > 0) || force else {
+            return
+        }
+
+        let functionName = function.components(separatedBy: "(").first ?? ""
+        let fileName: String = {
+            let name = URL(fileURLWithPath: file)
+                .deletingPathExtension().lastPathComponent
+            let value = name.isEmpty ? "Unknown file" : name
+            return value
+        }()
+
+        var allTags = [functionName, thread, fileName, level.rawValue]
+        allTags.append(contentsOf: explicitTags)
+
+        var shouldOutputToTransports = true
+        if self.ignoredTags.count > 0 && self.ignoredTags.intersection(allTags).count > 0 {
+            shouldOutputToTransports = false
+        }
+
+        if self.allowedTags.count > 0 && self.allowedTags.intersection(allTags).count == 0 {
+            shouldOutputToTransports = false
+        }
+
+        guard shouldOutputToTransports || force else {
+            return
+        }
+
+        var tagsString = ""
+        if explicitTags.count > 0 && self._outputTags {
+            tagsString = ",\(explicitTags.joined(separator: ","))"
+        }
+
+        let output = "[\(level.rawValue):\(String(format: "%.2f", timestamp))][\(thread):\(threadID),\(fileName):\(line),\(functionName)\(tagsString)] => \(string)"
+
+        self.historyBuffer?.append(output)
+
+        if shouldOutputToTransports {
+            for transport in self.transports {
+                transport(output)
             }
-            guard let strongSelf = self else {
-                return
-            }
-            guard (strongSelf._enabled && strongSelf.transports.count > 0) || force else {
-                return
-            }
+        }
 
-            let functionName = function.components(separatedBy: "(").first ?? ""
-            let fileName: String = {
-                let name = URL(fileURLWithPath: file)
-                    .deletingPathExtension().lastPathComponent
-                let value = name.isEmpty ? "Unknown file" : name
-                return value
-            }()
-
-            var allTags = [functionName, thread, fileName, level.rawValue]
-            allTags.append(contentsOf: explicitTags)
-
-            var shouldOutputToTransports = true
-            if strongSelf.ignoredTags.count > 0 && strongSelf.ignoredTags.intersection(allTags).count > 0 {
-                shouldOutputToTransports = false
-            }
-
-            if strongSelf.allowedTags.count > 0 && strongSelf.allowedTags.intersection(allTags).count == 0 {
-                shouldOutputToTransports = false
-            }
-
-            guard shouldOutputToTransports || force else {
-                return
-            }
-
-            var tagsString = ""
-            if explicitTags.count > 0 && strongSelf._outputTags {
-                tagsString = ",\(explicitTags.joined(separator: ","))"
-            }
-
-            let output = "[\(level.rawValue):\(String(format: "%.2f", timestamp))][\(thread):\(threadID),\(fileName):\(line),\(functionName)\(tagsString)] => \(string)"
-
-            strongSelf.historyBuffer?.append(output)
-
-            if shouldOutputToTransports {
-                for transport in strongSelf.transports {
-                    transport(output)
-                }
-            }
-
-            if force {
-                print(output)
-            }
+        if force {
+            print(output)
         }
     }
 }

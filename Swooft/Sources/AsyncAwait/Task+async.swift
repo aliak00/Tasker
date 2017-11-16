@@ -15,7 +15,7 @@ extension Task {
     public func async(
         with taskManager: TaskManager? = nil,
         after interval: DispatchTimeInterval? = nil,
-        queue _: DispatchQueue? = nil,
+        queue: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,
         completion: ResultCallback? = nil
     ) -> TaskHandle {
@@ -23,6 +23,7 @@ extension Task {
             task: self,
             after: interval,
             timeout: timeout,
+            completeOn: queue,
             completion: completion
         )
     }
