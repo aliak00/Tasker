@@ -32,35 +32,61 @@ class AsyncOperationTests: QuickSpec {
         describe("creating operation") {
 
             it("should start in ready state") {
-                let operation = Swooft.AsyncOperation { _ in }
-                expect(operation.state) == Swooft.AsyncOperation.State.ready
+                let operation = AsyncOperation { _ in }
+                expect(operation.state) == AsyncOperation.State.ready
             }
         }
 
         describe("adding operation") {
 
-            it("should go to executing if marked as ready") {
-                let operation = Swooft.AsyncOperation { _ in }
+            it("should go to executing") {
+                let operation = AsyncOperation { _ in }
                 self.queue.addOperation(operation)
                 ensure(operation.state).becomes(.executing)
             }
 
-            it("should go to finished if marked finished") {
-                let operation = Swooft.AsyncOperation { $0.finish() }
+            it("should go to finished") {
+                let operation = AsyncOperation { $0.finish() }
                 self.queue.addOperation(operation)
                 ensure(operation.state).becomes(.finished)
+            }
+
+            it("should all go to finished") {
+                var operations: [AsyncOperation] = []
+                for _ in 0..<100 {
+                    operations.append(AsyncOperation { $0.finish() })
+                }
+                self.queue.addOperations(operations, waitUntilFinished: false)
+                operations.forEach { ensure($0.state).becomes(.finished) }
             }
         }
 
         describe("cancelling") {
 
             it("before adding should go to finished") {
+                let operation = AsyncOperation { _ in }
+                operation.cancel()
+                self.queue.addOperation(operation)
+                ensure(operation.state).becomes(.finished)
+            }
+
+            it("before adding should not execute") {
                 var executed = false
-                let operation = Swooft.AsyncOperation { _ in executed = true }
+                let operation = AsyncOperation { _ in executed = true }
                 operation.cancel()
                 self.queue.addOperation(operation)
                 ensure(operation.state).becomes(.finished)
                 expect(executed) == false
+            }
+
+            it("should all go to finished") {
+                var operations: [AsyncOperation] = []
+                for _ in 0..<100 {
+                    operations.append(AsyncOperation { _ in })
+                }
+                operations.forEach { $0.cancel() }
+                self.queue.addOperations(operations, waitUntilFinished: false)
+                operations.forEach { ensure($0.state).becomes(.finished) }
             }
         }
     }
