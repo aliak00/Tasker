@@ -42,11 +42,14 @@ PODS:
   - Swooft/URLInterceptor (0.1.0):
     - Swooft/Collections/SynchronizedDictionary
     - Swooft/Tasker
+    - Swooft/Utils/Errors
   - Swooft/Utils (0.1.0):
     - Swooft/Utils/Array (= 0.1.0)
+    - Swooft/Utils/Errors (= 0.1.0)
     - Swooft/Utils/Locking (= 0.1.0)
     - Swooft/Utils/Weak (= 0.1.0)
   - Swooft/Utils/Array (0.1.0)
+  - Swooft/Utils/Errors (0.1.0)
   - Swooft/Utils/Locking (0.1.0)
   - Swooft/Utils/Weak (0.1.0)
 
@@ -64,7 +67,7 @@ SPEC CHECKSUMS:
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   SwiftFormat: 51ff30f86e1ef438babbda2e0f3e1e8f53b4e942
-  Swooft: 23e30b0c8c56d27b0ecb521066420e155cc5055d
+  Swooft: ac7c6df7f875825a75a2c11d1fd3861af1e12612
 
 PODFILE CHECKSUM: 3b23cc443bf7b11251fb469c0fe911b605c17afd
 

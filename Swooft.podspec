@@ -32,6 +32,9 @@ A group of libraries that provide some utility
     utils.subspec 'Array' do |array|
       array.source_files = ['Swooft/Sources/Utils/Array/**/*.swift']
     end
+    utils.subspec 'Errors' do |errors|
+      errors.source_files = ['Swooft/Sources/Utils/Errors/**/*.swift']
+    end
   end
 
   s.subspec 'Collections' do |collections|
@@ -91,6 +94,7 @@ A group of libraries that provide some utility
     urlinterceptor.source_files = ['Swooft/Sources/URLInterceptor/**/*.swift']
     urlinterceptor.dependency 'Swooft/Tasker'
     urlinterceptor.dependency 'Swooft/Collections/SynchronizedDictionary'
+    urlinterceptor.dependency 'Swooft/Utils/Errors'
   end
 
 end

@@ -151,7 +151,11 @@ public class TaskManager {
             strongSelf.execute(task: task, handle: handle, operation: operation, timeout: timeout ?? task.timeout, completion: completion)
         }
 
-        log(from: self, "will add \(handle) - task: \(T.self), interval: \(String(describing: interval)), completionQueue: \(completionQueue?.label)", tags: TaskManager.kClrTags)
+        log(from: self,
+            "will add \(handle) - "
+                + "task: \(T.self), "
+                + "interval: \(String(describing: interval)), "
+                + "completionQueue: \(completionQueue?.label as Any)", tags: TaskManager.kClrTags)
 
         self.taskQueue.async { [weak self] in
             guard let strongSelf = self else {

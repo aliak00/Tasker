@@ -160,7 +160,14 @@ public class Logger {
      - parameter object: autoclosure statment to be logged
      - parameter tag: a tag to apply to this log
      */
-    public func log<T>(_ object: @escaping @autoclosure () -> T, tag: String, force: Bool = false, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+    public func log<T>(
+        _ object: @autoclosure () -> T,
+        tag: String,
+        force: Bool = false,
+        _ file: String = #file,
+        _ function: String = #function,
+        _ line: Int = #line
+    ) {
         self.log(object(), tags: [tag], force: force, file, function, line)
     }
 
@@ -170,7 +177,15 @@ public class Logger {
      - parameter object: autoclosure statment to be logged
      - parameter tags: a set of tags to apply to this log
      */
-    public func log<T>(level: LogLevel = .info, _ object: @autoclosure () -> T, tags explicitTags: [String] = [], force: Bool = false, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+    public func log<T>(
+        level: LogLevel = .info,
+        _ object: @autoclosure () -> T,
+        tags explicitTags: [String] = [],
+        force: Bool = false,
+        _ file: String = #file,
+        _ function: String = #function,
+        _ line: Int = #line
+    ) {
         #if !DEBUG
             guard level != .debug else {
                 return
@@ -263,7 +278,9 @@ public class Logger {
             tagsString = ",\(explicitTags.joined(separator: ","))"
         }
 
-        let output = "[\(level.rawValue):\(String(format: "%.2f", timestamp))][\(thread):\(threadID),\(fileName):\(line),\(functionName)\(tagsString)] => \(string)"
+        let output = "[\(level.rawValue):\(String(format: "%.2f", timestamp))]"
+            + "[\(thread):\(threadID),\(fileName):\(line),\(functionName)\(tagsString)]"
+            + " => \(string)"
 
         self.historyBuffer?.append(output)
 
