@@ -11,13 +11,13 @@
 import Foundation
 
 private class TaskData {
-    fileprivate var operation: TaskOperation
+    fileprivate var operation: AsyncOperation
     fileprivate let anyTask: AnyTask<Any>
     fileprivate let completionErrorCallback: (TaskError) -> Void
     fileprivate let intercept: (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
 
     init(
-        operation: TaskOperation,
+        operation: AsyncOperation,
         anyTask: AnyTask<Any>,
         completionErrorCallback: @escaping (TaskError) -> Void,
         intercept: @escaping (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
@@ -122,7 +122,7 @@ public class TaskManager {
 
         let handle = OwnedTaskHandle(owner: self)
 
-        let operation = TaskOperation { [weak self, weak task, weak handle] operation in
+        let operation = AsyncOperation { [weak self, weak task, weak handle] operation in
 
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "\(T.self) operation => manager dead", tags: TaskManager.kOpQTags)
@@ -188,7 +188,7 @@ public class TaskManager {
         log(level: .verbose, from: self, "end waiting")
     }
 
-    private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: TaskOperation, timeout: DispatchTimeInterval?, completion: T.ResultCallback?) {
+    private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: AsyncOperation, timeout: DispatchTimeInterval?, completion: T.ResultCallback?) {
 
         let timeoutWorkItem: DispatchWorkItem?
         if let timeout = timeout {
@@ -283,7 +283,7 @@ public class TaskManager {
                 log(level: .verbose, from: strongSelf, "will finish \(handle)", tags: TaskManager.kTkQTags)
                 if let data = strongSelf.data(for: handle, remove: true) {
                     assert(data.operation === operation)
-                    data.operation.markFinished()
+                    data.operation.finish()
                     log(level: .verbose, from: strongSelf, "did finish \(handle)", tags: TaskManager.kTkQTags)
                     strongSelf.taskQueue.async {
                         completion?(result)
@@ -312,14 +312,13 @@ public class TaskManager {
         }
     }
 
-    private func queueOperation(_ operation: TaskOperation, for handle: OwnedTaskHandle) {
-        // Accessing TaskOperation so better be on task queue
+    private func queueOperation(_ operation: AsyncOperation, for handle: OwnedTaskHandle) {
+        // Accessing Swooft.Operation so better be on task queue
         if #available(iOS 10.0, *) {
             __dispatch_assert_queue(self.taskQueue)
         }
         self.taskOperationQueue.addOperation(operation)
         log(level: .verbose, from: self, "did queue \(handle)", tags: TaskManager.kTkQTags)
-        operation.markReady()
     }
 
     private func startTask(for handle: OwnedTaskHandle, with data: TaskData, after interval: DispatchTimeInterval? = nil) {
@@ -551,9 +550,8 @@ public class TaskManager {
         for handle in self.tasksToRequeue {
             if let data = self.data(for: handle) {
                 log(from: self, "requeueing \(handle)", tags: TaskManager.kTkQTags)
-                data.operation.markFinished()
-                data.operation = TaskOperation(executor: data.operation.executor)
-                data.operation.markReady()
+                data.operation.finish()
+                data.operation = AsyncOperation(executor: data.operation.executor)
                 self.startTask(for: handle, with: data)
             }
         }
@@ -636,7 +634,6 @@ public class TaskManager {
         }
         log(from: self, "removed \(handle) with error \(error as Any)", tags: TaskManager.kTkQTags)
         data.operation.cancel()
-        data.operation.markFinished()
         guard let error = error else {
             return
         }
@@ -678,7 +675,7 @@ public class TaskManager {
     }
 
     func taskState(for handle: OwnedTaskHandle) -> TaskState {
-        let maybeOperation = self.taskQueue.sync { () -> TaskOperation? in
+        let maybeOperation = self.taskQueue.sync { () -> AsyncOperation? in
             guard let data = self.data(for: handle) else {
                 log(level: .verbose, from: self, "\(handle) not found", tags: TaskManager.kTkQTags)
                 return nil
@@ -690,13 +687,11 @@ public class TaskManager {
             return .finished
         }
         switch (operation.state, operation.isCancelled) {
-        case (_, true):
+        case (.finished, _), (_, true):
             return .finished
-        case (.executing, _), (.ready, _):
+        case (.executing, _):
             return .executing
-        case (.finished, _):
-            return .finished
-        case (.pending, _):
+        case (.ready, _):
             return .pending
         }
     }

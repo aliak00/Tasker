@@ -8,3 +8,5 @@ target 'Swooft_Tests' do
   pod 'Quick'
   pod 'Nimble'
 end
+
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'

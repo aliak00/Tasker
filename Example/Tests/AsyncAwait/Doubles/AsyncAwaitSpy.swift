@@ -38,9 +38,9 @@ class AsyncAwaitSpy<T>: TaskSpy<T> {
         timeout: DispatchTimeInterval? = nil,
         completion: ((Result<T>) -> Void)? = nil
     ) -> TaskHandle {
-        return super.async(with: nil, after: interval, queue: queue, timeout: timeout) { result in
+        return super.async(with: nil, after: interval, queue: queue, timeout: timeout) { [weak self] result in
             defer {
-                self.completionCallData.append(result)
+                self?.completionCallData.append(result)
             }
             completion?(result)
         }

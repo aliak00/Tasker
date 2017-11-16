@@ -92,7 +92,7 @@ class TaskReactorTests: QuickSpec {
                 }
 
                 for (handle, task) in handles {
-                    expect(handle.state) == TaskState.executing
+                    ensure(handle.state).becomes(.pending)
                     expect(task.executeCallCount) == 0
                 }
 

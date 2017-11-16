@@ -39,7 +39,7 @@ public class Logger {
     /// Shared logger object
     public static let shared: Logger = {
         let logger = Logger()
-        //        logger.addTransport { print($0) }
+//        logger.addTransport { print($0) }
         return logger
     }()
 
@@ -78,7 +78,7 @@ public class Logger {
     public var outputTags: Bool {
         get {
             return self.queue.sync {
-                return self._outputTags
+                self._outputTags
             }
         }
         set {
@@ -92,7 +92,7 @@ public class Logger {
     public var enabled: Bool {
         get {
             return self.queue.sync {
-                return self._enabled
+                self._enabled
             }
         }
         set {
@@ -169,6 +169,11 @@ public class Logger {
      - parameter tags: a set of tags to apply to this log
      */
     public func log<T>(level: LogLevel = .info, _ object: @autoclosure () -> T, tags explicitTags: [String] = [], force: Bool = false, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
+        #if !DEBUG
+            guard level != .debug else {
+                return
+            }
+        #endif
 
         let thread = Thread.isMainThread ? "UI" : "BG"
         let threadID = pthread_mach_thread_np(pthread_self())

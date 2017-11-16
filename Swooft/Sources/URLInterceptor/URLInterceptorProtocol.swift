@@ -12,7 +12,7 @@ import Foundation
 
 class URLInterceptorProtocol: URLProtocol {
     static let key: String = {
-        return String(UUID().uuidString.prefix(6))
+        String(UUID().uuidString.prefix(6))
     }()
 
     override class func canInit(with request: URLRequest) -> Bool {

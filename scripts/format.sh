@@ -11,7 +11,6 @@ if [[ -z "${TRAVIS}" ]]; then
         --removelines enabled \
         --insertlines enabled \
         --allman false \
-        --disable redundantReturn \
         --enable redundantGet \
         --enable spaceAroundBraces \
         --header "\

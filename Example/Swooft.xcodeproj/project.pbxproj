@@ -15,6 +15,10 @@
 		E11671971FAB6E1F00F1E3BC /* ReactorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11671961FAB6E1F00F1E3BC /* ReactorSpy.swift */; };
 		E11671991FABBCD500F1E3BC /* LoggerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11671981FABBCD500F1E3BC /* LoggerConfiguration.swift */; };
 		E116719B1FABBD7D00F1E3BC /* TaskReactorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E116719A1FABBD7D00F1E3BC /* TaskReactorTests.swift */; };
+		E11FFC1B1FBDEFAF004896D5 /* AsyncOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC1A1FBDEFAF004896D5 /* AsyncOperationTests.swift */; };
+		E11FFC221FBE3519004896D5 /* MemoizeProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */; };
+		E11FFC241FBE352C004896D5 /* LoggingProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */; };
+		E11FFC261FBE3538004896D5 /* LockingProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */; };
 		E172FCD01F96AB6D00317E56 /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E172FCCF1F96AB6D00317E56 /* LoggerTests.swift */; };
 		E17C3FB31F5372E30002ADFF /* RingBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17C3FB21F5372E30002ADFF /* RingBufferTests.swift */; };
 		E18AD0ED1F50B3AD00757478 /* ScenarioBatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */; };
@@ -49,6 +53,10 @@
 		E11671961FAB6E1F00F1E3BC /* ReactorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorSpy.swift; sourceTree = "<group>"; };
 		E11671981FABBCD500F1E3BC /* LoggerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerConfiguration.swift; sourceTree = "<group>"; };
 		E116719A1FABBD7D00F1E3BC /* TaskReactorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskReactorTests.swift; sourceTree = "<group>"; };
+		E11FFC1A1FBDEFAF004896D5 /* AsyncOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperationTests.swift; sourceTree = "<group>"; };
+		E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoizeProfilerTests.swift; sourceTree = "<group>"; };
+		E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingProfilerTests.swift; sourceTree = "<group>"; };
+		E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockingProfilerTests.swift; sourceTree = "<group>"; };
 		E172FCCF1F96AB6D00317E56 /* LoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
 		E17C3FB21F5372E30002ADFF /* RingBufferTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBufferTests.swift; sourceTree = "<group>"; };
 		E18AD0E71F50B3AD00757478 /* ScenarioBatchingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenarioBatchingTests.swift; sourceTree = "<group>"; };
@@ -120,6 +128,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E11FFC1C1FBDF007004896D5 /* Operations */,
 				E116718D1FA2A13A00F1E3BC /* URLInterceptor */,
 				E103B3281F574DB1000F3F70 /* Profiler */,
 				E17C3FB01F5371300002ADFF /* Collections */,
@@ -154,6 +163,9 @@
 			isa = PBXGroup;
 			children = (
 				E103B3291F574DE9000F3F70 /* ProfilerTests.swift */,
+				E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */,
+				E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */,
+				E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */,
 			);
 			path = Profiler;
 			sourceTree = "<group>";
@@ -180,6 +192,14 @@
 				E116718E1FA2A16500F1E3BC /* URLInterceptorTests.swift */,
 			);
 			path = URLInterceptor;
+			sourceTree = "<group>";
+		};
+		E11FFC1C1FBDF007004896D5 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				E11FFC1A1FBDEFAF004896D5 /* AsyncOperationTests.swift */,
+			);
+			path = Operations;
 			sourceTree = "<group>";
 		};
 		E17C3FB01F5371300002ADFF /* Collections */ = {
@@ -397,12 +417,14 @@
 				E18AD0F11F50B3AD00757478 /* TaskManagerTests.swift in Sources */,
 				E18AD0FB1F50B3F600757478 /* DummyTask.swift in Sources */,
 				E18AD0FE1F50B3F600757478 /* TaskSpy.swift in Sources */,
+				E11FFC241FBE352C004896D5 /* LoggingProfilerTests.swift in Sources */,
 				E18AD0F01F50B3AD00757478 /* TaskInterceptorTests.swift in Sources */,
 				E18AD0ED1F50B3AD00757478 /* ScenarioBatchingTests.swift in Sources */,
 				E18AD0EF1F50B3AD00757478 /* TaskHandleTests.swift in Sources */,
 				E18AD0EE1F50B3AD00757478 /* ScenarioValidatingRetryingTests.swift in Sources */,
 				E103B32A1F574DE9000F3F70 /* ProfilerTests.swift in Sources */,
 				E18AD1061F50B40900757478 /* YieldingIterator.swift in Sources */,
+				E11FFC261FBE3538004896D5 /* LockingProfilerTests.swift in Sources */,
 				E18AD1041F50B40900757478 /* Ensure.swift in Sources */,
 				E116718F1FA2A16500F1E3BC /* URLInterceptorTests.swift in Sources */,
 				E18AD0FD1F50B3F600757478 /* TaskManagerSpy.swift in Sources */,
@@ -411,9 +433,11 @@
 				E116719B1FABBD7D00F1E3BC /* TaskReactorTests.swift in Sources */,
 				E103B3381F5C596F000F3F70 /* CacheTests.swift in Sources */,
 				E172FCD01F96AB6D00317E56 /* LoggerTests.swift in Sources */,
+				E11FFC221FBE3519004896D5 /* MemoizeProfilerTests.swift in Sources */,
 				E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */,
 				E18AD0FA1F50B3F600757478 /* AsyncAwaitSpy.swift in Sources */,
 				E18AD1001F50B40100757478 /* AsyncAwaitTests.swift in Sources */,
+				E11FFC1B1FBDEFAF004896D5 /* AsyncOperationTests.swift in Sources */,
 				E11671991FABBCD500F1E3BC /* LoggerConfiguration.swift in Sources */,
 				E17C3FB31F5372E30002ADFF /* RingBufferTests.swift in Sources */,
 				E1BAC6AC1FB3D56100442308 /* TaskerConfiguration.swift in Sources */,

@@ -31,7 +31,7 @@ class AsyncAwaitTests: QuickSpec {
             }
             task.async()
             ensure(task.completionCallCount).becomes(1)
-            ensure(task.completionCallData[0].successValue).becomes(3)
+            ensure(task.completionCallData.first?.successValue).becomes(3)
         }
 
         describe("async") {
@@ -47,14 +47,14 @@ class AsyncAwaitTests: QuickSpec {
                 let handle = task.async()
                 handle.cancel()
                 ensure(task.completionCallCount).becomes(1)
-                expect(task.completionCallData[0]).to(failWith(TaskError.cancelled))
+                expect(task.completionCallData.first).to(failWith(TaskError.cancelled))
             }
 
             it("should timeout after deadline reached") {
                 let task = AsyncAwaitSpy { sleep(for: .milliseconds(5)) }
                 let handle = task.async(timeout: .milliseconds(1))
                 ensure(task.completionCallCount).becomes(1)
-                expect(task.completionCallData[0]).to(failWith(TaskError.timedOut))
+                expect(task.completionCallData.first).to(failWith(TaskError.timedOut))
                 ensure(handle.state).becomes(.finished)
             }
 

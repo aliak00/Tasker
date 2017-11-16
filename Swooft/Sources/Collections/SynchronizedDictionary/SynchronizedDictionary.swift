@@ -19,7 +19,7 @@ public class SynchronizedDictionary<Key: Hashable, Value> {
     public subscript(key: Key) -> Value? {
         get {
             return self.queue.sync {
-                return self.dictionary[key]
+                self.dictionary[key]
             }
         }
         set {

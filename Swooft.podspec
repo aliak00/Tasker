@@ -24,7 +24,13 @@ A group of libraries that provide some utility
 
   s.subspec 'Utils' do |utils|
     utils.subspec 'Weak' do |weak|
-      weak.source_files = ['Swooft/Sources/Utils/Weak.swift']
+      weak.source_files = ['Swooft/Sources/Utils/Weak/**/*.swift']
+    end
+    utils.subspec 'Locking' do |locking|
+      locking.source_files = ['Swooft/Sources/Utils/Locking/**/*.swift']
+    end
+    utils.subspec 'Array' do |array|
+      array.source_files = ['Swooft/Sources/Utils/Array/**/*.swift']
     end
   end
 
@@ -42,6 +48,11 @@ A group of libraries that provide some utility
     collections.subspec 'SynchronizedDictionary' do |synchronizeddictionary|
       synchronizeddictionary.source_files  = ['Swooft/Sources/Collections/SynchronizedDictionary/**/*.swift']
     end
+  end
+
+  s.subspec 'Operations' do |operations|
+    operations.source_files  = ['Swooft/Sources/Operations/**/*.swift']
+    operations.dependency 'Swooft/Utils/Locking'
   end
 
   s.subspec 'Atomics' do |atomics|
@@ -67,6 +78,7 @@ A group of libraries that provide some utility
     tasker.dependency 'Swooft/Atomics'
     tasker.dependency 'Swooft/Logger'
     tasker.dependency 'Swooft/Result'
+    tasker.dependency 'Swooft/Operations'
     tasker.dependency 'Swooft/Utils/Weak'
   end
 

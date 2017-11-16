@@ -54,9 +54,9 @@ class ProfilerTests: QuickSpec {
                 profiler.profile(tag: "3ms") { sleep(for: .milliseconds(3)) }
                 let results = profiler.results.descending()
                 expect(results.count) == 3
-                expect(results[0].tag) == "3ms"
-                expect(results[1].tag) == "2ms"
-                expect(results[2].tag) == "1ms"
+                expect(results[safe: 0]?.tag) == "3ms"
+                expect(results[safe: 1]?.tag) == "2ms"
+                expect(results[safe: 2]?.tag) == "1ms"
             }
 
             it("should output ascending results") {
@@ -67,107 +67,9 @@ class ProfilerTests: QuickSpec {
                 profiler.profile(tag: "3ms") { sleep(for: .milliseconds(3)) }
                 let results = profiler.results.ascending()
                 expect(results.count) == 3
-                expect(results[0].tag) == "1ms"
-                expect(results[1].tag) == "2ms"
-                expect(results[2].tag) == "3ms"
-            }
-        }
-
-        describe("tests") {
-
-            xit("memoize or get path component") {
-                //
-                // This benchmark simlulates logging from X number of file and how much speed
-                // up or down there is with different cache sizes for file names
-                //
-                // The logger logs the #file and passes that toURL(fileURLWithPath:) and then
-                // cuts off the path and extension to leave only the filename. It also optionally
-                // memoizes #file => filename. This benchmark seems when and if that's actually
-                // useful
-                //
-                // Results show that a capacity of cache capacity of 100~120 does 50% better than
-                // if there's no caching and if you have about 100 files you are doing any logging
-                // from
-                //
-                let configuration = ProfilerConfiguration(threadCount: 2, sampleCount: 10)
-                let profiler = Profiler(label: "memoize or get path component", configuration: configuration)
-
-                let numberOfFiles: UInt32 = 100
-                let numberOfLogs = 3000
-
-                var files: [String] = []
-                for i in 0..<numberOfLogs {
-                    files.append("some/path/\(Int(Float(arc4random()) / Float(UInt32.max) * 100)).ext")
-                }
-
-                func noop(_: String) {}
-
-                for capacity in [5, 20, 50, 75, 100, 120, 180, 200] {
-                    let cache = Cache<String, String>(capacity: capacity)
-                    profiler.profile(tag: "memo-\(capacity)") {
-                        for file in files {
-                            let name: String = {
-                                if let name = cache[file] {
-                                    return name
-                                }
-                                let name = URL(fileURLWithPath: file)
-                                    .deletingPathExtension().lastPathComponent
-                                let value = name.isEmpty ? "Unknown file" : name
-                                cache[file] = value
-                                return value
-                            }()
-                            noop(name)
-                        }
-                    }
-                }
-
-                profiler.profile(tag: "no-memo") {
-                    for file in files {
-                        let name: String = {
-                            let name = URL(fileURLWithPath: file)
-                                .deletingPathExtension().lastPathComponent
-                            let value = name.isEmpty ? "Unknown file" : name
-                            return value
-                        }()
-                        noop(name)
-                    }
-                }
-
-                print(profiler.results)
-            }
-
-            xit("tasks") {
-                let configuration = ProfilerConfiguration(threadCount: 2, sampleCount: 10)
-                let profiler = Profiler(label: "", configuration: configuration)
-
-                let taskManager = TaskManager()
-                func noop(_: String) {}
-                Logger.shared.addTransport { noop($0) }
-                profiler.profile(tag: "with logging") {
-
-                    var handles: [TaskHandle] = []
-                    for _ in 0..<400 {
-                        handles.append(taskManager.add(task: DummyTask()))
-                    }
-                    taskManager.waitTillAllTasksFinished()
-                    for handle in handles {
-                        assert(handle.state == .finished)
-                    }
-                }
-
-                Logger.shared.removeTransports()
-                profiler.profile(tag: "without logging") {
-                    var handles: [TaskHandle] = []
-                    for _ in 0..<400 {
-                        handles.append(taskManager.add(task: DummyTask()))
-                    }
-                    taskManager.waitTillAllTasksFinished()
-                    for handle in handles {
-                        assert(handle.state == .finished)
-                    }
-                }
-
-                print(profiler.results)
+                expect(results[safe: 0]?.tag) == "1ms"
+                expect(results[safe: 1]?.tag) == "2ms"
+                expect(results[safe: 2]?.tag) == "3ms"
             }
         }
     }

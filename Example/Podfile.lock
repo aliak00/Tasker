@@ -7,6 +7,7 @@ PODS:
     - Swooft/Atomics (= 0.1.0)
     - Swooft/Collections (= 0.1.0)
     - Swooft/Logger (= 0.1.0)
+    - Swooft/Operations (= 0.1.0)
     - Swooft/Profiler (= 0.1.0)
     - Swooft/Result (= 0.1.0)
     - Swooft/Tasker (= 0.1.0)
@@ -28,18 +29,25 @@ PODS:
   - Swooft/Logger (0.1.0):
     - Swooft/Collections/Cache
     - Swooft/Collections/RingBuffer
+  - Swooft/Operations (0.1.0):
+    - Swooft/Utils/Locking
   - Swooft/Profiler (0.1.0)
   - Swooft/Result (0.1.0)
   - Swooft/Tasker (0.1.0):
     - Swooft/Atomics
     - Swooft/Logger
+    - Swooft/Operations
     - Swooft/Result
     - Swooft/Utils/Weak
   - Swooft/URLInterceptor (0.1.0):
     - Swooft/Collections/SynchronizedDictionary
     - Swooft/Tasker
   - Swooft/Utils (0.1.0):
+    - Swooft/Utils/Array (= 0.1.0)
+    - Swooft/Utils/Locking (= 0.1.0)
     - Swooft/Utils/Weak (= 0.1.0)
+  - Swooft/Utils/Array (0.1.0)
+  - Swooft/Utils/Locking (0.1.0)
   - Swooft/Utils/Weak (0.1.0)
 
 DEPENDENCIES:
@@ -56,8 +64,8 @@ SPEC CHECKSUMS:
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   SwiftFormat: 51ff30f86e1ef438babbda2e0f3e1e8f53b4e942
-  Swooft: 78119d776c098e57bde33b6a36bd763ba85a79d5
+  Swooft: 23e30b0c8c56d27b0ecb521066420e155cc5055d
 
-PODFILE CHECKSUM: 72726bc6beb9265f0aede21898e6adb86b6cad19
+PODFILE CHECKSUM: 3b23cc443bf7b11251fb469c0fe911b605c17afd
 
 COCOAPODS: 1.3.1
