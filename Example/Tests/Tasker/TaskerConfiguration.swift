@@ -18,5 +18,10 @@ class TaskerConfiguration: QuickConfiguration {
         configuration.beforeEach {
             OwnedTaskHandle.counter.value = 0
         }
+
+        configuration.afterEach {
+            ensure(AsyncOperation.counter.value).becomes(0)
+            AsyncOperation.counter.value = 0
+        }
     }
 }

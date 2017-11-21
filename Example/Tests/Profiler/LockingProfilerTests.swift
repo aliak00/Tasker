@@ -10,36 +10,41 @@
 
 import Quick
 import Nimble
-@testable import Swooft
+import Swooft
 
 class LockingProfilerTests: QuickSpec {
 
     override func spec() {
         xit("locks") {
-            let configuration = ProfilerConfiguration(threadCount: 100, sampleCount: 500)
+            let configuration = ProfilerConfiguration(threadCount: 100, sampleCount: 10000)
             let profiler = Profiler(label: "locking", configuration: configuration)
 
+            var x = 0
             let locka = NSLock()
             profiler.profile(tag: "nslock") {
                 locka.lock()
+                x += 1
                 locka.unlock()
             }
 
             let lockb = NSRecursiveLock()
             profiler.profile(tag: "nsrecursivelock") {
                 lockb.lock()
+                x += 1
                 lockb.unlock()
             }
 
             let lockc = PosixLock(kind: .normal)
             profiler.profile(tag: "plock") {
                 lockc.lock()
+                x += 1
                 lockc.unlock()
             }
 
             let lockd = PosixLock(kind: .recursive)
             profiler.profile(tag: "precursivelock") {
                 lockd.lock()
+                x += 1
                 lockd.unlock()
             }
 

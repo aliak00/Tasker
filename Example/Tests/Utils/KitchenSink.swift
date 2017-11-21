@@ -12,7 +12,7 @@ import Foundation
 import Quick
 import Nimble
 
-@testable import Swooft
+import Swooft
 
 func failWith<T>(_ expectedError: Error) -> Predicate<Result<T>> {
     let domain = (expectedError as NSError).domain

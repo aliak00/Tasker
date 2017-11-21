@@ -12,6 +12,11 @@ import Foundation
 
 public struct ProfilerConfiguration {
 
+    public init(threadCount: Int = 1, sampleCount: Int = 1) {
+        self.threadCount = threadCount
+        self.sampleCount = sampleCount
+    }
+
     /// Number of threads you want the profiler to use
     public let threadCount: Int
 

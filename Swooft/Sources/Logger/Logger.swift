@@ -38,7 +38,7 @@ private extension DispatchTime {
 public class Logger {
     /// Shared logger object
     public static let shared: Logger = {
-        let logger = Logger(synchronousOutput: false)
+        let logger = Logger(synchronousOutput: true)
         //        logger.addTransport { print($0) }
         return logger
     }()

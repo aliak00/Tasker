@@ -14,79 +14,89 @@ import Nimble
 @testable import Swooft
 
 class AsyncOperationTests: QuickSpec {
-    var queue = OperationQueue()
+
     override func spec() {
-
-        beforeEach {
-            self.queue = OperationQueue()
-        }
-
-        afterEach {
-            waitUntil { done in
-                self.queue.cancelAllOperations()
-                self.queue.waitUntilAllOperationsAreFinished()
-                done()
-            }
-        }
 
         describe("creating operation") {
 
             it("should start in ready state") {
-                let operation = AsyncOperation { _ in }
+                let operation = AsyncOperationSpy { _ in }
                 expect(operation.state) == AsyncOperation.State.ready
             }
         }
 
-        describe("adding operation") {
+        describe("starting operation") {
 
             it("should go to executing") {
-                let operation = AsyncOperation { _ in }
-                self.queue.addOperation(operation)
+                let operation = AsyncOperationSpy { _ in }
+                operation.start()
                 ensure(operation.state).becomes(.executing)
+            }
+
+            it("should call executor") {
+                let operation = AsyncOperationSpy { _ in }
+                operation.start()
+                ensure(operation.executorCallCount).becomes(1)
             }
 
             it("should go to finished") {
                 let operation = AsyncOperation { $0.finish() }
-                self.queue.addOperation(operation)
+                operation.start()
                 ensure(operation.state).becomes(.finished)
             }
+        }
+
+        describe("adding operations to a queue") {
 
             it("should all go to finished") {
+                let queue = OperationQueue()
                 var operations: [AsyncOperation] = []
                 for _ in 0..<100 {
                     operations.append(AsyncOperation { $0.finish() })
                 }
-                self.queue.addOperations(operations, waitUntilFinished: false)
-                operations.forEach { ensure($0.state).becomes(.finished) }
-            }
-        }
-
-        describe("cancelling") {
-
-            it("before adding should go to finished") {
-                let operation = AsyncOperation { _ in }
-                operation.cancel()
-                self.queue.addOperation(operation)
-                ensure(operation.state).becomes(.finished)
+                queue.addOperations(operations, waitUntilFinished: true)
+                operations.forEach { expect($0.state) == AsyncOperation.State.finished }
             }
 
-            it("before adding should not execute") {
-                var executed = false
-                let operation = AsyncOperation { _ in executed = true }
-                operation.cancel()
-                self.queue.addOperation(operation)
-                ensure(operation.state).becomes(.finished)
-                expect(executed) == false
-            }
-
-            it("should all go to finished") {
+            it("should all go to finished if cancelled") {
+                let queue = OperationQueue()
                 var operations: [AsyncOperation] = []
                 for _ in 0..<100 {
                     operations.append(AsyncOperation { _ in })
                 }
                 operations.forEach { $0.cancel() }
-                self.queue.addOperations(operations, waitUntilFinished: false)
+                queue.addOperations(operations, waitUntilFinished: false)
                 operations.forEach { ensure($0.state).becomes(.finished) }
+            }
+        }
+
+        describe("cancelling before") {
+
+            it("before starting should not call executor") {
+                let operation = AsyncOperationSpy { _ in }
+                operation.cancel()
+                operation.start()
+                ensure(operation.executorCallCount).stays(0)
+                expect(operation.state) == AsyncOperation.State.finished
+            }
+
+            it("before starting should not call finish") {
+                let operation = AsyncOperationSpy { _ in }
+                operation.cancel()
+                operation.start()
+                ensure(operation.finishCallCount).stays(0)
+                expect(operation.state) == AsyncOperation.State.finished
+            }
+        }
+
+        describe("cancelling after") {
+
+            it("executing should call finish") {
+                let operation = AsyncOperationSpy { _ in }
+                operation.start()
+                ensure(operation.state).becomes(.executing)
+                operation.cancel()
+                ensure(operation.state).becomes(.finished)
             }
         }
     }

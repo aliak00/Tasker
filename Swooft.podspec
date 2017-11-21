@@ -56,6 +56,8 @@ A group of libraries that provide some utility
   s.subspec 'Operations' do |operations|
     operations.source_files  = ['Swooft/Sources/Operations/**/*.swift']
     operations.dependency 'Swooft/Utils/Locking'
+    operations.dependency 'Swooft/Atomics'
+    operations.dependency 'Swooft/Logger'
   end
 
   s.subspec 'Atomics' do |atomics|

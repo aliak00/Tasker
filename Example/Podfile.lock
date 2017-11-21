@@ -30,6 +30,8 @@ PODS:
     - Swooft/Collections/Cache
     - Swooft/Collections/RingBuffer
   - Swooft/Operations (0.1.0):
+    - Swooft/Atomics
+    - Swooft/Logger
     - Swooft/Utils/Locking
   - Swooft/Profiler (0.1.0)
   - Swooft/Result (0.1.0)
@@ -67,7 +69,7 @@ SPEC CHECKSUMS:
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   SwiftFormat: 51ff30f86e1ef438babbda2e0f3e1e8f53b4e942
-  Swooft: ac7c6df7f875825a75a2c11d1fd3861af1e12612
+  Swooft: f76272df28775e0d8a407c9cbac6306d775d5632
 
 PODFILE CHECKSUM: 3b23cc443bf7b11251fb469c0fe911b605c17afd
 

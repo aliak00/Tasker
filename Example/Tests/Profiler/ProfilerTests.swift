@@ -10,7 +10,7 @@
 
 import Quick
 import Nimble
-@testable import Swooft
+import Swooft
 
 class ProfilerTests: QuickSpec {
 

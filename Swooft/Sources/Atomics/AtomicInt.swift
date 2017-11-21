@@ -14,6 +14,8 @@ public struct AtomicInt {
     fileprivate var queue = DispatchQueue(label: "Swooft.AtomicInt")
     fileprivate var _value = 0
 
+    public init() {}
+
     public var value: Int {
         get {
             var value: Int = 0

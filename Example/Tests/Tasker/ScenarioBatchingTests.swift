@@ -10,7 +10,7 @@
 
 import Quick
 import Nimble
-@testable import Swooft
+import Swooft
 
 // This interceptor will take any task that is retriable, and re-execute it
 class BatchingInterceptor: TaskInterceptor {

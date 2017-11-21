@@ -16,7 +16,7 @@ public struct TaskReactorConfiguration {
     let requeuesTask: Bool
     let suspendsTaskQueue: Bool
 
-    init(
+    public init(
         isImmediate: Bool = false,
         timeout: DispatchTimeInterval? = nil,
         requeuesTask: Bool = false,
@@ -28,5 +28,5 @@ public struct TaskReactorConfiguration {
         self.suspendsTaskQueue = suspendsTaskQueue
     }
 
-    static let `default` = TaskReactorConfiguration()
+    public static let `default` = TaskReactorConfiguration()
 }

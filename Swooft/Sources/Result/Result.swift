@@ -10,9 +10,6 @@
 
 import Foundation
 
-struct NoError: Error {}
-let noError = NoError()
-
 public enum Result<T> {
 
     case success(T)

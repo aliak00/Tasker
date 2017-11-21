@@ -11,7 +11,7 @@
 import Quick
 import Nimble
 
-@testable import Swooft
+import Swooft
 
 private extension TaskManagerSpy {
     @discardableResult
@@ -82,6 +82,7 @@ class TaskManagerTests: QuickSpec {
                 for task in tasks {
                     ensure(task.executeCallCount).becomes(1)
                 }
+                ensure(manager.completionCallCount).becomes(100)
             }
 
             it("should make all handles finished") {

@@ -8,7 +8,7 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-@testable import Swooft
+import Swooft
 
 class InterceptorSpy: TaskInterceptor {
 
