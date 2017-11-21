@@ -21,5 +21,5 @@ post_install do |installer|
   profile_debug.build_settings["SWIFT_OPTIMIZATION_LEVEL"] = "-Owholemodule"
   profile_debug.build_settings["MTL_ENABLE_DEBUG_INFO"] = "NO"
   profile_debug.build_settings["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
-  profile_debug.build_settings["GCC_OPTIMIZATION_LEVEL"] = "0s"
+  profile_debug.build_settings["GCC_OPTIMIZATION_LEVEL"] = "s"
 end
