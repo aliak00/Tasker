@@ -23,6 +23,7 @@ DerivedData
 .bundle
 
 Pods/
+Example/Swooft.xcworkspace
 
 /docs/*
 !/docs/jazzy-theme/
