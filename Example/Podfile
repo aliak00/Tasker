@@ -14,3 +14,12 @@ target 'Swooft_Profiler_Tests' do
 end
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+post_install do |installer|
+  profile = installer.pods_project.targets.find { |target| target.name == 'Pods-Swooft_Profiler_Tests' }
+  profile_debug = profile.build_configurations.find { |config| config.name == 'Debug' }
+  profile_debug.build_settings["SWIFT_OPTIMIZATION_LEVEL"] = "-Owholemodule"
+  profile_debug.build_settings["MTL_ENABLE_DEBUG_INFO"] = "NO"
+  profile_debug.build_settings["DEBUG_INFORMATION_FORMAT"] = "dwarf-with-dsym"
+  profile_debug.build_settings["GCC_OPTIMIZATION_LEVEL"] = "0s"
+end
