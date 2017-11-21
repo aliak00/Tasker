@@ -20,28 +20,28 @@ class LockingProfilerTests: QuickSpec {
 
             var x = 0
             let locka = NSLock()
-            profiler.profile(tag: "nslock") {
+            profiler.profile(label: "nslock") {
                 locka.lock()
                 x += 1
                 locka.unlock()
             }
 
             let lockb = NSRecursiveLock()
-            profiler.profile(tag: "nsrecursivelock") {
+            profiler.profile(label: "nsrecursivelock") {
                 lockb.lock()
                 x += 1
                 lockb.unlock()
             }
 
             let lockc = PosixLock(kind: .normal)
-            profiler.profile(tag: "plock") {
+            profiler.profile(label: "plock") {
                 lockc.lock()
                 x += 1
                 lockc.unlock()
             }
 
             let lockd = PosixLock(kind: .recursive)
-            profiler.profile(tag: "precursivelock") {
+            profiler.profile(label: "precursivelock") {
                 lockd.lock()
                 x += 1
                 lockd.unlock()

@@ -14,36 +14,53 @@ import Swooft
 class LoggingProfilerTests: QuickSpec {
 
     override func spec() {
-        it("tasks") {
-            let configuration = ProfilerConfiguration(threadCount: 2, sampleCount: 10)
-            let profiler = Profiler(label: "", configuration: configuration)
+        it("logging") {
+            let configuration = ProfilerConfiguration(threadCount: 4, sampleCount: 10000)
+            let profiler = Profiler(label: "logging", configuration: configuration)
 
-            let taskManager = TaskManager()
             func noop(_: String) {}
-            Logger.shared.addTransport { noop($0) }
-            profiler.profile(tag: "with logging") {
 
-                var handles: [TaskHandle] = []
-                for _ in 0..<400 {
-                    handles.append(taskManager.add(task: DummyTask()))
-                }
-                taskManager.waitTillAllTasksFinished()
-                for handle in handles {
-                    assert(handle.state == .finished)
-                }
+            let data = "hello this is some data".data(using: .utf8)!
+
+            //
+            // Test performance of synchronous logging
+            //
+            let syncLogger = Logger(synchronousOutput: true)
+            profiler.profile(label: "sync with self") {
+                syncLogger.log(from: self, "hello \(data)")
+            }
+            profiler.profile(label: "sync without self") {
+                syncLogger.log("hello \(data)")
+            }
+            syncLogger.addTransport({noop($0)})
+            profiler.profile(label: "sync without self with transport") {
+                syncLogger.log("hello \(data)")
+            }
+            profiler.profile(label: "sync with self with transport") {
+                syncLogger.log(from: self, "hello \(data)")
             }
 
-            Logger.shared.removeTransports()
-            profiler.profile(tag: "without logging") {
-                var handles: [TaskHandle] = []
-                for _ in 0..<400 {
-                    handles.append(taskManager.add(task: DummyTask()))
-                }
-                taskManager.waitTillAllTasksFinished()
-                for handle in handles {
-                    assert(handle.state == .finished)
-                }
+            //
+            // Test performance of asynchronous logging
+            //
+            let asyncLogger = Logger(synchronousOutput: false)
+            profiler.profile(label: "async with self") {
+                asyncLogger.log(from: self, "hello \(data)")
             }
+            asyncLogger.waitTillAllLogsTransported()
+            profiler.profile(label: "async without self") {
+                asyncLogger.log("hello \(data)")
+            }
+            asyncLogger.addTransport({noop($0)})
+            asyncLogger.waitTillAllLogsTransported()
+            profiler.profile(label: "async without self with transport") {
+                asyncLogger.log("hello \(data)")
+            }
+            asyncLogger.waitTillAllLogsTransported()
+            profiler.profile(label: "async with self with transport") {
+                asyncLogger.log(from: self, "hello \(data)")
+            }
+            asyncLogger.waitTillAllLogsTransported()
 
             print(profiler.results)
         }

@@ -161,6 +161,7 @@ public class Logger {
      - parameter tag: a tag to apply to this log
      */
     public func log<T>(
+        level: LogLevel = .info,
         _ object: @autoclosure () -> T,
         tag: String,
         force: Bool = false,
@@ -168,7 +169,30 @@ public class Logger {
         _ function: String = #function,
         _ line: Int = #line
     ) {
-        self.log(object(), tags: [tag], force: force, file, function, line)
+        self.log(object, tags: [tag], force: force, file, function, line)
+    }
+
+    public func log<T, S>(
+        level: LogLevel = .info,
+        from _: S?,
+        _ object: @autoclosure () -> T,
+        tags: [String] = [],
+        force: Bool = false,
+        _ file: String = #file,
+        _ function: String = #function,
+        _ line: Int = #line
+    ) {
+        self.log(
+            level: level,
+            object: object,
+            tags: tags,
+            force: force,
+            context: String(describing: S.self),
+            file: file,
+            function:
+            function,
+            line: line
+        )
     }
 
     /**
@@ -180,11 +204,34 @@ public class Logger {
     public func log<T>(
         level: LogLevel = .info,
         _ object: @autoclosure () -> T,
-        tags explicitTags: [String] = [],
+        tags: [String] = [],
         force: Bool = false,
         _ file: String = #file,
         _ function: String = #function,
         _ line: Int = #line
+    ) {
+        self.log(
+            level: level,
+            object: object,
+            tags: tags,
+            force: force,
+            context: nil,
+            file: file,
+            function:
+            function,
+            line: line
+        )
+    }
+
+    private func log<T>(
+        level: LogLevel = .info,
+        object: @autoclosure () -> T,
+        tags explicitTags: [String],
+        force: Bool,
+        context: String?,
+        file: String,
+        function: String,
+        line: Int
     ) {
         #if !DEBUG
             guard level != .debug else {
@@ -209,7 +256,8 @@ public class Logger {
                     force: force,
                     file: file,
                     function: function,
-                    line: line
+                    line: line,
+                    context: context
                 )
             }
             return
@@ -227,7 +275,8 @@ public class Logger {
                 force: force,
                 file: file,
                 function: function,
-                line: line
+                line: line,
+                context: context
             )
             self?.dispatchGroup.leave()
         }
@@ -243,7 +292,8 @@ public class Logger {
         force: Bool = false,
         file: String = #file,
         function: String = #function,
-        line: Int = #line
+        line: Int = #line,
+        context: String?
     ) {
         guard (self._enabled && self.transports.count > 0) || force else {
             return
@@ -259,6 +309,9 @@ public class Logger {
 
         var allTags = [functionName, thread, fileName, level.rawValue]
         allTags.append(contentsOf: explicitTags)
+        if let context = context {
+            allTags.append(context)
+        }
 
         var shouldOutputToTransports = true
         if self.ignoredTags.count > 0 && self.ignoredTags.intersection(allTags).count > 0 {

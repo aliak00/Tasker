@@ -43,7 +43,7 @@ class MemoizeProfilerTests: QuickSpec {
 
             for capacity in [50, 75, 100, 120] {
                 let cache = Cache<String, String>(capacity: capacity)
-                profiler.profile(tag: "memo-\(capacity)") {
+                profiler.profile(label: "memo-\(capacity)") {
                     for file in files {
                         let name: String = {
                             if let name = cache[file] {
@@ -60,7 +60,7 @@ class MemoizeProfilerTests: QuickSpec {
                 }
             }
 
-            profiler.profile(tag: "no-memo") {
+            profiler.profile(label: "no-memo") {
                 for file in files {
                     let name: String = {
                         let name = URL(fileURLWithPath: file)

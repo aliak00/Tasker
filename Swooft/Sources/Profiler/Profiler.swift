@@ -52,7 +52,7 @@ public class Profiler {
     @discardableResult
     public static func profile(label: String, configuration: ProfilerConfiguration = .single, block: @escaping () -> Void) -> ProfilerResults {
         let profiler = Profiler(label: label, configuration: configuration)
-        profiler.profile(tag: label, block: block)
+        profiler.profile(label: label, block: block)
         return profiler.results
     }
 
@@ -76,11 +76,11 @@ public class Profiler {
     }
 
     @discardableResult
-    public func profile(tag: String, block: @escaping () -> Void) -> Double {
+    public func profile(label: String, block: @escaping () -> Void) -> Double {
         let durations = self.process(block: block)
         let averageDuration = Profiler.averageDurations(durations)
         self.queue.sync {
-            self.data[tag] = averageDuration
+            self.data[label] = averageDuration
         }
         return averageDuration
     }

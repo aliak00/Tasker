@@ -24,12 +24,12 @@ public func log<T>(
     if let tag = tag {
         tags.append(tag)
     }
-    Logger.shared.log(level: level, object(), tags: tags, force: force, file, function, line)
+    Logger.shared.log(level: level, object, tags: tags, force: force, file, function, line)
 }
 
 public func log<T, S>(
     level: LogLevel = .info,
-    from _: S?,
+    from type: S?,
     _ object: @autoclosure () -> T,
     tag: String? = nil,
     tags: [String] = [],
@@ -39,6 +39,8 @@ public func log<T, S>(
     line: Int = #line
 ) {
     var tags = tags
-    tags.append(String(describing: S.self))
-    log(level: level, object(), tag: tag, tags: tags, force: force, file: file, function: function, line: line)
+    if let tag = tag {
+        tags.append(tag)
+    }
+    Logger.shared.log(level: level, from: type, object, tags: tags, force: force, file, function, line)
 }
