@@ -41,7 +41,7 @@ class MemoizeProfilerTests: QuickSpec {
 
             func noop(_: String) {}
 
-            for capacity in [5, 20, 50, 75, 100, 120, 180, 200] {
+            for capacity in [50, 75, 100, 120] {
                 let cache = Cache<String, String>(capacity: capacity)
                 profiler.profile(tag: "memo-\(capacity)") {
                     for file in files {

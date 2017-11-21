@@ -10,6 +10,7 @@
 
 import Foundation
 
+///
 public class AnyTask<T>: Task {
 
     public typealias SuccessValue = T

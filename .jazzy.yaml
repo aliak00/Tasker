@@ -17,13 +17,12 @@ xcodebuild_arguments: [
   -scheme,
   Swooft-Example,
   -sdk,
-  iphonesimulator10.3
+  iphonesimulator11.1,
+  -derivedDataPath,
+  build/DerivedData
 ]
 
 custom_categories:
-  - name: AsyncAwait
-    children:
-      - AsyncTask
   - name: Atomics
     children:
       - AtomicInt
@@ -53,7 +52,8 @@ custom_categories:
       - TaskError
       - TaskHandle
       - TaskInterceptor
-      - TaskInterceptorConfiguration
+      - TaskReactor
+      - TaskReactorConfiguration
       - TaskManager
       - TaskState
   - name: Utils
