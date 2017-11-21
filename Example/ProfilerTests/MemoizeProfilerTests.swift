@@ -9,13 +9,12 @@
 //
 
 import Quick
-import Nimble
 import Swooft
 
 class MemoizeProfilerTests: QuickSpec {
 
     override func spec() {
-        xit("memoize or get path component") {
+        it("memoize or get path component") {
             //
             // This benchmark simlulates logging from X number of file and how much speed
             // up or down there is with different cache sizes for file names

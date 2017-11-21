@@ -9,7 +9,6 @@
 //
 
 import Quick
-import Nimble
 import Swooft
 
 class ProfilerTests: QuickSpec {

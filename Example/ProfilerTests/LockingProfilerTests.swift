@@ -9,14 +9,13 @@
 //
 
 import Quick
-import Nimble
 import Swooft
 
 class LockingProfilerTests: QuickSpec {
 
     override func spec() {
-        xit("locks") {
-            let configuration = ProfilerConfiguration(threadCount: 100, sampleCount: 10000)
+        it("locks") {
+            let configuration = ProfilerConfiguration(threadCount: 100, sampleCount: 1000)
             let profiler = Profiler(label: "locking", configuration: configuration)
 
             var x = 0

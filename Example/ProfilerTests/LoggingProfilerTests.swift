@@ -9,13 +9,12 @@
 //
 
 import Quick
-import Nimble
 import Swooft
 
 class LoggingProfilerTests: QuickSpec {
 
     override func spec() {
-        xit("tasks") {
+        it("tasks") {
             let configuration = ProfilerConfiguration(threadCount: 2, sampleCount: 10)
             let profiler = Profiler(label: "", configuration: configuration)
 

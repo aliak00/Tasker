@@ -7,23 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A8D6903D458462375547F2F /* Pods_Swooft_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E12E7B581FC3C9AD0089EA36 /* Pods_Swooft_Tests.framework */; };
 		69CF2F5A4A9B4EB8F06D21A3 /* Pods_Swooft_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */; };
-		E103B32A1F574DE9000F3F70 /* ProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3291F574DE9000F3F70 /* ProfilerTests.swift */; };
 		E103B3351F5C5952000F3F70 /* LinkedListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3341F5C5952000F3F70 /* LinkedListTests.swift */; };
 		E103B3381F5C596F000F3F70 /* CacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3371F5C596F000F3F70 /* CacheTests.swift */; };
+		E1100E001FC40C5400A11F75 /* ProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3291F574DE9000F3F70 /* ProfilerTests.swift */; };
+		E1100E021FC40C9200A11F75 /* Nimble+failWith.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1100E011FC40C9200A11F75 /* Nimble+failWith.swift */; };
 		E116718F1FA2A16500F1E3BC /* URLInterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E116718E1FA2A16500F1E3BC /* URLInterceptorTests.swift */; };
 		E11671971FAB6E1F00F1E3BC /* ReactorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11671961FAB6E1F00F1E3BC /* ReactorSpy.swift */; };
 		E11671991FABBCD500F1E3BC /* LoggerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11671981FABBCD500F1E3BC /* LoggerConfiguration.swift */; };
 		E116719B1FABBD7D00F1E3BC /* TaskReactorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E116719A1FABBD7D00F1E3BC /* TaskReactorTests.swift */; };
 		E11FFC1B1FBDEFAF004896D5 /* AsyncOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC1A1FBDEFAF004896D5 /* AsyncOperationTests.swift */; };
-		E11FFC221FBE3519004896D5 /* MemoizeProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */; };
-		E11FFC241FBE352C004896D5 /* LoggingProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */; };
-		E11FFC261FBE3538004896D5 /* LockingProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */; };
 		E12E7B5F1FC3C9FC0089EA36 /* LoggingProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */; };
-		E12E7B641FC3C9FC0089EA36 /* ProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3291F574DE9000F3F70 /* ProfilerTests.swift */; };
 		E12E7B661FC3C9FC0089EA36 /* LockingProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */; };
 		E12E7B6F1FC3C9FC0089EA36 /* MemoizeProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */; };
-		E12E7B7A1FC3C9FC0089EA36 /* Pods_Swooft_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */; };
 		E12E7B831FC3CAA90089EA36 /* DummyTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0F61F50B3F600757478 /* DummyTask.swift */; };
 		E12E7B841FC3CAB70089EA36 /* KitchenSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1021F50B40900757478 /* KitchenSink.swift */; };
 		E14D68A31FC27BB200E7C06D /* AsyncOperationSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14D68A21FC27BB200E7C06D /* AsyncOperationSpy.swift */; };
@@ -44,19 +41,24 @@
 		E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1021F50B40900757478 /* KitchenSink.swift */; };
 		E18AD1061F50B40900757478 /* YieldingIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1031F50B40900757478 /* YieldingIterator.swift */; };
 		E1BAC6AC1FB3D56100442308 /* TaskerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BAC6AB1FB3D56000442308 /* TaskerConfiguration.swift */; };
+		E854857FCE32C067225D33A7 /* Pods_Swooft_Profiler_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2201E672E9331F10488DAA0 /* Pods_Swooft_Profiler_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		427DBA1E5ECA326A503075D3 /* Pods-Swooft_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		15519BFA8E98A319C6327E9F /* Pods-Swooft_Profiler_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Profiler_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Profiler_Tests/Pods-Swooft_Profiler_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		1A4610C1C178A06B43EC0608 /* Pods-Swooft_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* Swooft_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Swooft_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66FFD0813A0C9458848B342E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		956BD3EEF87BAD2FA1F00F8B /* Swooft.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Swooft.podspec; path = ../Swooft.podspec; sourceTree = "<group>"; };
 		97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swooft_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB23F84E0C87F16C518F852E /* Pods-Swooft_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		9D913FB3D005A321B1A28D25 /* Pods-Swooft_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		B2201E672E9331F10488DAA0 /* Pods_Swooft_Profiler_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swooft_Profiler_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6D62278CD3B1E289E33A9D5 /* Pods-Swooft_Profiler_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Profiler_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Profiler_Tests/Pods-Swooft_Profiler_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E103B3291F574DE9000F3F70 /* ProfilerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilerTests.swift; sourceTree = "<group>"; };
 		E103B3341F5C5952000F3F70 /* LinkedListTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedListTests.swift; sourceTree = "<group>"; };
 		E103B3371F5C596F000F3F70 /* CacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheTests.swift; sourceTree = "<group>"; };
+		E1100E011FC40C9200A11F75 /* Nimble+failWith.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Nimble+failWith.swift"; sourceTree = "<group>"; };
 		E116718E1FA2A16500F1E3BC /* URLInterceptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLInterceptorTests.swift; sourceTree = "<group>"; };
 		E11671961FAB6E1F00F1E3BC /* ReactorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorSpy.swift; sourceTree = "<group>"; };
 		E11671981FABBCD500F1E3BC /* LoggerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerConfiguration.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69CF2F5A4A9B4EB8F06D21A3 /* Pods_Swooft_Tests.framework in Frameworks */,
+				3A8D6903D458462375547F2F /* Pods_Swooft_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,7 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E12E7B7A1FC3C9FC0089EA36 /* Pods_Swooft_Tests.framework in Frameworks */,
+				E854857FCE32C067225D33A7 /* Pods_Swooft_Profiler_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,8 +116,10 @@
 		19929254596EB333C34FA3C7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BB23F84E0C87F16C518F852E /* Pods-Swooft_Tests.debug.xcconfig */,
-				427DBA1E5ECA326A503075D3 /* Pods-Swooft_Tests.release.xcconfig */,
+				1A4610C1C178A06B43EC0608 /* Pods-Swooft_Tests.debug.xcconfig */,
+				9D913FB3D005A321B1A28D25 /* Pods-Swooft_Tests.release.xcconfig */,
+				15519BFA8E98A319C6327E9F /* Pods-Swooft_Profiler_Tests.debug.xcconfig */,
+				C6D62278CD3B1E289E33A9D5 /* Pods-Swooft_Profiler_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -125,6 +130,7 @@
 				E12E7B581FC3C9AD0089EA36 /* Pods_Swooft_Tests.framework */,
 				E12E7B561FC3C9750089EA36 /* Swooft.framework */,
 				97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */,
+				B2201E672E9331F10488DAA0 /* Pods_Swooft_Profiler_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -132,6 +138,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				E1100DFF1FC40B1100A11F75 /* ProfilerTests */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
@@ -188,9 +195,6 @@
 			isa = PBXGroup;
 			children = (
 				E103B3291F574DE9000F3F70 /* ProfilerTests.swift */,
-				E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */,
-				E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */,
-				E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */,
 			);
 			path = Profiler;
 			sourceTree = "<group>";
@@ -209,6 +213,16 @@
 				E103B3371F5C596F000F3F70 /* CacheTests.swift */,
 			);
 			path = Cache;
+			sourceTree = "<group>";
+		};
+		E1100DFF1FC40B1100A11F75 /* ProfilerTests */ = {
+			isa = PBXGroup;
+			children = (
+				E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */,
+				E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */,
+				E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */,
+			);
+			path = ProfilerTests;
 			sourceTree = "<group>";
 		};
 		E116718D1FA2A13A00F1E3BC /* URLInterceptor */ = {
@@ -275,6 +289,7 @@
 				E18AD1011F50B40900757478 /* Ensure.swift */,
 				E18AD1021F50B40900757478 /* KitchenSink.swift */,
 				E18AD1031F50B40900757478 /* YieldingIterator.swift */,
+				E1100E011FC40C9200A11F75 /* Nimble+failWith.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -344,12 +359,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E12E7B7E1FC3C9FC0089EA36 /* Build configuration list for PBXNativeTarget "Swooft_Profiler_Tests" */;
 			buildPhases = (
-				E12E7B5A1FC3C9FC0089EA36 /* [CP] Check Pods Manifest.lock */,
+				682FAD70DD4062CF6D3A3DAD /* [CP] Check Pods Manifest.lock */,
 				E12E7B5B1FC3C9FC0089EA36 /* Sources */,
 				E12E7B791FC3C9FC0089EA36 /* Frameworks */,
 				E12E7B7B1FC3C9FC0089EA36 /* Resources */,
-				E12E7B7C1FC3C9FC0089EA36 /* [CP] Embed Pods Frameworks */,
-				E12E7B7D1FC3C9FC0089EA36 /* [CP] Copy Pods Resources */,
+				7A98B55E8A36FF5A12D5F3EE /* [CP] Embed Pods Frameworks */,
+				CEAD5D4E4C79CF025584E8AC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -447,6 +462,44 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		682FAD70DD4062CF6D3A3DAD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Swooft_Profiler_Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7A98B55E8A36FF5A12D5F3EE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Swooft_Profiler_Tests/Pods-Swooft_Profiler_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
+				"${BUILT_PRODUCTS_DIR}/Swooft/Swooft.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swooft.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Swooft_Profiler_Tests/Pods-Swooft_Profiler_Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		AC9C838DA7343997FBA7BF5E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -469,47 +522,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E12E7B5A1FC3C9FC0089EA36 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Swooft_Tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E12E7B7C1FC3C9FC0089EA36 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
-				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
-				"${BUILT_PRODUCTS_DIR}/Swooft/Swooft.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swooft.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E12E7B7D1FC3C9FC0089EA36 /* [CP] Copy Pods Resources */ = {
+		CEAD5D4E4C79CF025584E8AC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -521,7 +534,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Swooft_Profiler_Tests/Pods-Swooft_Profiler_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -534,14 +547,11 @@
 				E18AD0F11F50B3AD00757478 /* TaskManagerTests.swift in Sources */,
 				E18AD0FB1F50B3F600757478 /* DummyTask.swift in Sources */,
 				E18AD0FE1F50B3F600757478 /* TaskSpy.swift in Sources */,
-				E11FFC241FBE352C004896D5 /* LoggingProfilerTests.swift in Sources */,
 				E18AD0F01F50B3AD00757478 /* TaskInterceptorTests.swift in Sources */,
 				E18AD0ED1F50B3AD00757478 /* ScenarioBatchingTests.swift in Sources */,
 				E18AD0EF1F50B3AD00757478 /* TaskHandleTests.swift in Sources */,
 				E18AD0EE1F50B3AD00757478 /* ScenarioValidatingRetryingTests.swift in Sources */,
-				E103B32A1F574DE9000F3F70 /* ProfilerTests.swift in Sources */,
 				E18AD1061F50B40900757478 /* YieldingIterator.swift in Sources */,
-				E11FFC261FBE3538004896D5 /* LockingProfilerTests.swift in Sources */,
 				E18AD1041F50B40900757478 /* Ensure.swift in Sources */,
 				E116718F1FA2A16500F1E3BC /* URLInterceptorTests.swift in Sources */,
 				E18AD0FD1F50B3F600757478 /* TaskManagerSpy.swift in Sources */,
@@ -550,14 +560,15 @@
 				E116719B1FABBD7D00F1E3BC /* TaskReactorTests.swift in Sources */,
 				E103B3381F5C596F000F3F70 /* CacheTests.swift in Sources */,
 				E172FCD01F96AB6D00317E56 /* LoggerTests.swift in Sources */,
-				E11FFC221FBE3519004896D5 /* MemoizeProfilerTests.swift in Sources */,
 				E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */,
 				E18AD0FA1F50B3F600757478 /* AsyncAwaitSpy.swift in Sources */,
+				E1100E001FC40C5400A11F75 /* ProfilerTests.swift in Sources */,
 				E18AD1001F50B40100757478 /* AsyncAwaitTests.swift in Sources */,
 				E11FFC1B1FBDEFAF004896D5 /* AsyncOperationTests.swift in Sources */,
 				E14D68A31FC27BB200E7C06D /* AsyncOperationSpy.swift in Sources */,
 				E11671991FABBCD500F1E3BC /* LoggerConfiguration.swift in Sources */,
 				E17C3FB31F5372E30002ADFF /* RingBufferTests.swift in Sources */,
+				E1100E021FC40C9200A11F75 /* Nimble+failWith.swift in Sources */,
 				E1BAC6AC1FB3D56100442308 /* TaskerConfiguration.swift in Sources */,
 				E11671971FAB6E1F00F1E3BC /* ReactorSpy.swift in Sources */,
 			);
@@ -570,7 +581,6 @@
 				E12E7B841FC3CAB70089EA36 /* KitchenSink.swift in Sources */,
 				E12E7B831FC3CAA90089EA36 /* DummyTask.swift in Sources */,
 				E12E7B5F1FC3C9FC0089EA36 /* LoggingProfilerTests.swift in Sources */,
-				E12E7B641FC3C9FC0089EA36 /* ProfilerTests.swift in Sources */,
 				E12E7B661FC3C9FC0089EA36 /* LockingProfilerTests.swift in Sources */,
 				E12E7B6F1FC3C9FC0089EA36 /* MemoizeProfilerTests.swift in Sources */,
 			);
@@ -681,7 +691,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BB23F84E0C87F16C518F852E /* Pods-Swooft_Tests.debug.xcconfig */;
+			baseConfigurationReference = 1A4610C1C178A06B43EC0608 /* Pods-Swooft_Tests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -704,7 +714,7 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 427DBA1E5ECA326A503075D3 /* Pods-Swooft_Tests.release.xcconfig */;
+			baseConfigurationReference = 9D913FB3D005A321B1A28D25 /* Pods-Swooft_Tests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -722,7 +732,7 @@
 		};
 		E12E7B7F1FC3C9FC0089EA36 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BB23F84E0C87F16C518F852E /* Pods-Swooft_Tests.debug.xcconfig */;
+			baseConfigurationReference = 15519BFA8E98A319C6327E9F /* Pods-Swooft_Profiler_Tests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -745,7 +755,7 @@
 		};
 		E12E7B801FC3C9FC0089EA36 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 427DBA1E5ECA326A503075D3 /* Pods-Swooft_Tests.release.xcconfig */;
+			baseConfigurationReference = C6D62278CD3B1E289E33A9D5 /* Pods-Swooft_Profiler_Tests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (

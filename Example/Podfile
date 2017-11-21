@@ -1,12 +1,16 @@
 use_frameworks!
 
 target 'Swooft_Tests' do
-  
   pod 'Swooft', :path => '../'
   
   pod 'SwiftFormat/CLI'
   pod 'Quick'
   pod 'Nimble'
+end
+
+target 'Swooft_Profiler_Tests' do
+  pod 'Swooft', :path => '../'
+  pod 'Quick'
 end
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
