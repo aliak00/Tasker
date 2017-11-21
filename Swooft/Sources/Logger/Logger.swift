@@ -169,7 +169,7 @@ public class Logger {
         _ function: String = #function,
         _ line: Int = #line
     ) {
-        self.log(object, tags: [tag], force: force, file, function, line)
+        self.log(level: level, object, tags: [tag], force: force, file, function, line)
     }
 
     public func log<T, S>(
@@ -189,8 +189,7 @@ public class Logger {
             force: force,
             context: String(describing: S.self),
             file: file,
-            function:
-            function,
+            function: function,
             line: line
         )
     }
@@ -217,8 +216,7 @@ public class Logger {
             force: force,
             context: nil,
             file: file,
-            function:
-            function,
+            function: function,
             line: line
         )
     }
