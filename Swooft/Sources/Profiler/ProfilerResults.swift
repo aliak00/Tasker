@@ -15,20 +15,20 @@ public struct ProfilerResults: CustomStringConvertible {
     let configuration: ProfilerConfiguration
     let results: [String: Double]
 
-    public subscript(tag: String) -> Double? {
-        return self.results[tag]
+    public subscript(label: String) -> Double? {
+        return self.results[label]
     }
 
-    public func descending() -> [(tag: String, duration: Double)] {
+    public func descending() -> [(label: String, duration: Double)] {
         return self.results.sorted {
             $0.1 > $1.1
-        }.map { (tag: $0.0, duration: $0.1) }
+        }.map { (label: $0.0, duration: $0.1) }
     }
 
-    public func ascending() -> [(tag: String, duration: Double)] {
+    public func ascending() -> [(label: String, duration: Double)] {
         return self.results.sorted {
             $0.1 < $1.1
-        }.map { (tag: $0.0, duration: $0.1) }
+        }.map { (label: $0.0, duration: $0.1) }
     }
 
     public var description: String {
@@ -53,7 +53,7 @@ public struct ProfilerResults: CustomStringConvertible {
                 let percent = p == result.duration ? 0 : Int((p - result.duration) / p * 100)
                 percentString = " (\(percent) % faster)"
             }
-            lines.append("  " + result.tag + ": \(result.duration) ms" + (percentString ?? ""))
+            lines.append("  " + result.label + ": \(result.duration) ms" + (percentString ?? ""))
             previousDuration = result.duration
         }
         return header + "\n" + lines.reversed().joined(separator: "\n")

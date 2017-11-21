@@ -29,10 +29,10 @@ class ProfilerTests: QuickSpec {
             it("should get results for multiple profilers") {
                 let profiler = Profiler(label: "basic-math")
 
-                profiler.profile(tag: "1+1") {
+                profiler.profile(label: "1+1") {
                     _ = 1 + 1
                 }
-                profiler.profile(tag: "1-1") {
+                profiler.profile(label: "1-1") {
                     _ = 1 - 1
                 }
 
@@ -49,27 +49,27 @@ class ProfilerTests: QuickSpec {
             it("should show descending results") {
                 let configuration = ProfilerConfiguration(threadCount: 1, sampleCount: 1)
                 let profiler = Profiler(label: "basic-math", configuration: configuration)
-                profiler.profile(tag: "1ms") { sleep(for: .milliseconds(1)) }
-                profiler.profile(tag: "2ms") { sleep(for: .milliseconds(2)) }
-                profiler.profile(tag: "3ms") { sleep(for: .milliseconds(3)) }
+                profiler.profile(label: "1ms") { sleep(for: .milliseconds(1)) }
+                profiler.profile(label: "2ms") { sleep(for: .milliseconds(2)) }
+                profiler.profile(label: "3ms") { sleep(for: .milliseconds(3)) }
                 let results = profiler.results.descending()
                 expect(results.count) == 3
-                expect(results[safe: 0]?.tag) == "3ms"
-                expect(results[safe: 1]?.tag) == "2ms"
-                expect(results[safe: 2]?.tag) == "1ms"
+                expect(results[safe: 0]?.label) == "3ms"
+                expect(results[safe: 1]?.label) == "2ms"
+                expect(results[safe: 2]?.label) == "1ms"
             }
 
             it("should output ascending results") {
                 let configuration = ProfilerConfiguration(threadCount: 1, sampleCount: 1)
                 let profiler = Profiler(label: "basic-math", configuration: configuration)
-                profiler.profile(tag: "1ms") { sleep(for: .milliseconds(1)) }
-                profiler.profile(tag: "2ms") { sleep(for: .milliseconds(2)) }
-                profiler.profile(tag: "3ms") { sleep(for: .milliseconds(3)) }
+                profiler.profile(label: "1ms") { sleep(for: .milliseconds(1)) }
+                profiler.profile(label: "2ms") { sleep(for: .milliseconds(2)) }
+                profiler.profile(label: "3ms") { sleep(for: .milliseconds(3)) }
                 let results = profiler.results.ascending()
                 expect(results.count) == 3
-                expect(results[safe: 0]?.tag) == "1ms"
-                expect(results[safe: 1]?.tag) == "2ms"
-                expect(results[safe: 2]?.tag) == "3ms"
+                expect(results[safe: 0]?.label) == "1ms"
+                expect(results[safe: 1]?.label) == "2ms"
+                expect(results[safe: 2]?.label) == "3ms"
             }
         }
     }
