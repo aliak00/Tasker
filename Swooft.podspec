@@ -35,6 +35,10 @@ A group of libraries that provide some utility
     utils.subspec 'Errors' do |errors|
       errors.source_files = ['Swooft/Sources/Utils/Errors/**/*.swift']
     end
+    utils.subspec 'Delegate' do |delegate|
+      delegate.source_files = ['Swooft/Sources/Utils/Delegate/**/*.swift']
+      delegate.dependency 'Swooft/Utils/Weak'
+    end
   end
 
   s.subspec 'Collections' do |collections|
@@ -51,6 +55,14 @@ A group of libraries that provide some utility
     collections.subspec 'SynchronizedDictionary' do |synchronizeddictionary|
       synchronizeddictionary.source_files  = ['Swooft/Sources/Collections/SynchronizedDictionary/**/*.swift']
     end
+    collections.subspec 'SynchronizedSet' do |synchronizedset|
+      synchronizedset.source_files  = ['Swooft/Sources/Collections/SynchronizedSet/**/*.swift']
+    end
+  end
+
+  s.subspec 'EventEmitter' do |eventemitter|
+    eventemitter.source_files  = ['Swooft/Sources/EventEmiter/**/*.swift']
+    eventemitter.dependency 'Swooft/Utils/Delegate'
   end
 
   s.subspec 'Operations' do |operations|

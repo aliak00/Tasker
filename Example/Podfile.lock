@@ -6,6 +6,7 @@ PODS:
     - Swooft/AsyncAwait (= 0.1.0)
     - Swooft/Atomics (= 0.1.0)
     - Swooft/Collections (= 0.1.0)
+    - Swooft/EventEmitter (= 0.1.0)
     - Swooft/Logger (= 0.1.0)
     - Swooft/Operations (= 0.1.0)
     - Swooft/Profiler (= 0.1.0)
@@ -21,11 +22,15 @@ PODS:
     - Swooft/Collections/LinkedList (= 0.1.0)
     - Swooft/Collections/RingBuffer (= 0.1.0)
     - Swooft/Collections/SynchronizedDictionary (= 0.1.0)
+    - Swooft/Collections/SynchronizedSet (= 0.1.0)
   - Swooft/Collections/Cache (0.1.0):
     - Swooft/Collections/LinkedList
   - Swooft/Collections/LinkedList (0.1.0)
   - Swooft/Collections/RingBuffer (0.1.0)
   - Swooft/Collections/SynchronizedDictionary (0.1.0)
+  - Swooft/Collections/SynchronizedSet (0.1.0)
+  - Swooft/EventEmitter (0.1.0):
+    - Swooft/Utils/Delegate
   - Swooft/Logger (0.1.0):
     - Swooft/Collections/Cache
     - Swooft/Collections/RingBuffer
@@ -47,10 +52,13 @@ PODS:
     - Swooft/Utils/Errors
   - Swooft/Utils (0.1.0):
     - Swooft/Utils/Array (= 0.1.0)
+    - Swooft/Utils/Delegate (= 0.1.0)
     - Swooft/Utils/Errors (= 0.1.0)
     - Swooft/Utils/Locking (= 0.1.0)
     - Swooft/Utils/Weak (= 0.1.0)
   - Swooft/Utils/Array (0.1.0)
+  - Swooft/Utils/Delegate (0.1.0):
+    - Swooft/Utils/Weak
   - Swooft/Utils/Errors (0.1.0)
   - Swooft/Utils/Locking (0.1.0)
   - Swooft/Utils/Weak (0.1.0)
@@ -69,7 +77,7 @@ SPEC CHECKSUMS:
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   SwiftFormat: 51ff30f86e1ef438babbda2e0f3e1e8f53b4e942
-  Swooft: f76272df28775e0d8a407c9cbac6306d775d5632
+  Swooft: 325b248bb7b18e2e72be71f67262d6d3e23f28e3
 
 PODFILE CHECKSUM: b2c470b01982cf1385b9262c279e5fe5c51f424f
 

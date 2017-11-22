@@ -20,7 +20,7 @@ class TaskerConfiguration: QuickConfiguration {
         }
 
         configuration.afterEach {
-            ensure(AsyncOperation.counter.value).becomes(0)
+            ensure(AsyncOperation.counter.value).becomes(0, timeout: .seconds(3))
             AsyncOperation.counter.value = 0
         }
     }
