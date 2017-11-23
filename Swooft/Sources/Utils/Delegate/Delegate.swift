@@ -10,10 +10,10 @@
 
 public enum Delegate<Parameters, Return> {
 
-    public typealias Capture = (Parameters) -> Return
+    public typealias Closure = (Parameters) -> Return
 
-    case closure(Capture)
-    case method(weakObject: Weak<AnyObject>, method: (AnyObject) -> Capture)
+    case closure(Closure)
+    case method(weakObject: Weak<AnyObject>, method: (AnyObject) -> Closure)
 
     public func call(_ args: Parameters) -> Return? {
         switch self {
@@ -27,27 +27,18 @@ public enum Delegate<Parameters, Return> {
         }
     }
 
-    public init<T: AnyObject>(object: T?, method: @escaping (T) -> Capture) {
-        let typeErasedMethod: (AnyObject) -> Capture = { any in
+    public init<T: AnyObject>(object: T?, method: @escaping (T) -> Closure) {
+        let typeErasedMethod: (AnyObject) -> Closure = { any in
             method(any as! T) // swiftlint:disable:this force_cast
         }
         self = .method(weakObject: Weak(object), method: typeErasedMethod)
     }
 
-    public init(closure: @escaping Capture) {
+    public init(closure: @escaping Closure) {
         self = .closure(closure)
     }
 
-    public var isValid: Bool {
-        switch self {
-        case .closure:
-            return true
-        case let .method(weakObject, _):
-            return weakObject.value != nil
-        }
-    }
-
-    public func capture() -> Capture? {
+    public func capture() -> Closure? {
         switch self {
         case let .closure(closure):
             return closure

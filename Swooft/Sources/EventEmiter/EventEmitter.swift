@@ -49,8 +49,8 @@ public class EventEmitter<Parameters> {
         self.handles.remove(handle)
     }
 
-    private func compactAndCaptureHandlers() -> [(delegate: Handle.DelegateType.Capture, description: String)] {
-        var handlers: [(Handle.DelegateType.Capture, String)] = []
+    private func compactAndCaptureHandlers() -> [(closure: Handle.DelegateType.Closure, description: String)] {
+        var handlers: [(Handle.DelegateType.Closure, String)] = []
         self.handles.getAndMutate { set in
             let validHandles = set.filter {
                 if let capture = $0.delegate.capture() {
@@ -69,7 +69,7 @@ public class EventEmitter<Parameters> {
         let handlers = self.compactAndCaptureHandlers()
         for handler in handlers {
             log(from: self, "\(self.descriptionText) -> \(handler.description)")
-            handler.delegate(parameters)
+            handler.closure(parameters)
         }
     }
 
@@ -80,7 +80,7 @@ public class EventEmitter<Parameters> {
         self.queue.async {
             for handler in handlers {
                 log(from: self, "\(descriptionText) -> \(handler.description)")
-                handler.delegate(parameters)
+                handler.closure(parameters)
             }
         }
     }

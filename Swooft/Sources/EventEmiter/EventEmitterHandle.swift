@@ -17,12 +17,12 @@ public class EventEmitterHandle<Parameters>: Hashable {
     let delegate: DelegateType
     var descriptionText: String
 
-    init<T: AnyObject>(object: T, method: @escaping (T) -> DelegateType.Capture) {
+    init<T: AnyObject>(object: T, method: @escaping (T) -> DelegateType.Closure) {
         self.delegate = DelegateType(object: object, method: method)
         self.descriptionText = "\(T.self)"
     }
 
-    init(closure: @escaping DelegateType.Capture) {
+    init(closure: @escaping DelegateType.Closure) {
         self.delegate = Delegate(closure: closure)
         self.descriptionText = "block"
     }
