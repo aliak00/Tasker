@@ -15,10 +15,10 @@ Pod::Spec.new do |s|
 A group of libraries that provide some utility
                        DESC
 
-  s.homepage         = 'https://github.com/aliak00/Swooft'
+  s.homepage         = 'https://github.com/aliak00/swooft'
   s.license          = { :type => 'APACHE-2', :file => 'LICENSE' }
   s.author           = { 'Ali Akhtarzada' => 'ali.akhtarzada@gmail.com' }
-  s.source           = { :git => 'https://github.com/aliak00/Swooft.git', :tag => s.version.to_s }
+  s.source           = { :git => 'git@github.com:aliak00/swooft.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '9.0'
 
@@ -58,6 +58,10 @@ A group of libraries that provide some utility
     collections.subspec 'SynchronizedSet' do |synchronizedset|
       synchronizedset.source_files  = ['Swooft/Sources/Collections/SynchronizedSet/**/*.swift']
     end
+  end
+
+  s.subspec 'JSON' do |json|
+    json.source_files = ['Swooft/Sources/JSON/**/*.swift']
   end
 
   s.subspec 'EventEmitter' do |eventemitter|
