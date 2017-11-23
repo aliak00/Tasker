@@ -34,7 +34,8 @@ PODS:
     - Swooft/Collections/SynchronizedSet
     - Swooft/Logger
     - Swooft/Utils/Delegate
-  - Swooft/JSON (0.1.0)
+  - Swooft/JSON (0.1.0):
+    - Swooft/Utils/Errors
   - Swooft/Logger (0.1.0):
     - Swooft/Collections/Cache
     - Swooft/Collections/RingBuffer
@@ -81,7 +82,7 @@ SPEC CHECKSUMS:
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   SwiftFormat: 51ff30f86e1ef438babbda2e0f3e1e8f53b4e942
-  Swooft: 5746214ea1d5f8ea8d078266ed902f7d2d26d1b9
+  Swooft: e8252f8349236b862f936de0d611c053833fc29a
 
 PODFILE CHECKSUM: b2c470b01982cf1385b9262c279e5fe5c51f424f
 

@@ -62,6 +62,7 @@ A group of libraries that provide some utility
 
   s.subspec 'JSON' do |json|
     json.source_files = ['Swooft/Sources/JSON/**/*.swift']
+    json.dependency 'Swooft/Utils/Errors'
   end
 
   s.subspec 'EventEmitter' do |eventemitter|

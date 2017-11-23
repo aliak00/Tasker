@@ -1,6 +1,6 @@
 import Foundation
 
-enum JSONError: Error {
+public enum JSONError: Error {
     case noKey(String)
     case parse(Error)
     case notDictionary(Any)
@@ -12,7 +12,7 @@ enum JSONError: Error {
 }
 
 extension JSONError: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         switch self {
         case let .noKey(key):
             return "Did not find key \(key)"

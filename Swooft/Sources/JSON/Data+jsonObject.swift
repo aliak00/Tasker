@@ -1,7 +1,7 @@
 import Foundation
 
 extension Data {
-    func jsonObject() throws -> JSONObject {
+    public func jsonObject() throws -> JSONObject {
         let json: Any
         do {
             json = try JSONSerialization.jsonObject(with: self, options: JSONSerialization.ReadingOptions())
