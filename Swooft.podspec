@@ -67,6 +67,8 @@ A group of libraries that provide some utility
   s.subspec 'EventEmitter' do |eventemitter|
     eventemitter.source_files  = ['Swooft/Sources/EventEmiter/**/*.swift']
     eventemitter.dependency 'Swooft/Utils/Delegate'
+    eventemitter.dependency 'Swooft/Collections/SynchronizedSet'
+    eventemitter.dependency 'Swooft/Logger'
   end
 
   s.subspec 'Operations' do |operations|
