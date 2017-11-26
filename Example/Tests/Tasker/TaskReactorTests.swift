@@ -43,7 +43,7 @@ class TaskReactorTests: QuickSpec {
                     done(nil)
                 }
                 reactor.shouldExecuteBlock = { anyResult, anyTask, _ in
-                    guard (anyTask.internalTask as! TaskSpy<Int>).executeCallBackData.count == 1 else {
+                    guard (anyTask.underlyingTask as! TaskSpy<Int>).executeCallBackData.count == 1 else {
                         return false
                     }
                     return (anyResult.successValue! as! Int) % 2 == 0

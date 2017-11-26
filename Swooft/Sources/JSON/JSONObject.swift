@@ -46,7 +46,7 @@ extension JSONObjectProtocol where Key == String, Value == Any {
     public func jsonArray<T>(of _: T.Type, forKey key: Key) throws -> [T] {
         let value = try self.value(forKey: key)
         guard let array = value as? [T] else {
-            throw JSONError.notArrayOf("\(T.self)", forKey: "requiredFields")
+            throw JSONError.notArrayOf("\(T.self)", forKey: key)
         }
         return array
     }
