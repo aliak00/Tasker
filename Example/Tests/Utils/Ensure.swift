@@ -70,26 +70,11 @@ struct Ensure<T: Equatable> {
         }
     }
 
-    func doesNotBecome(_ value: T, for seconds: Double = 0.1) {
-        var passed = false
-        var changed = false
-        let start = Date()
-        while Date().timeIntervalSince(start) < seconds || changed {
-            sleep(for: .milliseconds(1))
-            let previousPassed = passed
-            passed = self.block() == value
-            changed = previousPassed != passed
-        }
-        if self.block() == value {
-            XCTFail("did not expect \(value)", file: self.file, line: self.line)
-        }
-    }
-
-    func stays(_ value: T, for seconds: Double = 0.1) {
+    func stays(_ value: T, for interval: DispatchTimeInterval = .milliseconds(100)) {
         var lastValue = self.block()
         var passed = lastValue == value
-        let start = Date()
-        while Date().timeIntervalSince(start) < seconds && passed {
+        let start = DispatchTime.now()
+        while DispatchTime.now() < start + interval && passed {
             sleep(for: .milliseconds(1))
             lastValue = self.block()
             passed = lastValue == value
