@@ -10,28 +10,6 @@
 
 import Foundation
 
-private class TaskData {
-    fileprivate var operation: AsyncOperation
-    fileprivate let anyTask: AnyTask<Any>
-    fileprivate let completionErrorCallback: (TaskError) -> Void
-    fileprivate let intercept: (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void
-    fileprivate let completionQueue: DispatchQueue?
-
-    init(
-        operation: AsyncOperation,
-        anyTask: AnyTask<Any>,
-        completionErrorCallback: @escaping (TaskError) -> Void,
-        intercept: @escaping (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void,
-        completionQueue: DispatchQueue?
-    ) {
-        self.operation = operation
-        self.anyTask = anyTask
-        self.completionErrorCallback = completionErrorCallback
-        self.intercept = intercept
-        self.completionQueue = completionQueue
-    }
-}
-
 /**
  A task manager can be given an arbitrary number of `Task`s and initialized with a set of `TaskInterceptor`s
  and then takes care of asynchronous execution for you.
@@ -72,23 +50,31 @@ public class TaskManager {
 
     static var counter = AtomicInt()
 
-    private var pendingTasks: [OwnedTaskHandle: TaskData] = [:]
+    private var pendingTasks: [Handle: Handle.Data] = [:]
     private let taskOperationQueue = OperationQueue()
 
     private let taskQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.tasks")
     private let reactorQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.reactors", attributes: [.concurrent])
     private let dispatchGroup = DispatchGroup()
 
-    private let reactors: [TaskReactor]
-    private let interceptorManager: TaskInterceptorManager
+    private let interceptorManager: InterceptorManager
 
     private var executingReactors = Set<Int>()
-    private var reactorAssoiciatedHandles: [Int: Set<OwnedTaskHandle>] = [:] // TODO: Can/should these handles be weak?
+    private var reactorAssoiciatedHandles: [Int: Set<Handle>] = [:] // TODO: Can/should these handles be weak?
 
-    private var tasksToRequeue = Set<OwnedTaskHandle>() // TODO: Can/should these handles be weak?
-    private var tasksToBatch: [Int: [Weak<OwnedTaskHandle>]] = [:]
+    private var tasksToRequeue = Set<Handle>() // TODO: Can/should these handles be weak?
+    private var tasksToBatch: [Int: [Weak<Handle>]] = [:]
+
+    public let reactors: [TaskReactor]
+    public var interceptors: [TaskInterceptor] {
+        return self.interceptorManager.interceptors
+    }
 
     let identifier: Int
+
+    @objc func copy() -> Any {
+        return TaskManager(interceptors: self.interceptorManager.interceptors, reactors: self.reactors)
+    }
 
     /**
      Initializes this manager object.
@@ -100,7 +86,7 @@ public class TaskManager {
         TaskManager.logKeys
         self.taskOperationQueue.isSuspended = false
         self.reactors = reactors
-        self.interceptorManager = TaskInterceptorManager(interceptors)
+        self.interceptorManager = InterceptorManager(interceptors)
         self.identifier = type(of: self).counter.getAndIncrement()
     }
 
@@ -124,7 +110,7 @@ public class TaskManager {
         completion: T.ResultCallback? = nil
     ) -> TaskHandle {
 
-        let handle = OwnedTaskHandle(owner: self)
+        let handle = Handle(owner: self)
 
         let operation = AsyncOperation { [weak self, weak task, weak handle] operation in
 
@@ -163,7 +149,7 @@ public class TaskManager {
                 return
             }
 
-            let intercept: (DispatchTimeInterval?, @escaping (InterceptTaskResult) -> Void) -> Void = { [weak task, weak handle] interval, completion in
+            let intercept: (DispatchTimeInterval?, @escaping (InterceptorManager.InterceptResult) -> Void) -> Void = { [weak task, weak handle] interval, completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
                     return
@@ -171,7 +157,7 @@ public class TaskManager {
                 strongSelf.interceptorManager.intercept(task: &task, for: handle, after: interval) { completion($0) }
             }
 
-            let data = TaskData(
+            let data = Handle.Data(
                 operation: operation,
                 anyTask: AnyTask(task),
                 completionErrorCallback: { completion?(.failure($0)) },
@@ -197,7 +183,7 @@ public class TaskManager {
         log(level: .verbose, from: self, "end waiting")
     }
 
-    private func execute<T: Task>(task: T, handle: OwnedTaskHandle, operation: AsyncOperation, timeout: DispatchTimeInterval?, completion: T.ResultCallback?) {
+    private func execute<T: Task>(task: T, handle: Handle, operation: AsyncOperation, timeout: DispatchTimeInterval?, completion: T.ResultCallback?) {
 
         let timeoutWorkItem: DispatchWorkItem?
         if let timeout = timeout {
@@ -304,7 +290,7 @@ public class TaskManager {
         }
     }
 
-    private func data(for handle: OwnedTaskHandle, remove: Bool = false) -> TaskData? {
+    private func data(for handle: Handle, remove: Bool = false) -> Handle.Data? {
         if #available(iOS 10.0, *) {
             __dispatch_assert_queue(self.taskQueue)
         }
@@ -321,7 +307,7 @@ public class TaskManager {
         }
     }
 
-    private func queueOperation(_ operation: AsyncOperation, for handle: OwnedTaskHandle) {
+    private func queueOperation(_ operation: AsyncOperation, for handle: Handle) {
         // Accessing Swooft.Operation so better be on task queue
         if #available(iOS 10.0, *) {
             __dispatch_assert_queue(self.taskQueue)
@@ -330,7 +316,7 @@ public class TaskManager {
         log(level: .verbose, from: self, "did queue \(handle)", tags: TaskManager.kTkQTags)
     }
 
-    private func startTask(for handle: OwnedTaskHandle, with data: TaskData, after interval: DispatchTimeInterval? = nil) {
+    private func startTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
         // Getting the raw TaskData here so we better be on the taskQueue
         if #available(iOS 10.0, *) {
             __dispatch_assert_queue(self.taskQueue)
@@ -389,7 +375,7 @@ public class TaskManager {
         }
     }
 
-    private func launchTimeoutWork(for handle: OwnedTaskHandle, withTimeout timeout: DispatchTimeInterval) -> DispatchWorkItem {
+    private func launchTimeoutWork(for handle: Handle, withTimeout timeout: DispatchTimeInterval) -> DispatchWorkItem {
         var timeoutWorkItem: DispatchWorkItem!
         timeoutWorkItem = DispatchWorkItem { [weak self, weak handle] in
             guard let handle = handle else {
@@ -406,7 +392,7 @@ public class TaskManager {
         return timeoutWorkItem
     }
 
-    private func launchReactors(at indices: [Int], on finishedHandle: OwnedTaskHandle, requeueTask: Bool, suspendQueue: Bool) {
+    private func launchReactors(at indices: [Int], on finishedHandle: Handle, requeueTask: Bool, suspendQueue: Bool) {
         //
         // Executing the reactors involves the following:
         //
@@ -431,7 +417,7 @@ public class TaskManager {
 
                 // Associate this handle with the reactors only if it's supposed to be requeued
                 for index in indices {
-                    strongSelf.reactorAssoiciatedHandles[index] = strongSelf.reactorAssoiciatedHandles[index] ?? Set<OwnedTaskHandle>()
+                    strongSelf.reactorAssoiciatedHandles[index] = strongSelf.reactorAssoiciatedHandles[index] ?? Set<Handle>()
                     strongSelf.reactorAssoiciatedHandles[index]?.insert(handle)
                 }
             } else {
@@ -564,7 +550,7 @@ public class TaskManager {
                 self.startTask(for: handle, with: data)
             }
         }
-        self.tasksToRequeue = Set<OwnedTaskHandle>()
+        self.tasksToRequeue = Set<Handle>()
     }
 
     private func executeImmediateReactors(at indicies: [Int]) {
@@ -602,8 +588,8 @@ public class TaskManager {
         if #available(iOS 10.0, *) {
             __dispatch_assert_queue(self.taskQueue)
         }
-        var allTheData: [TaskData] = []
-        for handle in self.reactorAssoiciatedHandles[index] ?? Set<OwnedTaskHandle>() {
+        var allTheData: [Handle.Data] = []
+        for handle in self.reactorAssoiciatedHandles[index] ?? Set<Handle>() {
             if let data = self.data(for: handle, remove: true) {
                 log(from: self, "removed handle \(handle) for reactor \(index)", tags: TaskManager.kTkQTags)
                 data.operation.cancel()
@@ -634,7 +620,7 @@ public class TaskManager {
         }
     }
 
-    private func removeAndCancel(handle: OwnedTaskHandle, with error: TaskError?) {
+    private func removeAndCancel(handle: Handle, with error: TaskError?) {
         if #available(iOS 10.0, *) {
             __dispatch_assert_queue(self.taskQueue)
         }
@@ -652,7 +638,7 @@ public class TaskManager {
         }
     }
 
-    func cancel(handle: OwnedTaskHandle, with error: TaskError?) {
+    func cancel(handle: Handle, with error: TaskError?) {
         log(from: self, "cancelling \(handle)", tags: TaskManager.kClrTags)
         self.taskQueue.async { [weak self, weak handle] in
             guard let strongSelf = self else {
@@ -667,7 +653,7 @@ public class TaskManager {
         }
     }
 
-    func start(handle: OwnedTaskHandle) {
+    func start(handle: Handle) {
         self.taskQueue.async { [weak self, weak handle] in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
@@ -683,7 +669,7 @@ public class TaskManager {
         }
     }
 
-    func taskState(for handle: OwnedTaskHandle) -> TaskState {
+    func taskState(for handle: Handle) -> TaskState {
         let maybeOperation = self.taskQueue.sync { () -> AsyncOperation? in
             guard let data = self.data(for: handle) else {
                 log(level: .verbose, from: self, "\(handle) not found", tags: TaskManager.kTkQTags)
