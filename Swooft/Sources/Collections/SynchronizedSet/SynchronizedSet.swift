@@ -12,13 +12,13 @@ import Foundation
 
 public class SynchronizedSet<Element: Hashable> {
     var set = Set<Element>()
-    let queue = DispatchQueue(label: "Swooft.Collections.SynchronizedSet", attributes: [.concurrent])
+    let queue = DispatchQueue(label: "Swooft.Collections.SynchronizedSet")
 
     public init() {}
 
     @discardableResult
     public func insert(_ newMember: Element) -> (inserted: Bool, memberAfterInsert: Element) {
-        return self.queue.sync(flags: .barrier) {
+        return self.queue.sync {
             self.set.insert(newMember)
         }
     }
@@ -38,7 +38,7 @@ public class SynchronizedSet<Element: Hashable> {
 
     @discardableResult
     public func getAndMutate(mutator: (Set<Element>) -> Set<Element>) -> Set<Element> {
-        return self.queue.sync(flags: .barrier) {
+        return self.queue.sync {
             self.set = mutator(self.set)
             return self.set
         }
@@ -46,7 +46,9 @@ public class SynchronizedSet<Element: Hashable> {
 
     public func takeAll() -> [Element] {
         return self.queue.sync {
-            Array(self.set)
+            let array = Array(self.set)
+            self.set.removeAll()
+            return array
         }
     }
 }
