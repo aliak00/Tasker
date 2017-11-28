@@ -72,10 +72,6 @@ public class TaskManager {
 
     let identifier: Int
 
-    @objc func copy() -> Any {
-        return TaskManager(interceptors: self.interceptorManager.interceptors, reactors: self.reactors)
-    }
-
     /**
      Initializes this manager object.
 
@@ -268,6 +264,8 @@ public class TaskManager {
                     if reactionData.requeueTask {
                         return
                     }
+                } else {
+                    log(level: .debug, from: strongSelf, "\(handle) not causing reactors", tags: TaskManager.kTkQTags)
                 }
 
                 guard let operation = operation, !operation.isCancelled else {

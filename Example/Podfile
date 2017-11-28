@@ -6,6 +6,8 @@ target 'Swooft_Tests' do
   pod 'SwiftFormat/CLI'
   pod 'Quick'
   pod 'Nimble'
+  pod 'Mockingjay'
+  pod 'URITemplate', :inhibit_warnings => true 
 end
 
 target 'Swooft_Profiler_Tests' do
