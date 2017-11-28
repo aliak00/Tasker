@@ -12,17 +12,17 @@ import Foundation
 
 public class EventEmitterHandle<Parameters>: Hashable {
 
-    public typealias DelegateType = Delegate<Parameters, Void>
+    public typealias Delegate = Swooft.Delegate<Parameters, Void>
 
-    let delegate: DelegateType
+    let delegate: Delegate
     var descriptionText: String
 
-    init<T: AnyObject>(object: T, method: @escaping (T) -> DelegateType.Closure) {
-        self.delegate = DelegateType(object: object, method: method)
+    init<T: AnyObject>(object: T, method: @escaping (T) -> Delegate.Closure) {
+        self.delegate = Delegate(object: object, method: method)
         self.descriptionText = "\(T.self)"
     }
 
-    init(closure: @escaping DelegateType.Closure) {
+    init(closure: @escaping Delegate.Closure) {
         self.delegate = Delegate(closure: closure)
         self.descriptionText = "block"
     }

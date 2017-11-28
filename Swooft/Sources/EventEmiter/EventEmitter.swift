@@ -49,8 +49,8 @@ public class EventEmitter<Parameters> {
         self.handles.remove(handle)
     }
 
-    private func compactAndCaptureHandlers() -> [(closure: Handle.DelegateType.Closure, description: String)] {
-        var handlers: [(Handle.DelegateType.Closure, String)] = []
+    private func compactAndCaptureHandlers() -> [(closure: Handle.Delegate.Closure, description: String)] {
+        var handlers: [(Handle.Delegate.Closure, String)] = []
         self.handles.getAndMutate { set in
             let validHandles = set.filter {
                 if let capture = $0.delegate.capture() {
