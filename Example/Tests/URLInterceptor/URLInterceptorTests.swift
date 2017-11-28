@@ -77,7 +77,7 @@ class URLInterceptorTests: QuickSpec {
         describe("test") {
             it("should") {
                 func matcher(request: URLRequest) -> Bool {
-                    return request.allHTTPHeaderFields?["hahaha"]?.contains("hahaha") ?? false
+                    return request.allHTTPHeaderFields?["hahaha"] == "hahaha"
                 }
                 self.stub(matcher, [
                     jsonData("yodles".data(using: .utf8)!),

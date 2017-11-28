@@ -546,7 +546,7 @@ public class TaskManager {
                 log(from: self, "requeueing \(handle)", tags: TaskManager.kTkQTags)
                 data.operation.finish()
                 data.operation = AsyncOperation(executor: data.operation.executor)
-                self.startTask(for: handle, with: data)
+                self.queueOperation(data.operation, for: handle)
             }
         }
         self.tasksToRequeue = Set<Handle>()
