@@ -32,7 +32,7 @@ class TaskManagerSpy {
         task: T,
         startImmediately: Bool = true,
         after interval: DispatchTimeInterval? = nil,
-        completion: (@escaping (T.TaskResult) -> Void) = { _ in }
+        completion: (@escaping (T.Result) -> Void) = { _ in }
     ) -> TaskHandle {
         return self.taskManager.add(task: task, startImmediately: startImmediately, after: interval) { [weak self] result in
             guard let strongSelf = self else {

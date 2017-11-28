@@ -12,8 +12,8 @@ import Foundation
 
 public protocol Task: class {
     associatedtype SuccessValue
-    typealias TaskResult = Result<SuccessValue>
-    typealias ResultCallback = (TaskResult) -> Void
+    typealias Result = Swooft.Result<SuccessValue>
+    typealias ResultCallback = (Result) -> Void
     func execute(completion: @escaping ResultCallback)
     var timeout: DispatchTimeInterval? { get }
     func didCancel(with _: TaskError)

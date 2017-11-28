@@ -29,8 +29,8 @@ private class Reactor: TaskReactor {
         done(nil)
     }
 
-    func shouldExecute<T: Task>(after result: T.TaskResult, from task: T, with _: TaskHandle) -> Bool {
-        guard let result = result as? URLInterceptor.DataTask.TaskResult else {
+    func shouldExecute<T: Task>(after result: T.Result, from task: T, with _: TaskHandle) -> Bool {
+        guard let result = result as? URLInterceptor.DataTask.Result else {
             return false
         }
         if case .success(let tuple) = result {

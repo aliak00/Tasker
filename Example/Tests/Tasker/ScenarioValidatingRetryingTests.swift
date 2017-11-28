@@ -160,7 +160,7 @@ class ScenarioValidatingRetryingTests: QuickSpec {
             // Invalidate user and try GetProfileTask
             user.id = .invalid
             let profile = UserProfile(name: "Jimbo")
-            var returnedResult: GetProfileTask.TaskResult!
+            var returnedResult: GetProfileTask.Result!
             let handle = manager.add(task: GetProfileTask(user: user, profile: profile)) { result in
                 returnedResult = result
             }
