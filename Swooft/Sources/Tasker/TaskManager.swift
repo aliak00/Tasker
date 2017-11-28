@@ -57,7 +57,7 @@ public class TaskManager {
     private let reactorQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.reactors", attributes: [.concurrent])
     private let dispatchGroup = DispatchGroup()
 
-    private let interceptorManager: InterceptorManager
+    private let interceptorManager: TaskInterceptorManager
 
     private var executingReactors = Set<Int>()
     private var reactorAssoiciatedHandles: [Int: Set<Handle>] = [:] // TODO: Can/should these handles be weak?
@@ -82,7 +82,7 @@ public class TaskManager {
         TaskManager.logKeys
         self.taskOperationQueue.isSuspended = false
         self.reactors = reactors
-        self.interceptorManager = InterceptorManager(interceptors)
+        self.interceptorManager = TaskInterceptorManager(interceptors)
         self.identifier = type(of: self).counter.getAndIncrement()
     }
 
@@ -145,7 +145,7 @@ public class TaskManager {
                 return
             }
 
-            let intercept: (DispatchTimeInterval?, @escaping (InterceptorManager.InterceptResult) -> Void) -> Void = { [weak task, weak handle] interval, completion in
+            let intercept: (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptResult) -> Void) -> Void = { [weak task, weak handle] interval, completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
                     return

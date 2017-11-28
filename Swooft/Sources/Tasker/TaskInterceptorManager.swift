@@ -10,15 +10,14 @@
 
 import Foundation
 
-extension TaskManager {
-    class InterceptorManager {
+class TaskInterceptorManager {
         enum InterceptResult {
             case ignore
-            case execute([Handle])
+            case execute([TaskManager.Handle])
         }
 
-        private let interceptorQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.InterceptorManager")
-        private var batchedHandles: [Int: [Weak<Handle>]] = [:]
+        private let queue = DispatchQueue(label: "Swooft.Tasker.TaskInterceptorManager")
+        private var batchedHandles: [Int: [Weak<TaskManager.Handle>]] = [:]
 
         let interceptors: [TaskInterceptor]
 
@@ -32,27 +31,27 @@ extension TaskManager {
 
         func intercept<T: Task>(
             task: inout T,
-            for handle: Handle,
+            for handle: TaskManager.Handle,
             after interval: DispatchTimeInterval?,
             completion: @escaping (InterceptResult) -> Void
         ) {
             if let interval = interval {
-                self.interceptorQueue.asyncAfter(deadline: .now() + interval) { [task] in
+                self.queue.asyncAfter(deadline: .now() + interval) { [task] in
                     var task = task
                     completion(self.intercept(task: &task, handle: handle))
                 }
             } else {
-                self.interceptorQueue.async { [task] in
+                self.queue.async { [task] in
                     var task = task
                     completion(self.intercept(task: &task, handle: handle))
                 }
             }
         }
 
-        private func intercept<T: Task>(task: inout T, handle: Handle) -> InterceptResult {
+        private func intercept<T: Task>(task: inout T, handle: TaskManager.Handle) -> InterceptResult {
             // Calling an interceptor so we better be on the interceptor queue
             if #available(iOS 10.0, *) {
-                __dispatch_assert_queue(self.interceptorQueue)
+                __dispatch_assert_queue(self.queue)
             }
             //
             // The algorithm here is as follows
@@ -101,7 +100,7 @@ extension TaskManager {
                 return .ignore
             }
 
-            var handlesToRelease: [Handle] = []
+            var handlesToRelease: [TaskManager.Handle] = []
             for index in interceptorIndicesRequestingExecute {
                 for weakHandle in self.batchedHandles[index] ?? [] {
                     if let handle = weakHandle.value {
@@ -121,4 +120,4 @@ extension TaskManager {
             return .execute(handles)
         }
     }
-}
+
