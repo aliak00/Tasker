@@ -13,21 +13,24 @@ import Foundation
 extension TaskManager.Handle {
     class Data {
         var operation: AsyncOperation
-        let anyTask: AnyTask<Any>
+        let taskReference: AnyObject
         let completionErrorCallback: (TaskError) -> Void
+        let taskDidCancelCallback: (TaskError) -> Void
         let intercept: (DispatchTimeInterval?, @escaping (TaskManager.InterceptorManager.InterceptResult) -> Void) -> Void
         let completionQueue: DispatchQueue?
 
         init(
             operation: AsyncOperation,
-            anyTask: AnyTask<Any>,
+            taskReference: AnyObject,
             completionErrorCallback: @escaping (TaskError) -> Void,
+            taskDidCancelCallback: @escaping (TaskError) -> Void,
             intercept: @escaping (DispatchTimeInterval?, @escaping (TaskManager.InterceptorManager.InterceptResult) -> Void) -> Void,
             completionQueue: DispatchQueue?
         ) {
             self.operation = operation
-            self.anyTask = anyTask
+            self.taskReference = taskReference
             self.completionErrorCallback = completionErrorCallback
+            self.taskDidCancelCallback = taskDidCancelCallback
             self.intercept = intercept
             self.completionQueue = completionQueue
         }

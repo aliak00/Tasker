@@ -16,15 +16,14 @@ class InterceptorSpy: TaskInterceptor {
         return self.interceptCallData.count
     }
 
-    var interceptCallData: [(anyTask: AnyTask<Any>, currentBatchCount: Int)] = []
+    var interceptCallData: [(anyTask: AnyObject, currentBatchCount: Int)] = []
     var interceptCallResultData: [InterceptCommand] = []
-    var interceptBlock: (AnyTask<Any>, Int) -> InterceptCommand = { _, _ in .execute }
+    var interceptBlock: (AnyObject, Int) -> InterceptCommand = { _, _ in .execute }
 
     func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand {
-        let anyTask = AnyTask<Any>(task)
-        let result = self.interceptBlock(anyTask, currentBatchCount)
+        let result = self.interceptBlock(task, currentBatchCount)
         defer {
-            self.interceptCallData.append((anyTask, currentBatchCount))
+            self.interceptCallData.append((task, currentBatchCount))
             self.interceptCallResultData.append(result)
         }
         return result

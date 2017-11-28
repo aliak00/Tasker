@@ -75,7 +75,7 @@ class URLInterceptorTests: QuickSpec {
     override func spec() {
 
         describe("test") {
-            fit("should") {
+            it("should") {
                 func matcher(request: URLRequest) -> Bool {
                     return request.allHTTPHeaderFields?["hahaha"]?.contains("hahaha") ?? false
                 }

@@ -155,8 +155,9 @@ public class TaskManager {
 
             let data = Handle.Data(
                 operation: operation,
-                anyTask: AnyTask(task),
+                taskReference: task,
                 completionErrorCallback: { completion?(.failure($0)) },
+                taskDidCancelCallback: { [weak task] in task?.didCancel(with: $0) },
                 intercept: intercept,
                 completionQueue: completionQueue
             )
@@ -591,7 +592,7 @@ public class TaskManager {
             if let data = self.data(for: handle, remove: true) {
                 log(from: self, "removed handle \(handle) for reactor \(index)", tags: TaskManager.kTkQTags)
                 data.operation.cancel()
-                data.anyTask.didCancel(with: error)
+                data.taskDidCancelCallback(error)
                 allTheData.append(data)
                 if self.tasksToRequeue.remove(handle) != nil {
                     log(from: self, "removed \(handle) from requeue list", tags: TaskManager.kTkQTags)
@@ -630,7 +631,7 @@ public class TaskManager {
         guard let error = error else {
             return
         }
-        data.anyTask.didCancel(with: error)
+        data.taskDidCancelCallback(error)
         (data.completionQueue ?? self.taskQueue).async {
             data.completionErrorCallback(error)
         }

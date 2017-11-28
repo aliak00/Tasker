@@ -16,7 +16,6 @@ public class AnyTask<T>: Task {
     public typealias SuccessValue = T
 
     var executeThunk: (@escaping ResultCallback) -> Void
-    weak var underlyingTask: AnyObject?
 
     public init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping ResultCallback) -> Void)) {
         self.executeThunk = { completion in
@@ -46,7 +45,6 @@ public class AnyTask<T>: Task {
             }
         }
         self.timeout = task.timeout
-        self.underlyingTask = task
     }
 
     public var timeout: DispatchTimeInterval?
@@ -63,6 +61,5 @@ extension AnyTask where T == Any {
                 completion(AnyResult(result))
             }
         }
-        self.underlyingTask = task
     }
 }

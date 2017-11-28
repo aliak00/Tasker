@@ -24,13 +24,13 @@ class TaskInterceptorTests: QuickSpec {
                 let task = TaskSpy { $0(.success(())) }
                 manager.add(task: task)
                 ensure(interceptor.interceptCallCount).becomes(1)
-                expect(interceptor.interceptCallData[0].anyTask.underlyingTask) === task
+                expect(interceptor.interceptCallData[0].anyTask) === task
             }
 
             it("should modify original task") {
                 let interceptor = InterceptorSpy()
                 interceptor.interceptBlock = { anyTask, _ in
-                    let task = anyTask.underlyingTask as! TaskSpy<Void>
+                    let task = anyTask as! TaskSpy<Void>
                     task.executeCallBackData.append(AnyResult(Result<Int>.success(1)))
                     return .execute
                 }
