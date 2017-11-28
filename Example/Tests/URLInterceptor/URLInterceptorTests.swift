@@ -8,10 +8,9 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import Quick
-import Nimble
 import Mockingjay
-
+import Nimble
+import Quick
 @testable import Swooft
 
 private class Interceptor: TaskInterceptor {
@@ -33,7 +32,7 @@ private class Reactor: TaskReactor {
         guard let result = result as? URLInterceptor.DataTask.Result else {
             return false
         }
-        if case .success(let tuple) = result {
+        if case let .success(tuple) = result {
             return (tuple.1 as? HTTPURLResponse)?.statusCode == 200
         }
         return false
@@ -81,7 +80,8 @@ class URLInterceptorTests: QuickSpec {
                 }
                 self.stub(matcher, [
                     jsonData("yodles".data(using: .utf8)!),
-                    http(400)]
+                    http(400),
+                ]
                 )
                 let urlInterceptor = URLInterceptor(interceptors: [Interceptor()], reactors: [Reactor()], configuration: .default)
                 let task = urlInterceptor.session.dataTask(with: URL(string: "http://www.msftncsi.com/ncsi.txt")!) { data, response, error in

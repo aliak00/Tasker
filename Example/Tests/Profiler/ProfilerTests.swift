@@ -8,9 +8,9 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
+import Nimble
 import Quick
 import Swooft
-import Nimble
 
 class ProfilerTests: QuickSpec {
 

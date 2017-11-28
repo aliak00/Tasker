@@ -8,8 +8,8 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import Quick
 import Nimble
+import Quick
 import Swooft
 
 // This interceptor will take any task that is retriable, and re-execute it

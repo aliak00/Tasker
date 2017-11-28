@@ -315,36 +315,36 @@ public class TaskManager {
         log(level: .verbose, from: self, "did queue \(handle)", tags: TaskManager.kTkQTags)
     }
 
-    private func startTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
-        // Getting the raw TaskData here so we better be on the taskQueue
+    private func justQueueTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
         if #available(iOS 10.0, *) {
             __dispatch_assert_queue(self.taskQueue)
         }
-
-        guard self.interceptorManager.count > 0 else {
-            log(level: .verbose, from: self, "will queue \(handle)", tags: TaskManager.kTkQTags)
-            if let interval = interval {
-                self.taskQueue.asyncAfter(deadline: .now() + interval) { [weak self, weak handle] in
-                    guard let strongSelf = self else {
-                        log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
-                        return
-                    }
-                    guard let handle = handle else {
-                        log(level: .verbose, from: self, "handle dead", tags: TaskManager.kTkQTags)
-                        return
-                    }
-                    guard let data = strongSelf.data(for: handle) else {
-                        log(level: .verbose, from: self, "will not queue \(handle)", tags: TaskManager.kTkQTags)
-                        return
-                    }
-                    strongSelf.queueOperation(data.operation, for: handle)
-                }
-            } else {
-                self.queueOperation(data.operation, for: handle)
-            }
+        log(level: .verbose, from: self, "will queue \(handle)", tags: TaskManager.kTkQTags)
+        guard let interval = interval else {
+            self.queueOperation(data.operation, for: handle)
             return
         }
+        self.taskQueue.asyncAfter(deadline: .now() + interval) { [weak self, weak handle] in
+            guard let strongSelf = self else {
+                log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
+                return
+            }
+            guard let handle = handle else {
+                log(level: .verbose, from: self, "handle dead", tags: TaskManager.kTkQTags)
+                return
+            }
+            guard let data = strongSelf.data(for: handle) else {
+                log(level: .verbose, from: self, "will not queue \(handle)", tags: TaskManager.kTkQTags)
+                return
+            }
+            strongSelf.queueOperation(data.operation, for: handle)
+        }
+    }
 
+    private func interceptThenQueueTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
+        if #available(iOS 10.0, *) {
+            __dispatch_assert_queue(self.taskQueue)
+        }
         data.intercept(interval) { [weak self, weak handle] result in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "manager dead", tags: TaskManager.kClrTags)
@@ -371,6 +371,18 @@ public class TaskManager {
                     strongSelf.queueOperation(data.operation, for: handle)
                 }
             }
+        }
+    }
+
+    private func startTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
+        // Getting the raw TaskData here so we better be on the taskQueue
+        if #available(iOS 10.0, *) {
+            __dispatch_assert_queue(self.taskQueue)
+        }
+        if self.interceptorManager.count == 0 {
+            self.justQueueTask(for: handle, with: data, after: interval)
+        } else {
+            self.interceptThenQueueTask(for: handle, with: data, after: interval)
         }
     }
 

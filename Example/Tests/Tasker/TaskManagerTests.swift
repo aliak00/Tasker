@@ -8,9 +8,8 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import Quick
 import Nimble
-
+import Quick
 import Swooft
 
 private extension TaskManagerSpy {

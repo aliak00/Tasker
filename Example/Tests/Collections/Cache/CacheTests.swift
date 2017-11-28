@@ -8,8 +8,8 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import Quick
 import Nimble
+import Quick
 @testable import Swooft
 
 func == <Key, Value: Equatable>(lhs: Cache<Key, Value>, rhs: Cache<Key, Value>) -> Bool {

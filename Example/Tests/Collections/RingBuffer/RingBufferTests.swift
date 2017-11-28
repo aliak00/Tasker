@@ -8,8 +8,8 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 //
 
-import Quick
 import Nimble
+import Quick
 import Swooft
 
 func equal<T: Equatable>(_ expected: RingBuffer<T>) -> Predicate<RingBuffer<T>> {

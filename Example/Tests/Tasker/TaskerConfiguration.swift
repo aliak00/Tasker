@@ -9,8 +9,8 @@
 //
 
 import Foundation
-import Quick
 import Nimble
+import Quick
 @testable import Swooft
 
 class TaskerConfiguration: QuickConfiguration {
@@ -20,7 +20,7 @@ class TaskerConfiguration: QuickConfiguration {
         }
 
         configuration.afterEach {
-            ensure(AsyncOperation.counter.value).becomes(0, timeout: .seconds(3))
+            ensure(AsyncOperation.counter.value).becomes(0)
             AsyncOperation.counter.value = 0
         }
     }
