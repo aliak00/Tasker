@@ -24,29 +24,19 @@ public class TaskManager {
      - SeeAlso `Logger'
      */
     public struct LoggerTag {
-        public static let task = "tq"
-        public static let op = "oq"
-        public static let cb = "cb"
-        public static let reactor = "rq"
+        public static let onTaskQueue = "tq"
+        public static let onOperationQueue = "oq"
+        public static let callback = "cb"
+        public static let onReactorQueue = "rq"
         public static let caller = "caller"
     }
 
-    private static let kOpQTags = [LoggerTag.op]
-    private static let kCbOpQTags = [LoggerTag.op, LoggerTag.cb]
-    private static let kTkQTags = [LoggerTag.task]
-    private static let kCbReQTags = [LoggerTag.reactor, LoggerTag.cb]
+    private static let kOpQTags = [LoggerTag.onOperationQueue]
+    private static let kCbOpQTags = [LoggerTag.onOperationQueue, LoggerTag.callback]
+    private static let kTkQTags = [LoggerTag.onTaskQueue]
+    private static let kCbReQTags = [LoggerTag.onReactorQueue, LoggerTag.callback]
     private static let kClrTags = [LoggerTag.caller]
-    private static let kReQTags = [LoggerTag.reactor]
-
-    private static let logKeys: Void = {
-        log("log keys = ["
-            + "\(LoggerTag.task): task queue, "
-            + "\(LoggerTag.op): operation queue, "
-            + "\(LoggerTag.cb): callback, "
-            + "\(LoggerTag.caller): caller thread"
-            + "]"
-        )
-    }()
+    private static let kReQTags = [LoggerTag.onReactorQueue]
 
     static var counter = AtomicInt()
 
@@ -79,7 +69,6 @@ public class TaskManager {
      - parameter reactors: an array of reactors that will be applied to every task after it's executed
      */
     public init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
-        TaskManager.logKeys
         self.taskOperationQueue.isSuspended = false
         self.reactors = reactors
         self.interceptorManager = TaskInterceptorManager(interceptors)
