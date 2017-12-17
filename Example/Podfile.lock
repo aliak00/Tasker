@@ -8,7 +8,7 @@ PODS:
     - Mockingjay/Core
   - Nimble (7.0.3)
   - Quick (1.2.0)
-  - SwiftFormat/CLI (0.31.0)
+  - SwiftFormat/CLI (0.32.1)
   - Swooft (0.1.0):
     - Swooft/AsyncAwait (= 0.1.0)
     - Swooft/Atomics (= 0.1.0)
@@ -92,7 +92,7 @@ SPEC CHECKSUMS:
   Mockingjay: 11a621880d2887f1775bdcf824341eb68f218450
   Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
-  SwiftFormat: 6920a7b037c2f1fd49df7fd94a6f144594471083
+  SwiftFormat: 80e535fe247ca30c81790d1fe1bc779e8b5de20a
   Swooft: e8252f8349236b862f936de0d611c053833fc29a
   URITemplate: ace0c4c46dcf8afe6e89b4060621852886b15c3b
 
