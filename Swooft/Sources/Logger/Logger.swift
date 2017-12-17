@@ -242,7 +242,7 @@ public class Logger {
         let timestamp = self.startTime.elapsed
         let string = "\(object())"
 
-        if synchronousOutput {
+        if self.synchronousOutput {
             self.queue.sync {
                 self.synclog(
                     thread: thread,
