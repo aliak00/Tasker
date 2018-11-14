@@ -12,7 +12,7 @@ class TaskInterceptorTests: XCTestCase {
         let task = TaskSpy { $0(.success(())) }
         manager.add(task: task)
         ensure(interceptor.interceptCallCount).becomes(1)
-        XCTAssertTrue(interceptor.interceptCallData[0].anyTask === task)
+        XCTAssertTrue(interceptor.interceptCallData.first?.anyTask === task)
     }
 
     func testInterceptShouldModifyOriginalTask() {

@@ -12,7 +12,7 @@ class TaskReactorTests: XCTestCase {
         let manager = TaskManagerSpy(reactors: [reactor])
         manager.add(task: TaskSpy { $0(.success(())) })
         ensure(manager.completionCallCount).becomes(1)
-        XCTAssertEqual(manager.completionCallData[0].failureValue! as NSError, TaskError.reactorTimedOut(type: ReactorSpy.self) as NSError)
+        XCTAssertErrorEqual(manager.completionCallData.first?.failureValue, TaskError.reactorTimedOut(type: ReactorSpy.self))
     }
 
     func testTaskManagerShouldCompleteReactorIfUnderTimeout() {
@@ -21,7 +21,7 @@ class TaskReactorTests: XCTestCase {
         let manager = TaskManagerSpy(reactors: [reactor])
         manager.add(task: TaskSpy { $0(.success(())) })
         ensure(manager.completionCallCount).becomes(1)
-        XCTAssertNil(manager.completionCallData[0].failureValue)
+        XCTAssertNil(manager.completionCallData.first?.failureValue)
     }
 
     func testTaskManagerShouldReExecuteTasksIfReactorSaysRequeue() {
@@ -84,7 +84,7 @@ class TaskReactorTests: XCTestCase {
             XCTAssertEqual(task.executeCallCount, 0)
         }
 
-        reactor.executeCallData[0](nil)
+        reactor.executeCallData.first?(nil)
 
         ensure(manager.completionCallCount).becomes(handles.count + 1)
 
