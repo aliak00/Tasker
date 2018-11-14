@@ -14,6 +14,14 @@ extension AsyncOperationTests {
     ]
 }
 
+extension RingBufferTests {
+    static let __allTests = [
+        ("testRingBufferShouldEqualAnotherSimilar", testRingBufferShouldEqualAnotherSimilar),
+        ("testRingBufferShouldProvideAccurateCount", testRingBufferShouldProvideAccurateCount),
+        ("testRingBufferShouldWrapAppends", testRingBufferShouldWrapAppends),
+    ]
+}
+
 extension TaskerTests {
     static let __allTests = [
         ("testExample", testExample),
@@ -24,6 +32,7 @@ extension TaskerTests {
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(AsyncOperationTests.__allTests),
+        testCase(RingBufferTests.__allTests),
         testCase(TaskerTests.__allTests),
     ]
 }
