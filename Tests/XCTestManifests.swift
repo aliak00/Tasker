@@ -14,6 +14,16 @@ extension AsyncOperationTests {
     ]
 }
 
+extension LoggerTests {
+    static let __allTests = [
+        ("testLoggerShouldFilterLogsCorrectly", testLoggerShouldFilterLogsCorrectly),
+        ("testLoggerShouldFilterLogsIfTagged", testLoggerShouldFilterLogsIfTagged),
+        ("testLoggerShouldFilterLogsUnlessTagged", testLoggerShouldFilterLogsUnlessTagged),
+        ("testLoggerShouldLogTagsIfRequested", testLoggerShouldLogTagsIfRequested),
+        ("testLoggerShouldNotLogTagsIfNotRequested", testLoggerShouldNotLogTagsIfNotRequested),
+    ]
+}
+
 extension RingBufferTests {
     static let __allTests = [
         ("testRingBufferShouldEqualAnotherSimilar", testRingBufferShouldEqualAnotherSimilar),
@@ -32,6 +42,7 @@ extension TaskerTests {
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(AsyncOperationTests.__allTests),
+        testCase(LoggerTests.__allTests),
         testCase(RingBufferTests.__allTests),
         testCase(TaskerTests.__allTests),
     ]
