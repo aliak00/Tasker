@@ -86,7 +86,7 @@ open class AsyncOperation: Operation {
                 log(level: .debug, from: self, "set \(self) to \(newValue)")
                 self._finished = newValue
             }
-            didChangeValue(forKey: KVOKey.isFinished.rawValue)
+            // didChangeValue(forKey: KVOKey.isFinished.rawValue)
         }
     }
 
