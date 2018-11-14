@@ -1,4 +1,5 @@
 import Foundation
+import XCTest
 
 func sleep(for interval: DispatchTimeInterval) {
     switch interval {
@@ -17,4 +18,8 @@ func sleep(for interval: DispatchTimeInterval) {
     case .never:
         break
     }
+}
+
+func XCTAssertErrorEqual(_ e1: Error?, _ e2: Error?, line: UInt = #line, file: StaticString = #file) {
+    XCTAssertEqual(e1 as NSError?, e2 as NSError?, "", file: file, line: line)
 }

@@ -30,14 +30,14 @@ final class AsyncAwaitTests: XCTestCase {
         let handle = task.async()
         handle.cancel()
         ensure(task.completionCallCount).becomes(1)
-        XCTAssertEqual(task.completionCallData[0].failureValue! as NSError, TaskError.cancelled as NSError)
+        XCTAssertErrorEqual(task.completionCallData[0].failureValue, TaskError.cancelled)
     }
 
     func testAsyncShouldTimeoutAfterDeadline() {
         let task = AsyncAwaitSpy { sleep(for: .milliseconds(5)) }
         let handle = task.async(timeout: .milliseconds(1))
         ensure(task.completionCallCount).becomes(1)
-        XCTAssertEqual(task.completionCallData[0].failureValue! as NSError, TaskError.timedOut as NSError)
+        XCTAssertErrorEqual(task.completionCallData[0].failureValue, TaskError.timedOut)
         ensure(handle.state).becomes(.finished)
     }
 

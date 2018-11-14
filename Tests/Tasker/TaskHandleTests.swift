@@ -12,12 +12,24 @@ class TaskHandleTests: XCTestCase {
     }
 
     func testCancelShouldCancelATask() {
+        let numHandles = 100
         let manager = TaskManagerSpy()
-        let handle = manager.add(task: kDummyTask)
-        handle.cancel()
-        XCTAssertEqual(handle.state, TaskState.finished)
-        ensure(manager.completionCallCount).becomes(1)
-        XCTAssertEqual(TaskError.cancelled as NSError, manager.completionCallData[0].failureValue! as NSError)
+        var handles: [TaskHandle] = []
+
+        for _ in 0..<numHandles {
+            let handle = manager.add(task: kDummyTask)
+            handles.append(handle)
+            handle.cancel()
+        }
+        handles.forEach { handle in
+            XCTAssertEqual(handle.state, TaskState.finished)
+        }
+
+        ensure(manager.completionCallCount).becomes(numHandles)
+
+        for i in 0..<numHandles {
+            XCTAssertErrorEqual(TaskError.cancelled, manager.completionCallData[i].failureValue)
+        }
     }
 
     func testStartShouldStartATask() {
