@@ -9,8 +9,4 @@ final class TaskerTests: XCTestCase {
         let a = Tasker.Result<Int>.success(3)
         XCTAssertEqual(a.successValue!, 3)
     }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }
