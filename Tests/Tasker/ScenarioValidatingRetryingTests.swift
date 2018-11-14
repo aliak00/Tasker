@@ -1,3 +1,7 @@
+#if os(Linux)
+    import Glibc
+#endif
+
 @testable import Tasker
 import XCTest
 
@@ -40,7 +44,12 @@ private class UserTask: Task, UserDependent, Retriable {
             completion(.failure(UserInvalid()))
             return
         }
-        guard arc4random_uniform(2) != 0 else {
+        #if os(Linux)
+        let r = random() % 2
+        #else
+        let r = arc4random_uniform(2)
+        #endif
+        guard r != 0 else {
             completion(.failure(RandomFailure()))
             return
         }

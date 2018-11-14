@@ -7,6 +7,13 @@ private extension DispatchTime {
     }
 }
 
+#if os(Linux)
+    import Glibc
+    typealias Tid = pthread_t
+#else
+    typealias Tid = mach_port_t
+#endif
+
 /**
  A logging class that can be told where to log to via transports.
 
@@ -228,7 +235,12 @@ public class Logger {
         #endif
 
         let thread = Thread.isMainThread ? "UI" : "BG"
+        #if os(Linux)
+        let threadID = pthread_self()
+        #else
         let threadID = pthread_mach_thread_np(pthread_self())
+        #endif
+        
         let timestamp = self.startTime.elapsed
         let string = "\(object())"
 
@@ -272,7 +284,7 @@ public class Logger {
 
     private func synclog(
         thread: String,
-        threadID: mach_port_t,
+        threadID: Tid,
         timestamp: Double,
         level: LogLevel = .info,
         string: String,
