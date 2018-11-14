@@ -45,10 +45,23 @@ extension RingBufferTests {
     ]
 }
 
+extension ScenarioBatchingTests {
+    static let __allTests = [
+        ("testShouldAllWork", testShouldAllWork),
+    ]
+}
+
 extension TaskHandleTests {
     static let __allTests = [
         ("testCancelShouldCancelATask", testCancelShouldCancelATask),
         ("testStartShouldStartATask", testStartShouldStartATask),
+    ]
+}
+
+extension TaskInterceptorTests {
+    static let __allTests = [
+        ("testInterceptShouldBeCalledWithTask", testInterceptShouldBeCalledWithTask),
+        ("testInterceptShouldModifyOriginalTask", testInterceptShouldModifyOriginalTask),
     ]
 }
 
@@ -61,6 +74,15 @@ extension TaskManagerTests {
         ("testAddingManyTasksShouldCallAllCallbacks", testAddingManyTasksShouldCallAllCallbacks),
         ("testAddingManyTasksShouldExecuteAllTasks", testAddingManyTasksShouldExecuteAllTasks),
         ("testAddingManyTasksShouldMakeAllHandlesFinished", testAddingManyTasksShouldMakeAllHandlesFinished),
+    ]
+}
+
+extension TaskReactorTests {
+    static let __allTests = [
+        ("testTaskManagerShouldCancelReactorOnTimeout", testTaskManagerShouldCancelReactorOnTimeout),
+        ("testTaskManagerShouldCompleteReactorIfUnderTimeout", testTaskManagerShouldCompleteReactorIfUnderTimeout),
+        ("testTaskManagerShouldNotStartCompleteTasksTillAfterReactorIsCompleted", testTaskManagerShouldNotStartCompleteTasksTillAfterReactorIsCompleted),
+        ("testTaskManagerShouldReExecuteTasksIfReactorSaysRequeue", testTaskManagerShouldReExecuteTasksIfReactorSaysRequeue),
     ]
 }
 
@@ -83,8 +105,11 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(AsyncOperationTests.__allTests),
         testCase(LoggerTests.__allTests),
         testCase(RingBufferTests.__allTests),
+        testCase(ScenarioBatchingTests.__allTests),
         testCase(TaskHandleTests.__allTests),
+        testCase(TaskInterceptorTests.__allTests),
         testCase(TaskManagerTests.__allTests),
+        testCase(TaskReactorTests.__allTests),
         testCase(TaskerTests.__allTests),
         testCase(URLInterceptorTests.__allTests),
     ]
