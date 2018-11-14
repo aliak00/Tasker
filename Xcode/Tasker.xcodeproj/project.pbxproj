@@ -82,7 +82,6 @@
 		E1CC6C46219CC52500B465A5 /* AsyncAwaitSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058887219CB93A0020976B /* AsyncAwaitSpy.swift */; };
 		E1CC6C47219CC52500B465A5 /* AsyncAwaitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058888219CB93A0020976B /* AsyncAwaitTests.swift */; };
 		E1CC6C48219CC52500B465A5 /* RingBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105888B219CB93A0020976B /* RingBufferTests.swift */; };
-		E1CC6C49219CC52500B465A5 /* TaskerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105888D219CB93A0020976B /* TaskerTests.swift */; };
 		E1CC6C4A219CC52500B465A5 /* InterceptorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058890219CB93A0020976B /* InterceptorSpy.swift */; };
 		E1CC6C4B219CC52500B465A5 /* ReactorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058891219CB93A0020976B /* ReactorSpy.swift */; };
 		E1CC6C4C219CC52500B465A5 /* TaskManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058892219CB93A0020976B /* TaskManagerSpy.swift */; };
@@ -103,7 +102,6 @@
 		E1CC6C5B219CC52600B465A5 /* AsyncAwaitSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058887219CB93A0020976B /* AsyncAwaitSpy.swift */; };
 		E1CC6C5C219CC52600B465A5 /* AsyncAwaitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058888219CB93A0020976B /* AsyncAwaitTests.swift */; };
 		E1CC6C5D219CC52600B465A5 /* RingBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105888B219CB93A0020976B /* RingBufferTests.swift */; };
-		E1CC6C5E219CC52600B465A5 /* TaskerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105888D219CB93A0020976B /* TaskerTests.swift */; };
 		E1CC6C5F219CC52600B465A5 /* InterceptorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058890219CB93A0020976B /* InterceptorSpy.swift */; };
 		E1CC6C60219CC52600B465A5 /* ReactorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058891219CB93A0020976B /* ReactorSpy.swift */; };
 		E1CC6C61219CC52600B465A5 /* TaskManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058892219CB93A0020976B /* TaskManagerSpy.swift */; };
@@ -172,11 +170,9 @@
 		E105887F219CB93A0020976B /* YieldingIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YieldingIterator.swift; sourceTree = "<group>"; };
 		E1058882219CB93A0020976B /* AsyncOperationSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncOperationSpy.swift; sourceTree = "<group>"; };
 		E1058883219CB93A0020976B /* AsyncOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncOperationTests.swift; sourceTree = "<group>"; };
-		E1058884219CB93A0020976B /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		E1058887219CB93A0020976B /* AsyncAwaitSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncAwaitSpy.swift; sourceTree = "<group>"; };
 		E1058888219CB93A0020976B /* AsyncAwaitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncAwaitTests.swift; sourceTree = "<group>"; };
 		E105888B219CB93A0020976B /* RingBufferTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBufferTests.swift; sourceTree = "<group>"; };
-		E105888D219CB93A0020976B /* TaskerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskerTests.swift; sourceTree = "<group>"; };
 		E1058890219CB93A0020976B /* InterceptorSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterceptorSpy.swift; sourceTree = "<group>"; };
 		E1058891219CB93A0020976B /* ReactorSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactorSpy.swift; sourceTree = "<group>"; };
 		E1058892219CB93A0020976B /* TaskManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManagerSpy.swift; sourceTree = "<group>"; };
@@ -423,10 +419,8 @@
 				E105887A219CB93A0020976B /* URLInterceptor */,
 				E105887C219CB93A0020976B /* Utils */,
 				E1058880219CB93A0020976B /* Operations */,
-				E1058884219CB93A0020976B /* XCTestManifests.swift */,
 				E1058885219CB93A0020976B /* AsyncAwait */,
 				E1058889219CB93A0020976B /* Collections */,
-				E105888C219CB93A0020976B /* TaskerTests */,
 				E105888E219CB93A0020976B /* Tasker */,
 			);
 			name = Tests;
@@ -507,14 +501,6 @@
 				E105888B219CB93A0020976B /* RingBufferTests.swift */,
 			);
 			path = RingBuffer;
-			sourceTree = "<group>";
-		};
-		E105888C219CB93A0020976B /* TaskerTests */ = {
-			isa = PBXGroup;
-			children = (
-				E105888D219CB93A0020976B /* TaskerTests.swift */,
-			);
-			path = TaskerTests;
 			sourceTree = "<group>";
 		};
 		E105888E219CB93A0020976B /* Tasker */ = {
@@ -791,7 +777,6 @@
 				E1CC6C53219CC52500B465A5 /* TaskReactorTests.swift in Sources */,
 				E1CC6C02219CC45D00B465A5 /* LoggerTests.swift in Sources */,
 				E1CC6C44219CC52500B465A5 /* AsyncOperationSpy.swift in Sources */,
-				E1CC6C49219CC52500B465A5 /* TaskerTests.swift in Sources */,
 				E1CC6C4C219CC52500B465A5 /* TaskManagerSpy.swift in Sources */,
 				E1CC6C4D219CC52500B465A5 /* TaskSpy.swift in Sources */,
 				E1CC6C47219CC52500B465A5 /* AsyncAwaitTests.swift in Sources */,
@@ -857,7 +842,6 @@
 				E1CC6C68219CC52600B465A5 /* TaskReactorTests.swift in Sources */,
 				E1CC6C03219CC45D00B465A5 /* LoggerTests.swift in Sources */,
 				E1CC6C59219CC52600B465A5 /* AsyncOperationSpy.swift in Sources */,
-				E1CC6C5E219CC52600B465A5 /* TaskerTests.swift in Sources */,
 				E1CC6C61219CC52600B465A5 /* TaskManagerSpy.swift in Sources */,
 				E1CC6C62219CC52600B465A5 /* TaskSpy.swift in Sources */,
 				E1CC6C5C219CC52600B465A5 /* AsyncAwaitTests.swift in Sources */,
