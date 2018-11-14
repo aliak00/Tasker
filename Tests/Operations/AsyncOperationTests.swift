@@ -35,17 +35,6 @@ final class AsyncOperationTests: XCTestCase {
         operations.forEach { XCTAssertEqual($0.state, AsyncOperation.State.finished) }
     }
 
-    func testAddingOperationsToAQueueShouldAllGoToFinishedIfCancelled() {
-        let queue = OperationQueue()
-        var operations: [AsyncOperation] = []
-        for _ in 0..<100 {
-            operations.append(AsyncOperation { _ in })
-        }
-        operations.forEach { $0.cancel() }
-        queue.addOperations(operations, waitUntilFinished: false)
-        operations.forEach { ensure($0.state).becomes(.finished) }
-    }
-
     func testCancellingBeforeBeforeStartingShouldNotCallExecutor() {
         let operation = AsyncOperationSpy { _ in }
         operation.cancel()
@@ -58,7 +47,7 @@ final class AsyncOperationTests: XCTestCase {
         let operation = AsyncOperationSpy { _ in }
         operation.cancel()
         operation.start()
-        ensure(operation.finishCallCount).stays(0)
+        XCTAssertEqual(operation.finishCallCount, 1)
         XCTAssertEqual(operation.state, AsyncOperation.State.finished)
     }
 

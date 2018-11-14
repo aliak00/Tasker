@@ -122,9 +122,7 @@ open class AsyncOperation: Operation {
     open override func cancel() {
         log(from: self, "cancelling \(self)")
         super.cancel()
-        if self.state == .executing {
-            self.finish()
-        }
+        self.finish()
     }
 }
 
