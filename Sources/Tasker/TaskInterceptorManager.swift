@@ -41,7 +41,9 @@ class TaskInterceptorManager {
     private func intercept<T: Task>(task: inout T, handle: TaskManager.Handle) -> InterceptResult {
         // Calling an interceptor so we better be on the interceptor queue
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.queue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.queue)
+            #endif
         }
         //
         // The algorithm here is as follows

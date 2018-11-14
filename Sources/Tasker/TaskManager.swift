@@ -266,7 +266,9 @@ public class TaskManager {
 
     private func data(for handle: Handle, remove: Bool = false) -> Handle.Data? {
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         if remove {
             guard let data = self.pendingTasks.removeValue(forKey: handle) else {
@@ -284,7 +286,9 @@ public class TaskManager {
     private func queueOperation(_ operation: AsyncOperation, for handle: Handle) {
         // Accessing Swooft.Operation so better be on task queue
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         self.taskOperationQueue.addOperation(operation)
         log(level: .verbose, from: self, "did queue \(handle)", tags: TaskManager.kTkQTags)
@@ -292,7 +296,9 @@ public class TaskManager {
 
     private func justQueueTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         log(level: .verbose, from: self, "will queue \(handle)", tags: TaskManager.kTkQTags)
         guard let interval = interval else {
@@ -318,7 +324,9 @@ public class TaskManager {
 
     private func interceptThenQueueTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         data.intercept(interval) { [weak self, weak handle] result in
             guard let strongSelf = self else {
@@ -352,7 +360,9 @@ public class TaskManager {
     private func startTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
         // Getting the raw TaskData here so we better be on the taskQueue
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         if self.interceptorManager.count == 0 {
             self.justQueueTask(for: handle, with: data, after: interval)
@@ -525,7 +535,9 @@ public class TaskManager {
 
     private func requeueTasks() {
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         for handle in self.tasksToRequeue {
             if let data = self.data(for: handle) {
@@ -540,7 +552,9 @@ public class TaskManager {
 
     private func executeImmediateReactors(at indicies: [Int]) {
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.reactorQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         DispatchQueue.concurrentPerform(iterations: indicies.count) { index in
             let semaphore = DispatchSemaphore(value: 0)
@@ -571,7 +585,9 @@ public class TaskManager {
 
     private func cancelAssociatedTasksForReactor(at index: Int, with error: TaskError) {
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         var allTheData: [Handle.Data] = []
         for handle in self.reactorAssoiciatedHandles[index] ?? Set<Handle>() {
@@ -595,7 +611,9 @@ public class TaskManager {
 
     private func removeExecutingReactor(at index: Int) {
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         self.executingReactors.remove(index)
         if self.executingReactors.count == 0 {
@@ -607,7 +625,9 @@ public class TaskManager {
 
     private func removeAndCancel(handle: Handle, with error: TaskError?) {
         if #available(iOS 10.0, OSX 10.12, *) {
-            __dispatch_assert_queue(self.taskQueue)
+            #if !os(Linux)
+                __dispatch_assert_queue(self.taskQueue)
+            #endif
         }
         guard let data = self.data(for: handle, remove: true) else {
             return

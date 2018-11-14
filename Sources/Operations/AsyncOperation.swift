@@ -124,9 +124,7 @@ open class AsyncOperation: Operation {
         super.cancel()
         self.finish()
     }
-}
 
-extension AsyncOperation {
     open override var description: String {
         #if DEBUG
             if let name = self.name {
