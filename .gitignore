@@ -30,3 +30,5 @@ Example/Swooft.xcworkspace
 !/docs/jazzy-theme/*
 !/docs/abstracts/
 !/docs/abstracts/*
+
+.build
