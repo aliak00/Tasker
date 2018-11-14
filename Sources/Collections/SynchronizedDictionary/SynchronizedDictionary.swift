@@ -2,7 +2,7 @@ import Foundation
 
 public class SynchronizedDictionary<Key: Hashable, Value> {
     var dictionary: [Key: Value] = [:]
-    let queue = DispatchQueue(label: "Swooft.Collections.SynchronizedDictionary", attributes: [.concurrent])
+    let queue = DispatchQueue(label: "Tasker.Collections.SynchronizedDictionary", attributes: [.concurrent])
 
     public init() {}
 

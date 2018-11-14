@@ -1,7 +1,7 @@
 import Foundation
 
 public struct AtomicInt {
-    fileprivate var queue = DispatchQueue(label: "Swooft.AtomicInt")
+    fileprivate var queue = DispatchQueue(label: "Tasker.AtomicInt")
     fileprivate var _value = 0
 
     public init() {}

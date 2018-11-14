@@ -42,7 +42,7 @@ final class AsyncAwaitTests: XCTestCase {
     }
 
     func testAsyncShouldCallCompletionOnSpecifiedQueue() {
-        let queue = DispatchQueue(label: "Swooft.Tests.AsyncTask")
+        let queue = DispatchQueue(label: "Tasker.Tests.AsyncTask")
         let key = DispatchSpecificKey<Void>()
         queue.setSpecific(key: key, value: ())
         let task = AsyncAwaitSpy {}
@@ -82,7 +82,7 @@ final class AsyncAwaitTests: XCTestCase {
     }
 
     // func testAwaitShouldCallCompletionOnSpecifiedQueue() {
-    //     let queue = DispatchQueue(label: "Swooft.Tests.AsyncTask")
+    //     let queue = DispatchQueue(label: "Tasker.Tests.AsyncTask")
     //     let key = DispatchSpecificKey<Void>()
     //     queue.setSpecific(key: key, value: ())
     //     let task = AsyncTaskSpy {

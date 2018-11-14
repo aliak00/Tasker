@@ -6,7 +6,7 @@ class TaskInterceptorManager {
         case execute([TaskManager.Handle])
     }
 
-    private let queue = DispatchQueue(label: "Swooft.Tasker.TaskInterceptorManager")
+    private let queue = DispatchQueue(label: "Tasker.Tasker.TaskInterceptorManager")
     private var batchedHandles: [Int: [Weak<TaskManager.Handle>]] = [:]
 
     let interceptors: [TaskInterceptor]

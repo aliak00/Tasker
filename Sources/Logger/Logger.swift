@@ -34,7 +34,7 @@ public class Logger {
     }()
 
     private let startTime = DispatchTime.now()
-    private let queue = DispatchQueue(label: "Swooft.Logger", qos: .utility)
+    private let queue = DispatchQueue(label: "Tasker.Logger", qos: .utility)
     private let dispatchGroup = DispatchGroup()
 
     private var _enabled: Bool = true

@@ -32,8 +32,8 @@ public class TaskManager {
     private var pendingTasks: [Handle: Handle.Data] = [:]
     private let taskOperationQueue = OperationQueue()
 
-    private let taskQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.tasks")
-    private let reactorQueue = DispatchQueue(label: "Swooft.Tasker.TaskManager.reactors", attributes: [.concurrent])
+    private let taskQueue = DispatchQueue(label: "Tasker.Tasker.TaskManager.tasks")
+    private let reactorQueue = DispatchQueue(label: "Tasker.Tasker.TaskManager.reactors", attributes: [.concurrent])
     private let dispatchGroup = DispatchGroup()
 
     private let interceptorManager: TaskInterceptorManager
@@ -284,7 +284,7 @@ public class TaskManager {
     }
 
     private func queueOperation(_ operation: AsyncOperation, for handle: Handle) {
-        // Accessing Swooft.Operation so better be on task queue
+        // Accessing Tasker.Operation so better be on task queue
         if #available(iOS 10.0, OSX 10.12, *) {
             #if !os(Linux)
                 __dispatch_assert_queue(self.taskQueue)

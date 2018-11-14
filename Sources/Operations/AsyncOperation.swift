@@ -7,7 +7,7 @@ open class AsyncOperation: Operation {
         static var counter = AtomicInt()
     #endif
 
-    public static let queue = DispatchQueue(label: "Swooft.AsyncOperation", attributes: [.concurrent])
+    public static let queue = DispatchQueue(label: "Tasker.AsyncOperation", attributes: [.concurrent])
 
     public enum State {
         case ready
