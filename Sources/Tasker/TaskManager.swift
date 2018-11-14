@@ -32,8 +32,8 @@ public class TaskManager {
     private var pendingTasks: [Handle: Handle.Data] = [:]
     private let taskOperationQueue = OperationQueue()
 
-    private let taskQueue = DispatchQueue(label: "Tasker.Tasker.TaskManager.tasks")
-    private let reactorQueue = DispatchQueue(label: "Tasker.Tasker.TaskManager.reactors", attributes: [.concurrent])
+    private let taskQueue = DispatchQueue(label: "Tasker.TaskManager.tasks")
+    private let reactorQueue = DispatchQueue(label: "Tasker.TaskManager.reactors", attributes: [.concurrent])
     private let dispatchGroup = DispatchGroup()
 
     private let interceptorManager: TaskInterceptorManager
