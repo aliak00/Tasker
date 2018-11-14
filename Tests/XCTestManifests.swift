@@ -51,6 +51,12 @@ extension ScenarioBatchingTests {
     ]
 }
 
+extension ScenarioValidatingRetryingTests {
+    static let __allTests = [
+        ("testShouldAllWork", testShouldAllWork),
+    ]
+}
+
 extension TaskHandleTests {
     static let __allTests = [
         ("testCancelShouldCancelATask", testCancelShouldCancelATask),
@@ -106,6 +112,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(LoggerTests.__allTests),
         testCase(RingBufferTests.__allTests),
         testCase(ScenarioBatchingTests.__allTests),
+        testCase(ScenarioValidatingRetryingTests.__allTests),
         testCase(TaskHandleTests.__allTests),
         testCase(TaskInterceptorTests.__allTests),
         testCase(TaskManagerTests.__allTests),
