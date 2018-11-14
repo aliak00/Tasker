@@ -18,8 +18,7 @@ class LoggerTests: XCTestCase {
 
         logger.waitTillAllLogsTransported()
 
-        for t in tags { XCTAssertNotNil(log.range(of: t)) }
-        print(log)
+        for tag in tags { XCTAssertNotNil(log.range(of: tag)) }
     }
 
     func testLoggerShouldNotLogTagsIfNotRequested() {
