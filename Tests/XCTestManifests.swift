@@ -16,7 +16,6 @@ extension AsyncAwaitTests {
 extension AsyncOperationTests {
     static let __allTests = [
         ("testAddingOperationsToAQueueShouldAllGoToFinished", testAddingOperationsToAQueueShouldAllGoToFinished),
-        ("testAddingOperationsToAQueueShouldAllGoToFinishedIfCancelled", testAddingOperationsToAQueueShouldAllGoToFinishedIfCancelled),
         ("testCancellingAfterExecutingShouldCallFinish", testCancellingAfterExecutingShouldCallFinish),
         ("testCancellingBeforeBeforeStartingShouldNotCallExecutor", testCancellingBeforeBeforeStartingShouldNotCallExecutor),
         ("testCancellingBeforeBeforeStartingShouldNotCallFinish", testCancellingBeforeBeforeStartingShouldNotCallFinish),
