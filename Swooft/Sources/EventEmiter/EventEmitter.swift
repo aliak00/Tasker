@@ -39,7 +39,7 @@ public class EventEmitter<Parameters> {
     }
 
     @discardableResult
-    public func register<T: AnyObject>(_ object: T, method: @escaping (T) -> (Parameters) -> Void) -> Handle {
+    public func register<T: AnyObject>(_ object: T, method: @escaping (T) -> (Parameters) -> ()) -> Handle {
         let handle = Handle(object: object, method: method)
         self.handles.insert(handle)
         return handle

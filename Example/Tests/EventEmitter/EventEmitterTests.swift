@@ -30,7 +30,7 @@ private class Receiver {
         self.blockVoidCalls.append(())
     }
 
-    func handlerVoid() {
+    func handlerVoid(_: Void) {
         self.preCallBlock?()
         self.handlerVoidCalls.append(())
     }

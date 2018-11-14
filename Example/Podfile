@@ -18,12 +18,6 @@ end
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '4.0'
-    end
-  end
-
   profile = installer.pods_project.targets.find { |target| target.name == 'Pods-Swooft_Profiler_Tests' }
   profile_debug = profile.build_configurations.find { |config| config.name == 'Debug' }
   profile_debug.build_settings["SWIFT_OPTIMIZATION_LEVEL"] = "-Owholemodule"
