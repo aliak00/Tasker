@@ -9,16 +9,12 @@
 /* Begin PBXBuildFile section */
 		3A8D6903D458462375547F2F /* Pods_Swooft_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E12E7B581FC3C9AD0089EA36 /* Pods_Swooft_Tests.framework */; };
 		69CF2F5A4A9B4EB8F06D21A3 /* Pods_Swooft_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97CD44675472A1F640CCF3BF /* Pods_Swooft_Tests.framework */; };
-		E1100E001FC40C5400A11F75 /* ProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E103B3291F574DE9000F3F70 /* ProfilerTests.swift */; };
 		E1100E021FC40C9200A11F75 /* Nimble+failWith.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1100E011FC40C9200A11F75 /* Nimble+failWith.swift */; };
 		E116718F1FA2A16500F1E3BC /* URLInterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E116718E1FA2A16500F1E3BC /* URLInterceptorTests.swift */; };
 		E11671971FAB6E1F00F1E3BC /* ReactorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11671961FAB6E1F00F1E3BC /* ReactorSpy.swift */; };
 		E11671991FABBCD500F1E3BC /* LoggerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11671981FABBCD500F1E3BC /* LoggerConfiguration.swift */; };
 		E116719B1FABBD7D00F1E3BC /* TaskReactorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E116719A1FABBD7D00F1E3BC /* TaskReactorTests.swift */; };
 		E11FFC1B1FBDEFAF004896D5 /* AsyncOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC1A1FBDEFAF004896D5 /* AsyncOperationTests.swift */; };
-		E12E7B5F1FC3C9FC0089EA36 /* LoggingProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */; };
-		E12E7B661FC3C9FC0089EA36 /* LockingProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */; };
-		E12E7B6F1FC3C9FC0089EA36 /* MemoizeProfilerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */; };
 		E12E7B831FC3CAA90089EA36 /* DummyTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD0F61F50B3F600757478 /* DummyTask.swift */; };
 		E12E7B841FC3CAB70089EA36 /* KitchenSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18AD1021F50B40900757478 /* KitchenSink.swift */; };
 		E14D68A31FC27BB200E7C06D /* AsyncOperationSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14D68A21FC27BB200E7C06D /* AsyncOperationSpy.swift */; };
@@ -53,16 +49,12 @@
 		9D913FB3D005A321B1A28D25 /* Pods-Swooft_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Tests/Pods-Swooft_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		B2201E672E9331F10488DAA0 /* Pods_Swooft_Profiler_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swooft_Profiler_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6D62278CD3B1E289E33A9D5 /* Pods-Swooft_Profiler_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swooft_Profiler_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Swooft_Profiler_Tests/Pods-Swooft_Profiler_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		E103B3291F574DE9000F3F70 /* ProfilerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilerTests.swift; sourceTree = "<group>"; };
 		E1100E011FC40C9200A11F75 /* Nimble+failWith.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Nimble+failWith.swift"; sourceTree = "<group>"; };
 		E116718E1FA2A16500F1E3BC /* URLInterceptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLInterceptorTests.swift; sourceTree = "<group>"; };
 		E11671961FAB6E1F00F1E3BC /* ReactorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorSpy.swift; sourceTree = "<group>"; };
 		E11671981FABBCD500F1E3BC /* LoggerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerConfiguration.swift; sourceTree = "<group>"; };
 		E116719A1FABBD7D00F1E3BC /* TaskReactorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskReactorTests.swift; sourceTree = "<group>"; };
 		E11FFC1A1FBDEFAF004896D5 /* AsyncOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncOperationTests.swift; sourceTree = "<group>"; };
-		E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoizeProfilerTests.swift; sourceTree = "<group>"; };
-		E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingProfilerTests.swift; sourceTree = "<group>"; };
-		E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockingProfilerTests.swift; sourceTree = "<group>"; };
 		E12E7B561FC3C9750089EA36 /* Swooft.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Swooft.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E12E7B581FC3C9AD0089EA36 /* Pods_Swooft_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Swooft_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E12E7B811FC3C9FC0089EA36 /* Swooft_Profiler_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Swooft_Profiler_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,7 +126,6 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
-				E1100DFF1FC40B1100A11F75 /* ProfilerTests */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
@@ -160,7 +151,6 @@
 				E17C3FB01F5371300002ADFF /* Collections */,
 				E18AD1071F50B8D400757478 /* Logger */,
 				E11FFC1C1FBDF007004896D5 /* Operations */,
-				E103B3281F574DB1000F3F70 /* Profiler */,
 				E18AD0E51F50B39100757478 /* Tasker */,
 				E116718D1FA2A13A00F1E3BC /* URLInterceptor */,
 				E18AD0F21F50B3B800757478 /* Utils */,
@@ -185,24 +175,6 @@
 				E8BBF77C8B1AB741F355F151 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
-			sourceTree = "<group>";
-		};
-		E103B3281F574DB1000F3F70 /* Profiler */ = {
-			isa = PBXGroup;
-			children = (
-				E103B3291F574DE9000F3F70 /* ProfilerTests.swift */,
-			);
-			path = Profiler;
-			sourceTree = "<group>";
-		};
-		E1100DFF1FC40B1100A11F75 /* ProfilerTests */ = {
-			isa = PBXGroup;
-			children = (
-				E11FFC211FBE3519004896D5 /* MemoizeProfilerTests.swift */,
-				E11FFC231FBE352C004896D5 /* LoggingProfilerTests.swift */,
-				E11FFC251FBE3538004896D5 /* LockingProfilerTests.swift */,
-			);
-			path = ProfilerTests;
 			sourceTree = "<group>";
 		};
 		E116718D1FA2A13A00F1E3BC /* URLInterceptor */ = {
@@ -542,7 +514,6 @@
 				E172FCD01F96AB6D00317E56 /* LoggerTests.swift in Sources */,
 				E18AD1051F50B40900757478 /* KitchenSink.swift in Sources */,
 				E18AD0FA1F50B3F600757478 /* AsyncAwaitSpy.swift in Sources */,
-				E1100E001FC40C5400A11F75 /* ProfilerTests.swift in Sources */,
 				E18AD1001F50B40100757478 /* AsyncAwaitTests.swift in Sources */,
 				E11FFC1B1FBDEFAF004896D5 /* AsyncOperationTests.swift in Sources */,
 				E14D68A31FC27BB200E7C06D /* AsyncOperationSpy.swift in Sources */,
@@ -560,9 +531,6 @@
 			files = (
 				E12E7B841FC3CAB70089EA36 /* KitchenSink.swift in Sources */,
 				E12E7B831FC3CAA90089EA36 /* DummyTask.swift in Sources */,
-				E12E7B5F1FC3C9FC0089EA36 /* LoggingProfilerTests.swift in Sources */,
-				E12E7B661FC3C9FC0089EA36 /* LockingProfilerTests.swift in Sources */,
-				E12E7B6F1FC3C9FC0089EA36 /* MemoizeProfilerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
