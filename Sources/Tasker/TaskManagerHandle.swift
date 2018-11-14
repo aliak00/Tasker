@@ -2,7 +2,7 @@ import Foundation
 
 extension TaskManager {
     class Handle: TaskHandle {
-        private weak var owner: TaskManager?
+        fileprivate weak var owner: TaskManager?
 
         public let identifier: Int
 
