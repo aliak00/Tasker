@@ -1,5 +1,5 @@
-import XCTest
 @testable import Tasker
+import XCTest
 
 final class TaskerTests: XCTestCase {
     func testExample() {

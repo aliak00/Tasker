@@ -1,15 +1,5 @@
-//
-// Copyright 2017 Ali Akhtarzada
-//
-// Licensed under the Apache License, Version 2.0 (the 'License');
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-
-import XCTest
 @testable import Tasker
+import XCTest
 
 private struct UserProfile {
     var name: String
@@ -81,7 +71,6 @@ private class GetProfileTask: Task, UserDependent {
 // internal user is still present, will set set the user in the task to something
 // valid and re-execute
 private class ValidateUserReactor: TaskReactor {
-
     weak var user: User?
     init(user: User) {
         self.user = user
@@ -134,9 +123,7 @@ private class RetryReactor: TaskReactor {
 }
 
 class ScenarioValidatingRetryingTests: XCTestCase {
-
     func testShouldAllWork() {
-
         // Ensure user starts off as invalid
         let user = User()
         XCTAssertEqual(user.id, User.ID.invalid)

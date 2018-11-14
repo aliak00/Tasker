@@ -2,15 +2,13 @@
 
 if [[ -z "${TRAVIS}" ]]; then
     swiftformat \
-        Swooft/Sources/ Example/Tests  \
-        --exclude Example/Pods/ \
+        Sources/ Tests  \
         --comments ignore \
         --ranges nospace \
         --self insert \
         --indent 4 \
-        --removelines enabled \
-        --insertlines enabled \
         --allman false \
         --enable redundantGet \
-        --enable spaceAroundBraces
+        --enable spaceAroundBraces \
+        --header strip
 fi

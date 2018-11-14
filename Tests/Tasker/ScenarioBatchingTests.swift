@@ -1,15 +1,5 @@
-//
-// Copyright 2017 Ali Akhtarzada
-//
-// Licensed under the Apache License, Version 2.0 (the 'License');
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-
-import XCTest
 import Tasker
+import XCTest
 
 // This interceptor will take any task that is retriable, and re-execute it
 class BatchingInterceptor: TaskInterceptor {
@@ -19,7 +9,6 @@ class BatchingInterceptor: TaskInterceptor {
 }
 
 class ScenarioBatchingTests: XCTestCase {
-
     override func tearDown() {
         ensure(kTaskSpyCounter.value).becomes(0)
     }

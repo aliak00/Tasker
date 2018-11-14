@@ -1,13 +1,3 @@
-//
-// Copyright 2017 Ali Akhtarzada
-//
-// Licensed under the Apache License, Version 2.0 (the 'License');
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-
 import Foundation
 
 /**
@@ -15,7 +5,6 @@ import Foundation
  and then takes care of asynchronous execution for you.
  */
 public class TaskManager {
-
     public static let shared = TaskManager()
 
     /**
@@ -94,7 +83,6 @@ public class TaskManager {
         completeOn completionQueue: DispatchQueue? = nil,
         completion: T.ResultCallback? = nil
     ) -> TaskHandle {
-
         let handle = Handle(owner: self)
 
         let operation = AsyncOperation { [weak self, weak task, weak handle] operation in
@@ -170,7 +158,6 @@ public class TaskManager {
     }
 
     private func execute<T: Task>(task: T, handle: Handle, operation: AsyncOperation, timeout: DispatchTimeInterval?, completion: T.ResultCallback?) {
-
         let timeoutWorkItem: DispatchWorkItem?
         if let timeout = timeout {
             timeoutWorkItem = self.launchTimeoutWork(for: handle, withTimeout: timeout)
@@ -242,8 +229,7 @@ public class TaskManager {
                             + "after result \(result), "
                             + "requeue: \(reactionData.requeueTask), "
                             + "suspend: \(reactionData.suspendQueue)",
-                        tags: TaskManager.kTkQTags
-                    )
+                        tags: TaskManager.kTkQTags)
                     strongSelf.launchReactors(
                         at: reactionData.indices,
                         on: handle,
@@ -500,7 +486,6 @@ public class TaskManager {
                     let timeoutWorkItem = DispatchWorkItem { [weak self] in
 
                         strongSelf.taskQueue.async {
-
                             reactorWorkItem.cancel()
 
                             guard let timeoutWorkItem = maybeTimeoutWorkItem, !timeoutWorkItem.isCancelled else {

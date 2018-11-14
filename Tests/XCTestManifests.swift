@@ -105,20 +105,20 @@ extension URLInterceptorTests {
 }
 
 #if !os(macOS)
-public func __allTests() -> [XCTestCaseEntry] {
-    return [
-        testCase(AsyncAwaitTests.__allTests),
-        testCase(AsyncOperationTests.__allTests),
-        testCase(LoggerTests.__allTests),
-        testCase(RingBufferTests.__allTests),
-        testCase(ScenarioBatchingTests.__allTests),
-        testCase(ScenarioValidatingRetryingTests.__allTests),
-        testCase(TaskHandleTests.__allTests),
-        testCase(TaskInterceptorTests.__allTests),
-        testCase(TaskManagerTests.__allTests),
-        testCase(TaskReactorTests.__allTests),
-        testCase(TaskerTests.__allTests),
-        testCase(URLInterceptorTests.__allTests),
-    ]
-}
+    public func __allTests() -> [XCTestCaseEntry] {
+        return [
+            testCase(AsyncAwaitTests.__allTests),
+            testCase(AsyncOperationTests.__allTests),
+            testCase(LoggerTests.__allTests),
+            testCase(RingBufferTests.__allTests),
+            testCase(ScenarioBatchingTests.__allTests),
+            testCase(ScenarioValidatingRetryingTests.__allTests),
+            testCase(TaskHandleTests.__allTests),
+            testCase(TaskInterceptorTests.__allTests),
+            testCase(TaskManagerTests.__allTests),
+            testCase(TaskReactorTests.__allTests),
+            testCase(TaskerTests.__allTests),
+            testCase(URLInterceptorTests.__allTests),
+        ]
+    }
 #endif

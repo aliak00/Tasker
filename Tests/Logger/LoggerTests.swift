@@ -1,18 +1,7 @@
-//
-// Copyright 2017 Ali Akhtarzada
-//
-// Licensed under the Apache License, Version 2.0 (the 'License');
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-
 import Tasker
 import XCTest
 
 class LoggerTests: XCTestCase {
-
     override func tearDown() {
         Logger.shared.waitTillAllLogsTransported()
     }
@@ -29,7 +18,7 @@ class LoggerTests: XCTestCase {
 
         logger.waitTillAllLogsTransported()
 
-        for t in tags { XCTAssertNotNil(log.range(of:t)) }
+        for t in tags { XCTAssertNotNil(log.range(of: t)) }
         print(log)
     }
 
@@ -45,7 +34,7 @@ class LoggerTests: XCTestCase {
 
         logger.waitTillAllLogsTransported()
 
-        for t in tags { XCTAssertNil(log.range(of:t)) }
+        for t in tags { XCTAssertNil(log.range(of: t)) }
     }
 
     func testLoggerShouldFilterLogsUnlessTagged() {
@@ -64,8 +53,8 @@ class LoggerTests: XCTestCase {
 
         logger.waitTillAllLogsTransported()
 
-        XCTAssertNotNil(log.range(of:log1))
-        XCTAssertNil(log.range(of:log2))
+        XCTAssertNotNil(log.range(of: log1))
+        XCTAssertNil(log.range(of: log2))
     }
 
     func testLoggerShouldFilterLogsIfTagged() {
@@ -84,8 +73,8 @@ class LoggerTests: XCTestCase {
 
         logger.waitTillAllLogsTransported()
 
-        XCTAssertNil(log.range(of:log1))
-        XCTAssertNotNil(log.range(of:log2))
+        XCTAssertNil(log.range(of: log1))
+        XCTAssertNotNil(log.range(of: log2))
     }
 
     func testLoggerShouldFilterLogsCorrectly() {
@@ -110,8 +99,8 @@ class LoggerTests: XCTestCase {
 
         logger.waitTillAllLogsTransported()
 
-        XCTAssertNil(log.range(of:log1))
-        XCTAssertNotNil(log.range(of:log2))
-        XCTAssertNil(log.range(of:log3))
+        XCTAssertNil(log.range(of: log1))
+        XCTAssertNotNil(log.range(of: log2))
+        XCTAssertNil(log.range(of: log3))
     }
 }
