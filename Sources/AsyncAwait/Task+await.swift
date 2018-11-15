@@ -31,3 +31,9 @@ extension Task {
         }
     }
 }
+
+func await<R>(_ closure: @escaping @autoclosure () -> R, timeout: DispatchTimeInterval? = nil) throws -> R {
+    return try AnyTask<R> { callback in
+        callback(.success(closure()))
+    }.await(timeout: timeout)
+}

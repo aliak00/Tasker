@@ -2,7 +2,7 @@
 import XCTest
 
 final class AsyncAwaitTests: XCTestCase {
-    func testShouldWork() {
+    func testAwaitInAsyncShouldComplete() {
         let task = AsyncAwaitSpy { () -> Int in
             let one = try! TaskSpy<Int> { callback in
                 sleep(for: .milliseconds(1))
@@ -79,6 +79,26 @@ final class AsyncAwaitTests: XCTestCase {
         }
         XCTAssertEqual(maybeError! as NSError, TaskError.timedOut as NSError)
         ensure(task.completionCallCount).stays(1)
+    }
+
+    func testAsyncAwaitFreeFunctionsShouldSuccess() {
+        let f = { () -> Int in
+            sleep(for: .milliseconds(10))
+            return 5
+        }
+        XCTAssertEqual(try await(f()), 5)
+
+        var value: Int? = 0
+        async(f()) { value = $0.successValue }
+        ensure(value).becomes(5)
+    }
+
+    func testAwaitFreeFunctionShouldThrowOnTimeOut() {
+        let f = { () -> Int in
+            sleep(for: .seconds(1))
+            return 5
+        }
+        XCTAssertThrowsError(try await(f(), timeout: .milliseconds(10)))
     }
 
     // func testAwaitShouldCallCompletionOnSpecifiedQueue() {
