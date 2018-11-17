@@ -197,6 +197,10 @@ public class TaskManager {
 
         log(from: self, "will execute \(handle)", tags: TaskManager.kOpQTags)
 
+        // Considered putting a DispatchGroup here to signify when "only" the execute part of a Task is over,
+        // but, because the API for DispatchGroup *requires* that every enter() MUST have a leave(), capturing
+        // self weakly would not be an option. So we go for a less accurate version of all Task.execute being
+        // run and use the operation queue's wait instead.
         task.execute { [weak self, weak task, weak handle, weak operation] result in
 
             timeoutWorkItem?.cancel()

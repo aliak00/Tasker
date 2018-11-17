@@ -6,6 +6,10 @@ public struct AtomicInt {
 
     public init() {}
 
+    public init(_ value: Int) {
+        self._value = value
+    }
+
     public var value: Int {
         get {
             var value: Int = 0

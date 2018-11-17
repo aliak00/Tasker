@@ -79,12 +79,12 @@ class TaskManagerTests: XCTestCase {
 
     func testWaitingForAllTasksToFinish() {
         let manager = TaskManagerSpy()
-        var count = 0
+        var count = AtomicInt(0)
         manager.launch(task: TaskSpy<Void> { cb in
-            count += 1
+            count.getAndIncrement()
             cb(.success(()))
         }, count: 100)
         manager.waitTillAllTasksFinished()
-        XCTAssertEqual(count, 100)
+        XCTAssertEqual(count.value, 100)
     }
 }
