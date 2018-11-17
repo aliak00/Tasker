@@ -1,7 +1,7 @@
 import Foundation
 
 class TaskInterceptorManager {
-    enum InterceptResult {
+    enum InterceptionResult {
         case ignore
         case execute([TaskManager.Handle])
     }
@@ -23,7 +23,7 @@ class TaskInterceptorManager {
         task: inout T,
         for handle: TaskManager.Handle,
         after interval: DispatchTimeInterval?,
-        completion: @escaping (InterceptResult) -> Void
+        completion: @escaping (InterceptionResult) -> Void
     ) {
         if let interval = interval {
             self.queue.asyncAfter(deadline: .now() + interval) { [task] in
@@ -38,7 +38,7 @@ class TaskInterceptorManager {
         }
     }
 
-    private func intercept<T: Task>(task: inout T, handle: TaskManager.Handle) -> InterceptResult {
+    private func intercept<T: Task>(task: inout T, handle: TaskManager.Handle) -> InterceptionResult {
         // Calling an interceptor so we better be on the interceptor queue
         if #available(iOS 10.0, OSX 10.12, *) {
             #if !os(Linux)

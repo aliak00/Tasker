@@ -2,13 +2,17 @@ import Foundation
 
 /**
  A task manager can be given an arbitrary number of `Task`s and initialized with a set of `TaskInterceptor`s
- and then takes care of asynchronous execution for you.
+ and `TaskReactor`s, after which it will take care of asynchonous task management for you.
  */
 public class TaskManager {
+    /**
+     Shared TaskManager that is default constructed and has no `TaskInterceptor`s or `TaskReactor`s.
+     */
     public static let shared = TaskManager()
 
     /**
-     Thes log tags can be passed to filter the logs produced by the TaskManager
+     Thes log tags can be passed to filter the logs produced by the TaskManager. This can be used
+     to aid in debugging, or to get information about what your tasks are up to.
 
      - SeeAlso `Logger'
      */
@@ -27,10 +31,10 @@ public class TaskManager {
     private static let kClrTags = [LoggerTag.caller]
     private static let kReQTags = [LoggerTag.onReactorQueue]
 
-    static var counter = AtomicInt()
+    private static var identifierCounter = AtomicInt()
 
     private var pendingTasks: [Handle: Handle.Data] = [:]
-    private let taskOperationQueue = OperationQueue()
+    private let operationQueue = OperationQueue()
 
     private let taskQueue = DispatchQueue(label: "Tasker.TaskManager.tasks")
     private let reactorQueue = DispatchQueue(label: "Tasker.TaskManager.reactors", attributes: [.concurrent])
@@ -44,12 +48,22 @@ public class TaskManager {
     private var tasksToRequeue = Set<Handle>() // TODO: Can/should these handles be weak?
     private var tasksToBatch: [Int: [Weak<Handle>]] = [:]
 
+    /**
+     List of reactors that this TaskManager was created with
+     */
     public let reactors: [TaskReactor]
+
+    /**
+     List of interceptors that this TaskManager was created with
+     */
     public var interceptors: [TaskInterceptor] {
         return self.interceptorManager.interceptors
     }
 
-    let identifier: Int
+    /**
+     Identifies the TaskManager in question. It is an atomically increasing integer, per TaskManager created
+     */
+    public let identifier: Int
 
     /**
      Initializes this manager object.
@@ -58,20 +72,22 @@ public class TaskManager {
      - parameter reactors: an array of reactors that will be applied to every task after it's executed
      */
     public init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
-        self.taskOperationQueue.isSuspended = false
+        self.operationQueue.isSuspended = false
         self.reactors = reactors
         self.interceptorManager = TaskInterceptorManager(interceptors)
-        self.identifier = type(of: self).counter.getAndIncrement()
+        self.identifier = type(of: self).identifierCounter.getAndIncrement()
     }
 
     /**
-     Add a task to the manager. You may choose to start the task immediately or start if yourself via the `TaskHandle` that
+     Add a task to the manager. You may choose to start the task immediately or start it yourself via the `TaskHandle` that
      is returned. Additionally, you can also set an interval on when to start the task but that is only valid if `startImmediately`
      is set to true
 
      - parameter task: the task to run
-     - parameter startImmediately: set this to false if you want to call start on the `TaskHandle` that's returned
+     - parameter startImmediately: set this to false if you want to explicity call start on the `TaskHandle` that's returned
      - parameter after: set this to some value if you want the task to start running after some interval
+     - parameter timeout:
+     - parameter completeOn: specifies which queue completion is called on
      - parameter completion: called after the task is done with the result of `Task.execute`
      */
     @discardableResult
@@ -83,32 +99,9 @@ public class TaskManager {
         completeOn completionQueue: DispatchQueue? = nil,
         completion: T.ResultCallback? = nil
     ) -> TaskHandle {
+
         let handle = Handle(owner: self)
-
-        let operation = AsyncOperation { [weak self, weak task, weak handle] operation in
-
-            guard let strongSelf = self else {
-                log(level: .verbose, from: self, "\(T.self) operation => manager dead", tags: TaskManager.kOpQTags)
-                return
-            }
-
-            guard let handle = handle else {
-                log(level: .verbose, from: self, "\(T.self) operation => handle dead", tags: TaskManager.kOpQTags)
-                return
-            }
-
-            guard let task = task else {
-                log(level: .verbose, from: self, "\(handle) operation => task dead", tags: TaskManager.kOpQTags)
-                return
-            }
-
-            guard !operation.isCancelled else {
-                log(level: .verbose, from: self, "\(handle) operation => operation cancelled", tags: TaskManager.kOpQTags)
-                return
-            }
-
-            strongSelf.execute(task: task, handle: handle, operation: operation, timeout: timeout ?? task.timeout, completion: completion)
-        }
+        let operation = self.createAsyncOperationForHandle(handle, task: task, timeout: timeout, completion: completion)
 
         log(from: self,
             "will add \(handle) - "
@@ -116,13 +109,14 @@ public class TaskManager {
                 + "interval: \(String(describing: interval)), "
                 + "completionQueue: \(completionQueue?.label as Any)", tags: TaskManager.kClrTags)
 
+        // Fire off a closure to set up the data in the handle.
         self.taskQueue.async { [weak self] in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
                 return
             }
 
-            let intercept: (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptResult) -> Void) -> Void = { [weak task, weak handle] interval, completion in
+            let intercept: (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void = { [weak task, weak handle] interval, completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
                     return
@@ -150,14 +144,54 @@ public class TaskManager {
         return handle
     }
 
+    private func createAsyncOperationForHandle<T: Task>(
+        _ handle: TaskManager.Handle, task: T,
+        timeout: DispatchTimeInterval?,
+        completion: T.ResultCallback?
+    ) -> AsyncOperation {
+        return AsyncOperation { [weak self, weak task, weak handle] operation in
+            guard let strongSelf = self else {
+                log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kOpQTags)
+                return
+            }
+
+            guard let handle = handle else {
+                log(level: .verbose, from: self, "\(T.self) handle dead", tags: TaskManager.kOpQTags)
+                return
+            }
+
+            guard let task = task else {
+                log(level: .verbose, from: self, "\(handle) task dead", tags: TaskManager.kOpQTags)
+                return
+            }
+
+            guard !operation.isCancelled else {
+                log(level: .verbose, from: self, "\(handle) operation cancelled", tags: TaskManager.kOpQTags)
+                return
+            }
+
+            strongSelf.executeAsyncOperation(operation, task: task, handle: handle, timeout: timeout ?? task.timeout, completion: completion)
+        }
+
+    }
+
+    /**
+     Blocks until all tasks finish executing
+     */
     public func waitTillAllTasksFinished() {
         log(level: .verbose, from: self, "begin waiting")
-        self.taskOperationQueue.waitUntilAllOperationsAreFinished()
+        self.operationQueue.waitUntilAllOperationsAreFinished()
         self.dispatchGroup.wait()
         log(level: .verbose, from: self, "end waiting")
     }
 
-    private func execute<T: Task>(task: T, handle: Handle, operation: AsyncOperation, timeout: DispatchTimeInterval?, completion: T.ResultCallback?) {
+    private func executeAsyncOperation<T: Task>(
+        _ operation: AsyncOperation,
+        task: T,
+        handle: Handle,
+        timeout: DispatchTimeInterval?,
+        completion: T.ResultCallback?
+    ) {
         let timeoutWorkItem: DispatchWorkItem?
         if let timeout = timeout {
             timeoutWorkItem = self.launchTimeoutWork(for: handle, withTimeout: timeout)
@@ -174,23 +208,23 @@ public class TaskManager {
             timeoutWorkItem?.cancel()
 
             guard let strongSelf = self else {
-                log(level: .verbose, from: self, "\(T.self).execute manager dead", tags: TaskManager.kCbOpQTags)
+                log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kCbOpQTags)
                 return
             }
 
             guard let handle = handle else {
-                log(level: .verbose, from: strongSelf, "\(T.self).execute handle dead", tags: TaskManager.kCbOpQTags)
+                log(level: .verbose, from: strongSelf, "\(T.self) handle dead", tags: TaskManager.kCbOpQTags)
                 return
             }
 
             guard let operation = operation, !operation.isCancelled else {
-                log(level: .verbose, from: strongSelf, "executed \(handle) but operation dead or cancelled", tags: TaskManager.kTkQTags)
+                log(level: .verbose, from: strongSelf, "executed \(handle) but operation dead or cancelled", tags: TaskManager.kCbOpQTags)
                 return
             }
 
             log(from: strongSelf, "did execute \(handle)", tags: TaskManager.kCbOpQTags)
 
-            // Get off whatever thread the task called the callback on
+            // Finish executing this task on the task queue
             strongSelf.taskQueue.async { [weak handle, weak operation] in
                 guard let strongSelf = self else {
                     log(level: .verbose, from: self, "\(T.self).execute => manager dead", tags: TaskManager.kTkQTags)
@@ -201,14 +235,12 @@ public class TaskManager {
                     return
                 }
                 guard let task = task else {
-                    log(level: .verbose, from: strongSelf, "task.execute => task for \(handle) dead", tags: TaskManager.kCbOpQTags)
+                    log(level: .verbose, from: strongSelf, "task.execute => task for \(handle) dead", tags: TaskManager.kTkQTags)
                     return
                 }
 
-                //
                 // Now check if we need to execute any of the reactors. If we do and the reactor is configured
                 // to requeue the task then we are done here. Else we fire up the reactors and finish the task
-                //
                 let reactionData = strongSelf.reactors.enumerated().reduce((indices: [Int](), requeueTask: false, suspendQueue: false)) { memo, pair in
                     let index = pair.offset
                     let reactor = pair.element
@@ -241,7 +273,7 @@ public class TaskManager {
                         return
                     }
                 } else {
-                    log(level: .debug, from: strongSelf, "\(handle) not causing reactors", tags: TaskManager.kTkQTags)
+                    log(level: .debug, from: strongSelf, "\(handle) caused no reactions", tags: TaskManager.kTkQTags)
                 }
 
                 guard let operation = operation, !operation.isCancelled else {
@@ -290,7 +322,7 @@ public class TaskManager {
                 __dispatch_assert_queue(self.taskQueue)
             #endif
         }
-        self.taskOperationQueue.addOperation(operation)
+        self.operationQueue.addOperation(operation)
         log(level: .verbose, from: self, "did queue \(handle)", tags: TaskManager.kTkQTags)
     }
 
@@ -429,7 +461,7 @@ public class TaskManager {
 
             if suspendQueue {
                 log(from: strongSelf, "suspending task queue", tags: TaskManager.kTkQTags)
-                strongSelf.taskOperationQueue.isSuspended = true
+                strongSelf.operationQueue.isSuspended = true
             }
 
             var immediateReactorIndices = Set<Int>()
@@ -527,7 +559,7 @@ public class TaskManager {
             // If we only had immediate reactors make sure queue is suspended and requeue tasks
             if strongSelf.executingReactors.count == 0 {
                 log(from: strongSelf, "unsuspending task queue", tags: TaskManager.kTkQTags)
-                strongSelf.taskOperationQueue.isSuspended = false
+                strongSelf.operationQueue.isSuspended = false
                 strongSelf.requeueTasks()
             }
         }
@@ -618,7 +650,7 @@ public class TaskManager {
         self.executingReactors.remove(index)
         if self.executingReactors.count == 0 {
             // Stop interceptor queue and ensure task queue is not suspended
-            self.taskOperationQueue.isSuspended = false
+            self.operationQueue.isSuspended = false
             self.requeueTasks()
         }
     }

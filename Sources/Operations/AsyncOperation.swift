@@ -4,7 +4,7 @@ open class AsyncOperation: Operation {
     private let lock: NSLocking = NSLock()
 
     #if DEBUG
-        static var counter = AtomicInt()
+        static var identifierCounter = AtomicInt()
     #endif
 
     public static let queue = DispatchQueue(label: "Tasker.AsyncOperation", attributes: [.concurrent])
@@ -36,13 +36,13 @@ open class AsyncOperation: Operation {
         self.executor = executor
         super.init()
         #if DEBUG
-            self.name = "asyncop.\(AsyncOperation.counter.getAndIncrement())"
+            self.name = "asyncop.\(AsyncOperation.identifierCounter.getAndIncrement())"
         #endif
     }
 
     #if DEBUG
         deinit {
-            AsyncOperation.counter.getAndDecrement()
+            AsyncOperation.identifierCounter.getAndDecrement()
         }
     #endif
 

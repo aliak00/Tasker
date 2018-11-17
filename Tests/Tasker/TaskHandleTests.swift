@@ -7,8 +7,8 @@ class TaskHandleTests: XCTestCase {
     }
 
     override func tearDown() {
-        ensure(AsyncOperation.counter.value).becomes(0)
-        AsyncOperation.counter.value = 0
+        ensure(AsyncOperation.identifierCounter.value).becomes(0)
+        AsyncOperation.identifierCounter.value = 0
     }
 
     func testCancelShouldCancelATask() {
