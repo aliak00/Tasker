@@ -21,10 +21,10 @@ private class Reactor: TaskReactor {
         guard let result = result as? URLInterceptor.DataTask.Result else {
             return false
         }
-        if case .success(_) = result {
+        if case .success = result {
             let run = count == 0
             count -= 1
-            return run// (tuple.1 as? HTTPURLResponse)?.statusCode == 200
+            return run // (tuple.1 as? HTTPURLResponse)?.statusCode == 200
         }
         return false
     }

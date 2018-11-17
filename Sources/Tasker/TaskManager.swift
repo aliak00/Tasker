@@ -38,7 +38,6 @@ public class TaskManager {
 
     private let taskQueue = DispatchQueue(label: "Tasker.TaskManager.tasks")
     private let reactorQueue = DispatchQueue(label: "Tasker.TaskManager.reactors", attributes: [.concurrent])
-    private let dispatchGroup = DispatchGroup()
 
     private let interceptorManager: TaskInterceptorManager
 
@@ -86,7 +85,7 @@ public class TaskManager {
      - parameter task: the task to run
      - parameter startImmediately: set this to false if you want to explicity call start on the `TaskHandle` that's returned
      - parameter after: set this to some value if you want the task to start running after some interval
-     - parameter timeout:
+     - parameter timeout: after how long the task times out (overrides `Task.timeout`)
      - parameter completeOn: specifies which queue completion is called on
      - parameter completion: called after the task is done with the result of `Task.execute`
      */
@@ -99,7 +98,6 @@ public class TaskManager {
         completeOn completionQueue: DispatchQueue? = nil,
         completion: T.ResultCallback? = nil
     ) -> TaskHandle {
-
         let handle = Handle(owner: self)
         let operation = self.createAsyncOperationForHandle(handle, task: task, timeout: timeout, completion: completion)
 
@@ -169,10 +167,9 @@ public class TaskManager {
                 log(level: .verbose, from: self, "\(handle) operation cancelled", tags: TaskManager.kOpQTags)
                 return
             }
-
+            // Make sure we prefer the explicit timeout over the configured task timeout
             strongSelf.executeAsyncOperation(operation, task: task, handle: handle, timeout: timeout ?? task.timeout, completion: completion)
         }
-
     }
 
     /**
@@ -181,7 +178,6 @@ public class TaskManager {
     public func waitTillAllTasksFinished() {
         log(level: .verbose, from: self, "begin waiting")
         self.operationQueue.waitUntilAllOperationsAreFinished()
-        self.dispatchGroup.wait()
         log(level: .verbose, from: self, "end waiting")
     }
 
@@ -201,9 +197,7 @@ public class TaskManager {
 
         log(from: self, "will execute \(handle)", tags: TaskManager.kOpQTags)
 
-        self.dispatchGroup.enter()
         task.execute { [weak self, weak task, weak handle, weak operation] result in
-            defer { self?.dispatchGroup.leave() }
 
             timeoutWorkItem?.cancel()
 

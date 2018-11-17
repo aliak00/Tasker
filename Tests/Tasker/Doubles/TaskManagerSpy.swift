@@ -31,4 +31,8 @@ class TaskManagerSpy {
             completion(result)
         }
     }
+
+    func waitTillAllTasksFinished() {
+        return self.taskManager.waitTillAllTasksFinished()
+    }
 }

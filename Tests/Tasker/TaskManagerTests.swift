@@ -76,4 +76,15 @@ class TaskManagerTests: XCTestCase {
             ensure(handle.state).becomes(TaskState.finished)
         }
     }
+
+    func testWaitingForAllTasksToFinish() {
+        let manager = TaskManagerSpy()
+        var count = 0
+        manager.launch(task: TaskSpy<Void> { cb in
+            count += 1
+            cb(.success(()))
+        }, count: 100)
+        manager.waitTillAllTasksFinished()
+        XCTAssertEqual(count, 100)
+    }
 }
