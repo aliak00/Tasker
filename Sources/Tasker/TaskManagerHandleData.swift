@@ -2,11 +2,14 @@ import Foundation
 
 extension TaskManager.Handle {
     class Data {
+
+        typealias Interceptor = (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
+
         var operation: AsyncOperation
         let taskReference: AnyObject
         let completionErrorCallback: (TaskError) -> Void
         let taskDidCancelCallback: (TaskError) -> Void
-        let intercept: (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
+        let intercept: Interceptor
         let completionQueue: DispatchQueue?
 
         init(
