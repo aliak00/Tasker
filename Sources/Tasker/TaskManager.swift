@@ -143,7 +143,8 @@ public class TaskManager {
     }
 
     private func createAsyncOperationForHandle<T: Task>(
-        _ handle: TaskManager.Handle, task: T,
+        _ handle: TaskManager.Handle,
+        task: T,
         timeout: DispatchTimeInterval?,
         completion: T.ResultCallback?
     ) -> AsyncOperation {
@@ -170,15 +171,6 @@ public class TaskManager {
             // Make sure we prefer the explicit timeout over the configured task timeout
             strongSelf.executeAsyncOperation(operation, task: task, handle: handle, timeout: timeout ?? task.timeout, completion: completion)
         }
-    }
-
-    /**
-     Blocks until all tasks finish executing
-     */
-    public func waitTillAllTasksFinished() {
-        log(level: .verbose, from: self, "begin waiting")
-        self.operationQueue.waitUntilAllOperationsAreFinished()
-        log(level: .verbose, from: self, "end waiting")
     }
 
     private func executeAsyncOperation<T: Task>(
@@ -292,6 +284,15 @@ public class TaskManager {
                 }
             }
         }
+    }
+
+    /**
+     Blocks until all tasks finish executing
+     */
+    public func waitTillAllTasksFinished() {
+        log(level: .verbose, from: self, "begin waiting")
+        self.operationQueue.waitUntilAllOperationsAreFinished()
+        log(level: .verbose, from: self, "end waiting")
     }
 
     private func data(for handle: Handle, remove: Bool = false) -> Handle.Data? {
@@ -679,6 +680,11 @@ public class TaskManager {
             data.completionErrorCallback(error)
         }
     }
+
+    //
+    // The following are internal because they are used by TaskHandle to proxy the handle
+    // to the TaskManager and then dealt with
+    //
 
     func cancel(handle: Handle, with error: TaskError?) {
         log(from: self, "cancelling \(handle)", tags: TaskManager.kClrTags)
