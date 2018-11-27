@@ -1,6 +1,7 @@
 import Foundation
 
 extension Task {
+    ///
     public func await(
         with taskManager: TaskManager? = nil,
         queue _: DispatchQueue? = nil,
@@ -30,10 +31,4 @@ extension Task {
             throw error
         }
     }
-}
-
-func await<R>(_ closure: @escaping @autoclosure () -> R, timeout: DispatchTimeInterval? = nil) throws -> R {
-    return try AnyTask<R> { callback in
-        callback(.success(closure()))
-    }.await(timeout: timeout)
 }

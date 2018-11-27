@@ -1,6 +1,7 @@
 import Foundation
 
 extension Task {
+    ///
     @discardableResult
     public func async(
         with taskManager: TaskManager? = nil,
@@ -16,13 +17,5 @@ extension Task {
             completeOn: queue,
             completion: completion
         )
-    }
-}
-
-func async<R>(_ closure: @escaping @autoclosure () -> R, completion: ((Result<R>) -> Void)? = nil) {
-    AnyTask<R> { callback in
-        callback(.success(closure()))
-    }.async { result in
-        completion?(result)
     }
 }

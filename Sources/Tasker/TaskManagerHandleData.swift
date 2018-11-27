@@ -2,7 +2,6 @@ import Foundation
 
 extension TaskManager.Handle {
     class Data {
-
         typealias Interceptor = (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
 
         var operation: AsyncOperation

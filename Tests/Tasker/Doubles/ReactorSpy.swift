@@ -1,4 +1,4 @@
-import Tasker
+@testable import Tasker
 
 class ReactorSpy: TaskReactor {
     let configuration: TaskReactorConfiguration

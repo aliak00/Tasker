@@ -1,6 +1,7 @@
 import Foundation
 
 extension URLInterceptor {
+    ///
     public class DataTask: Task {
         public var request: URLRequest
 
@@ -10,8 +11,10 @@ extension URLInterceptor {
             self.request = request
         }
 
+        ///
         public typealias SuccessValue = (data: Data?, response: URLResponse?, error: Error?)
 
+        ///
         public func execute(completion: @escaping (Result<(data: Data?, response: URLResponse?, error: Error?)>) -> Void) {
             self.task = URLSession.shared.dataTask(with: self.request) { data, response, error in
                 let value: SuccessValue = (data, response, error)
@@ -21,6 +24,7 @@ extension URLInterceptor {
             self.task?.resume()
         }
 
+        ///
         public func didCancel(with _: TaskError) {
             self.task?.cancel()
         }

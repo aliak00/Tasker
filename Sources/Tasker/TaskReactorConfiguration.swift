@@ -1,11 +1,13 @@
 import Foundation
 
+///
 public struct TaskReactorConfiguration {
     let isImmediate: Bool
     let timeout: DispatchTimeInterval?
     let requeuesTask: Bool
     let suspendsTaskQueue: Bool
 
+    ///
     public init(
         isImmediate: Bool = false,
         timeout: DispatchTimeInterval? = nil,
@@ -18,5 +20,6 @@ public struct TaskReactorConfiguration {
         self.suspendsTaskQueue = suspendsTaskQueue
     }
 
+    ///
     public static let `default` = TaskReactorConfiguration()
 }

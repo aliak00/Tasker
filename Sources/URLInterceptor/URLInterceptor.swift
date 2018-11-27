@@ -17,6 +17,7 @@ private extension URLSessionConfiguration {
     }
 }
 
+///
 public class URLInterceptor {
     static var globalStore = SynchronizedDictionary<String, TaskManager>()
 
@@ -26,8 +27,10 @@ public class URLInterceptor {
 
     let taskManager: TaskManager
 
+    ///
     public let session: URLSession
 
+    ///
     public init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = [], configuration: URLSessionConfiguration) {
         self.taskManager = TaskManager(interceptors: interceptors, reactors: reactors)
         self.session = URLSession(configuration: configuration.copy(for: URLInterceptorProtocol.self, manager: self.taskManager))

@@ -113,6 +113,8 @@
 		E1CC6C67219CC52600B465A5 /* TaskHandleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058898219CB93A0020976B /* TaskHandleTests.swift */; };
 		E1CC6C68219CC52600B465A5 /* TaskReactorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058899219CB93A0020976B /* TaskReactorTests.swift */; };
 		E1CC6C69219CC52600B465A5 /* ScenarioBatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105889A219CB93A0020976B /* ScenarioBatchingTests.swift */; };
+		E1D8BAEA21ADE18E00A9BD07 /* AsyncAwait.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BAE921ADE18E00A9BD07 /* AsyncAwait.swift */; };
+		E1D8BAEB21ADE18E00A9BD07 /* AsyncAwait.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BAE921ADE18E00A9BD07 /* AsyncAwait.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -194,6 +196,7 @@
 		E1CC6BEC219CC3ED00B465A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E1CC6BF1219CC3ED00B465A5 /* Tasker-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tasker-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1CC6BF8219CC3EE00B465A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E1D8BAE921ADE18E00A9BD07 /* AsyncAwait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncAwait.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -363,6 +366,7 @@
 			isa = PBXGroup;
 			children = (
 				E1058845219CB9270020976B /* AnyTask.swift */,
+				E1D8BAE921ADE18E00A9BD07 /* AsyncAwait.swift */,
 				E1058846219CB9270020976B /* Task+async.swift */,
 				E1058847219CB9270020976B /* Task+await.swift */,
 			);
@@ -750,6 +754,7 @@
 				E1CC6C1B219CC49A00B465A5 /* URLInterceptor.swift in Sources */,
 				E1CC6C20219CC49A00B465A5 /* NSLocking+withScope.swift in Sources */,
 				E1CC6C08219CC49A00B465A5 /* RingBuffer.swift in Sources */,
+				E1D8BAEA21ADE18E00A9BD07 /* AsyncAwait.swift in Sources */,
 				E1CC6C11219CC49A00B465A5 /* TaskError.swift in Sources */,
 				E1CC6C04219CC49A00B465A5 /* AnyTask.swift in Sources */,
 				E1CC6C1C219CC49A00B465A5 /* URLInterceptorDataTask.swift in Sources */,
@@ -815,6 +820,7 @@
 				E1CC6C39219CC49B00B465A5 /* URLInterceptor.swift in Sources */,
 				E1CC6C3E219CC49B00B465A5 /* NSLocking+withScope.swift in Sources */,
 				E1CC6C26219CC49B00B465A5 /* RingBuffer.swift in Sources */,
+				E1D8BAEB21ADE18E00A9BD07 /* AsyncAwait.swift in Sources */,
 				E1CC6C2F219CC49B00B465A5 /* TaskError.swift in Sources */,
 				E1CC6C22219CC49B00B465A5 /* AnyTask.swift in Sources */,
 				E1CC6C3A219CC49B00B465A5 /* URLInterceptorDataTask.swift in Sources */,

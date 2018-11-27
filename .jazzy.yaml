@@ -1,0 +1,34 @@
+theme: apple
+min_acl: public
+skip_undocumented: true
+hide_documentation_coverage: true
+exclude:
+  - Tests/**
+github_url: https://www.github.com/aliak00/Tasker
+copyright: © 2018-2019 Ali Akhtarzada
+xcodebuild_arguments: ["-scheme", "Tasker-macOS", "-project", "Xcode/Tasker.xcodeproj", "-derivedDataPath", "build/DerivedData"]
+abstract: docs/abstracts/*.md
+
+custom_categories:
+  - name: "Async Await"
+    children:
+      - async(_:completion:)
+      - await(_:timeout:)
+      - AnyTask
+      - AnyResult
+  - name: Task Management
+    children:
+      - Task
+      - TaskManager
+      - TaskInterceptor
+      - TaskReactor
+      - TaskReactorConfiguration
+      - TaskError
+      - TaskState
+      - InterceptCommand
+  - name: URL Session Interceptor
+    children:
+      - URLInterceptor
+  - name: Logging
+    children:
+      - Logger
