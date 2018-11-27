@@ -2,10 +2,10 @@ import Foundation
 import Tasker
 
 class AsyncOperationSpy: AsyncOperation {
-    var executorCallCount: Int = 0
-    var startCallCount: Int = 0
-    var finishCallCount: Int = 0
-    var cancelCallCount: Int = 0
+    var executorCallCount: AtomicInt = 0
+    var startCallCount: AtomicInt = 0
+    var finishCallCount: AtomicInt = 0
+    var cancelCallCount: AtomicInt = 0
 
     override init(executor: @escaping (AsyncOperation) -> Void) {
         super.init { op in

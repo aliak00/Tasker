@@ -1,6 +1,10 @@
 import Foundation
 
-public struct AtomicInt {
+public struct AtomicInt: ExpressibleByIntegerLiteral {
+    public init(integerLiteral value: Int) {
+        self._value = value
+    }
+
     fileprivate var queue = DispatchQueue(label: "Tasker.AtomicInt")
     fileprivate var _value = 0
 
@@ -44,6 +48,16 @@ public struct AtomicInt {
             self._value -= 1
         }
         return previousValue
+    }
+
+    public mutating func add(_ number: Int) {
+        self.queue.sync {
+            self._value += number
+        }
+    }
+
+    public static func += (lhs: inout AtomicInt, rhs: Int) {
+        lhs.add(rhs)
     }
 }
 
