@@ -31,7 +31,6 @@ private class Reactor: TaskReactor {
 
     var configuration: TaskReactorConfiguration {
         return TaskReactorConfiguration(
-            isImmediate: true,
             timeout: nil,
             requeuesTask: true,
             suspendsTaskQueue: false

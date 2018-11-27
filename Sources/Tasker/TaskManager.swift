@@ -470,18 +470,8 @@ public class TaskManager {
                 strongSelf.operationQueue.isSuspended = true
             }
 
-            var immediateReactorIndices = Set<Int>()
-
             for index in reactorIndices {
                 let reactor = strongSelf.reactors[index]
-
-                // If reactor is immediate than mark it and move on
-                if reactor.configuration.isImmediate {
-                    log(level: .verbose, from: strongSelf, "adding immediate reactor \(index): \(reactor.self)", tags: TaskManager.kTkQTags)
-                    immediateReactorIndices.insert(index)
-                    continue
-                }
-
                 var maybeTimeoutWorkItem: DispatchWorkItem?
                 var reactorWorkItem: DispatchWorkItem!
 
@@ -558,10 +548,6 @@ public class TaskManager {
                 }
             }
 
-            strongSelf.reactorQueue.sync {
-                strongSelf.executeImmediateReactors(at: Array(immediateReactorIndices))
-            }
-
             // If we only had immediate reactors make sure queue is suspended and requeue tasks
             if strongSelf.executingReactors.count == 0 {
                 log(from: strongSelf, "unsuspending task queue", tags: TaskManager.kTkQTags)
@@ -586,39 +572,6 @@ public class TaskManager {
             }
         }
         self.tasksToRequeue = Set<Handle>()
-    }
-
-    private func executeImmediateReactors(at indicies: [Int]) {
-        if #available(iOS 10.0, OSX 10.12, *) {
-            #if !os(Linux)
-                __dispatch_assert_queue(self.taskQueue)
-            #endif
-        }
-        DispatchQueue.concurrentPerform(iterations: indicies.count) { index in
-            let semaphore = DispatchSemaphore(value: 0)
-            let reactor = self.reactors[index]
-            log(from: self, "executing immediate reactor \(reactor.self)", tags: TaskManager.kReQTags)
-            var maybeError: TaskError?
-            reactor.execute { error in
-                if let error = error {
-                    maybeError = .reactorFailed(type: type(of: reactor), error: error)
-                }
-                semaphore.signal()
-            }
-            if let timeout = reactor.configuration.timeout, semaphore.wait(timeout: .now() + timeout) == .timedOut {
-                maybeError = .reactorTimedOut(type: type(of: reactor))
-            } else {
-                semaphore.wait()
-            }
-            guard let error = maybeError else {
-                log(from: self, "executed immediate reactor \(reactor.self)", tags: TaskManager.kReQTags)
-                return
-            }
-            log(from: self, "immediate reactor \(reactor.self) failed with: \(error)", tags: TaskManager.kReQTags)
-            self.taskQueue.async { [weak self] in
-                self?.cancelAssociatedTasksForReactor(at: index, with: .reactorFailed(type: type(of: reactor), error: error))
-            }
-        }
     }
 
     private func cancelAssociatedTasksForReactor(at index: Int, with error: TaskError) {

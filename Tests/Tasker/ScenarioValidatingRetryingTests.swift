@@ -77,7 +77,7 @@ private class ValidateUserReactor: TaskReactor {
     }
 
     var configuration: TaskReactorConfiguration {
-        return TaskReactorConfiguration(isImmediate: false, requeuesTask: true, suspendsTaskQueue: true)
+        return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
     func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with _: TaskHandle) -> Bool where T: Task {
@@ -99,7 +99,7 @@ private class RetryReactor: TaskReactor {
     var counter: [Int: Int] = [:]
 
     var configuration: TaskReactorConfiguration {
-        return TaskReactorConfiguration(isImmediate: true, requeuesTask: true, suspendsTaskQueue: false)
+        return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
     func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with handle: TaskHandle) -> Bool where T: Task {
