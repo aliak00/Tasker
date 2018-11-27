@@ -1,12 +1,12 @@
 import Foundation
-import Tasker
+@testable import Tasker
 
 class AsyncAwaitSpy<T>: TaskSpy<T> {
     var completionCallCount: Int {
         return self.completionCallData.count
     }
 
-    var completionCallData: [Result<T>] = []
+    var completionCallData: SynchronizedArray<Result<T>> = []
 
     convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> Result<T>) {
         self.init(timeout: timeout) { completion in

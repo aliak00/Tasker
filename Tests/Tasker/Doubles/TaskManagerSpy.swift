@@ -8,7 +8,7 @@ class TaskManagerSpy {
         return self.completionCallData.count
     }
 
-    var completionCallData: [AnyResult] = []
+    var completionCallData: SynchronizedArray<AnyResult> = []
 
     init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
         self.taskManager = TaskManager(interceptors: interceptors, reactors: reactors)

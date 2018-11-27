@@ -8,7 +8,7 @@ class TaskSpy<T>: AnyTask<T> {
         return self.executeCallBackData.count
     }
 
-    var executeCallBackData: [AnyResult] = []
+    var executeCallBackData: SynchronizedArray<AnyResult> = []
 
     override init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping ResultCallback) -> Void)) {
         super.init(timeout: timeout, execute: execute)
@@ -26,6 +26,13 @@ class TaskSpy<T>: AnyTask<T> {
             completion(.success(execute()))
         }
     }
+
+    // TODO: Uncomment when bug fixed: https://bugs.swift.org/browse/SR-8142
+//    convenience init<U: Task>(_ task: U) where U.SuccessValue == SuccessValue {
+//        self.init(timeout: task.timeout) { completion in
+//            task.execute(completion: completion)
+//        }
+//    }
 
     deinit {
         kTaskSpyCounter.getAndDecrement()

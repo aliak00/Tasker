@@ -16,7 +16,7 @@ final class AsyncAwaitTests: XCTestCase {
         }
         task.async()
         ensure(task.completionCallCount).becomes(1)
-        ensure(task.completionCallData.first!.successValue).becomes(3)
+        ensure(task.completionCallData.data.first?.successValue).becomes(3)
     }
 
     func testAsyncShouldCallExecute() {
@@ -30,14 +30,14 @@ final class AsyncAwaitTests: XCTestCase {
         let handle = task.async()
         handle.cancel()
         ensure(task.completionCallCount).becomes(1)
-        XCTAssertErrorEqual(task.completionCallData.first?.failureValue, TaskError.cancelled)
+        XCTAssertErrorEqual(task.completionCallData.data.first?.failureValue, TaskError.cancelled)
     }
 
     func testAsyncShouldTimeoutAfterDeadline() {
         let task = AsyncAwaitSpy { sleep(for: .milliseconds(5)) }
         let handle = task.async(timeout: .milliseconds(1))
         ensure(task.completionCallCount).becomes(1)
-        XCTAssertErrorEqual(task.completionCallData.first?.failureValue, TaskError.timedOut)
+        XCTAssertErrorEqual(task.completionCallData.data.first?.failureValue, TaskError.timedOut)
         ensure(handle.state).becomes(.finished)
     }
 

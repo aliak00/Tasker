@@ -1,12 +1,12 @@
-import Tasker
+@testable import Tasker
 
 class InterceptorSpy: TaskInterceptor {
     var interceptCallCount: Int {
         return self.interceptCallData.count
     }
 
-    var interceptCallData: [(anyTask: AnyObject, currentBatchCount: Int)] = []
-    var interceptCallResultData: [InterceptCommand] = []
+    var interceptCallData: SynchronizedArray<(anyTask: AnyObject, currentBatchCount: Int)> = []
+    var interceptCallResultData: SynchronizedArray<InterceptCommand> = []
     var interceptBlock: (AnyObject, Int) -> InterceptCommand = { _, _ in .execute }
 
     func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand {

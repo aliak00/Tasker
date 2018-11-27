@@ -11,13 +11,13 @@ class ReactorSpy: TaskReactor {
         return self.executeCallData.count
     }
 
-    var executeCallData: [(Error?) -> Void] = []
+    var executeCallData: SynchronizedArray<(Error?) -> Void> = []
     var executeBlock: (@escaping (Error?) -> Void) -> Void = { _ in }
 
     var shouldExecuteCallCount: Int {
         return self.shouldExecuteCallData.count
     }
-    var shouldExecuteCallData: [(anyResult: AnyResult, weakAnyTask: Weak<AnyObject>, handle: TaskHandle)] = []
+    var shouldExecuteCallData: SynchronizedArray<(anyResult: AnyResult, weakAnyTask: Weak<AnyObject>, handle: TaskHandle)> = []
     var shouldExecuteBlock: (AnyResult, AnyObject, TaskHandle) -> Bool = { _, _, _ in true }
 
     func execute(done: @escaping (Error?) -> Void) {
