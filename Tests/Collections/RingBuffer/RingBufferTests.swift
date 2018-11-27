@@ -1,4 +1,4 @@
-import Tasker
+@testable import Tasker
 import XCTest
 
 final class RingBufferTests: XCTestCase {

@@ -1,12 +1,12 @@
 import Foundation
 
-public class SynchronizedDictionary<Key: Hashable, Value> {
+class SynchronizedDictionary<Key: Hashable, Value> {
     var dictionary: [Key: Value] = [:]
     let queue = DispatchQueue(label: "Tasker.Collections.SynchronizedDictionary", attributes: [.concurrent])
 
-    public init() {}
+    init() {}
 
-    public subscript(key: Key) -> Value? {
+    subscript(key: Key) -> Value? {
         get {
             return self.queue.sync {
                 self.dictionary[key]

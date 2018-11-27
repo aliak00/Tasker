@@ -1,26 +1,26 @@
 import Foundation
 
-public struct RingBuffer<Element> {
+struct RingBuffer<Element> {
     fileprivate var array: [Element] = []
     fileprivate var currentIndex = 0
-    public let capacity: Int
+    let capacity: Int
 
-    public init(desiredCapacity: Int, initialElements: [Element]) {
+    init(desiredCapacity: Int, initialElements: [Element]) {
         self.init(capacity: Swift.max(desiredCapacity, initialElements.count))
         self.array.append(contentsOf: initialElements)
     }
 
-    public init(elementsDictatingCapacity: [Element]) {
+    init(elementsDictatingCapacity: [Element]) {
         self.init(capacity: elementsDictatingCapacity.count)
         self.array = elementsDictatingCapacity
     }
 
-    public init(capacity: Int) {
+    init(capacity: Int) {
         self.capacity = capacity
         self.array.reserveCapacity(capacity)
     }
 
-    public mutating func append(_ element: Element) {
+    mutating func append(_ element: Element) {
         if self.array.count < self.capacity {
             self.array.append(element)
         } else {
@@ -31,25 +31,25 @@ public struct RingBuffer<Element> {
 }
 
 extension RingBuffer: Equatable where Element: Equatable {
-    public static func == (lhs: RingBuffer<Element>, rhs: RingBuffer<Element>) -> Bool {
+    static func == (lhs: RingBuffer<Element>, rhs: RingBuffer<Element>) -> Bool {
         return lhs.array == rhs.array
     }
 }
 
 extension RingBuffer: MutableCollection, RandomAccessCollection {
-    public func index(after i: Int) -> Int {
+    func index(after i: Int) -> Int {
         return i + 1
     }
 
-    public var startIndex: Int {
+    var startIndex: Int {
         return 0
     }
 
-    public var endIndex: Int {
+    var endIndex: Int {
         return self.array.count
     }
 
-    public subscript(index: Int) -> Element {
+    subscript(index: Int) -> Element {
         get {
             return self.array[(self.currentIndex + index) % self.array.count]
         }
@@ -60,7 +60,7 @@ extension RingBuffer: MutableCollection, RandomAccessCollection {
 }
 
 extension RingBuffer: CustomStringConvertible {
-    public var description: String {
+    var description: String {
         return self.array.description
     }
 }
