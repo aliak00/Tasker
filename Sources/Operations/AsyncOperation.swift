@@ -108,19 +108,33 @@ open class AsyncOperation: Operation {
     }
 
     open func finish() {
+        log(level: .debug, from: self, "will finish \(self)")
         willChangeValue(forKey: KVOKey.isExecuting.rawValue)
         willChangeValue(forKey: KVOKey.isFinished.rawValue)
-        self.lock.withScope {
-            log(level: .debug, from: self, "finishing \(self)")
+        let didFinish = self.lock.withScope { () -> Bool in
+            let cancelled = self.isCancelled
+            log(level: .debug, from: self, "finishing \(self), cancelled: \(cancelled), executing: \(self._executing)")
+            guard self._executing else {
+                return false
+            }
             self._executing = false
             self._finished = true
+            return true
         }
+        guard didFinish else {
+            return
+        }
+        log(level: .debug, from: self, "did finish \(self)")
         didChangeValue(forKey: KVOKey.isExecuting.rawValue)
         didChangeValue(forKey: KVOKey.isFinished.rawValue)
     }
 
     open override func cancel() {
-        log(from: self, "cancelling \(self)")
+        let alreadyCancelled = self.isCancelled
+        log(from: self, "cancelling \(self), isCancelled = \(alreadyCancelled)")
+        guard !alreadyCancelled else {
+            return
+        }
         super.cancel()
         self.finish()
     }

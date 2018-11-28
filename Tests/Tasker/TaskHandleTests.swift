@@ -12,24 +12,34 @@ class TaskHandleTests: XCTestCase {
     }
 
     func testCancelShouldCancelATask() {
-        let numHandles = 100
-        let manager = TaskManagerSpy()
-        var handles: [TaskHandle] = []
+        Logger.shared.addTransport { print($0) }
 
-        for _ in 0..<numHandles {
-            let handle = manager.add(task: kDummyTask)
-            handles.append(handle)
-            handle.cancel()
-        }
-        handles.forEach { handle in
-            XCTAssertEqual(handle.state, TaskState.finished)
-        }
+        for j in 0..<1 {
+            do {
+                let numHandles = 1
+                let manager = TaskManagerSpy()
+                var handles: [TaskHandle] = []
 
-        ensure(manager.completionCallCount).becomes(numHandles)
+                for _ in 0..<numHandles {
+                    let handle = manager.add(task: kDummyTask)
+                    handles.append(handle)
+                    handle.cancel()
+                }
+                handles.forEach { handle in
+                    XCTAssertEqual(handle.state, TaskState.finished)
+                }
 
-        for i in 0..<numHandles {
-            XCTAssertErrorEqual(TaskError.cancelled, manager.completionCallData[i].failureValue)
+                ensure(manager.completionCallCount).becomes(numHandles)
+
+                for i in 0..<numHandles {
+                    XCTAssertErrorEqual(TaskError.cancelled, manager.completionCallData[i].failureValue)
+                }
+            }
+            //            print("done \(j)")
+            ensure(AsyncOperation.identifierCounter.value).becomes(0)
+            AsyncOperation.identifierCounter.value = 0
         }
+        Logger.shared.removeTransports()
     }
 
     func testStartShouldStartATask() {

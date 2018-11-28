@@ -69,3 +69,9 @@ extension AtomicInt: Equatable {
         }
     }
 }
+
+extension AtomicInt: CustomStringConvertible {
+    public var description: String {
+        return "\(self.value)"
+    }
+}

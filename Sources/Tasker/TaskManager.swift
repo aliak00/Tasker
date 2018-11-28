@@ -149,6 +149,9 @@ public class TaskManager {
         completion: T.ResultCallback?
     ) -> AsyncOperation {
         return AsyncOperation { [weak self, weak task, weak handle] operation in
+            // Regardless of what's happened. We are done with this operation object
+            operation.finish()
+
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kOpQTags)
                 return
@@ -274,7 +277,6 @@ public class TaskManager {
                 log(level: .verbose, from: strongSelf, "will finish \(handle)", tags: TaskManager.kTkQTags)
                 if let data = strongSelf.data(for: handle, remove: true) {
                     assert(data.operation === operation)
-                    data.operation.finish()
                     log(level: .verbose, from: strongSelf, "did finish \(handle)", tags: TaskManager.kTkQTags)
                     (data.completionQueue ?? strongSelf.taskQueue).async {
                         completion?(result)
@@ -566,7 +568,6 @@ public class TaskManager {
         for handle in self.tasksToRequeue {
             if let data = self.data(for: handle) {
                 log(from: self, "requeueing \(handle)", tags: TaskManager.kTkQTags)
-                data.operation.finish()
                 data.operation = AsyncOperation(executor: data.operation.executor)
                 self.queueOperation(data.operation, for: handle)
             }
