@@ -1,6 +1,6 @@
 import Foundation
 
-public func log<T>(
+func log<T>(
     level: LogLevel = .info,
     _ object: @autoclosure () -> T,
     tag: String? = nil,
@@ -17,7 +17,7 @@ public func log<T>(
     Logger.shared.log(level: level, object, tags: tags, force: force, file, function, line)
 }
 
-public func log<T, S>(
+func log<T, S>(
     level: LogLevel = .info,
     from type: S?,
     _ object: @autoclosure () -> T,

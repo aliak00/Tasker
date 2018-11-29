@@ -1,5 +1,5 @@
 import Foundation
-import Tasker
+@testable import Tasker
 
 class AsyncOperationSpy: AsyncOperation {
     var executorCallCount: AtomicInt = 0

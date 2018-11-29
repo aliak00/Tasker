@@ -1,13 +1,13 @@
 import Foundation
 
-open class AsyncOperation: Operation {
+class AsyncOperation: Operation {
     private let lock: NSLocking = NSLock()
 
     #if DEBUG
         static var identifierCounter = AtomicInt()
     #endif
 
-    public static let queue = DispatchQueue(label: "Tasker.AsyncOperation", attributes: [.concurrent])
+    static let queue = DispatchQueue(label: "Tasker.AsyncOperation", attributes: [.concurrent])
 
     public enum State {
         case ready
@@ -17,7 +17,7 @@ open class AsyncOperation: Operation {
 
     private var _state: State = .ready
 
-    public var state: State {
+    var state: State {
         get {
             return self.lock.scope {
                 return self._state
@@ -33,7 +33,7 @@ open class AsyncOperation: Operation {
 
     let executor: (AsyncOperation) -> Void
 
-    public init(executor: @escaping (AsyncOperation) -> Void) {
+    init(executor: @escaping (AsyncOperation) -> Void) {
         self.executor = executor
         super.init()
         #if DEBUG
@@ -47,7 +47,7 @@ open class AsyncOperation: Operation {
         }
     #endif
 
-    open override var isAsynchronous: Bool {
+    override var isAsynchronous: Bool {
         return true
     }
 
@@ -55,7 +55,7 @@ open class AsyncOperation: Operation {
         case isExecuting, isFinished, isCancelled
     }
 
-    open private(set) override var isExecuting: Bool {
+    private(set) override var isExecuting: Bool {
         get {
             return self.state == .executing
         }
@@ -66,7 +66,7 @@ open class AsyncOperation: Operation {
         }
     }
 
-    open private(set) override var isFinished: Bool {
+    private(set) override var isFinished: Bool {
         get {
             return self.state == .finished
         }
@@ -77,7 +77,7 @@ open class AsyncOperation: Operation {
         }
     }
 
-    open override func start() {
+    override func start() {
         log(from: self, "starting \(self)")
         guard !self.isCancelled else {
             log(from: self, "cancelled, aborting \(self)")
@@ -94,7 +94,7 @@ open class AsyncOperation: Operation {
         }
     }
 
-    open func finish() {
+    func finish() {
         log(level: .debug, from: self, "finishing \(self)")
         willChangeValue(forKey: KVOKey.isExecuting.rawValue)
         willChangeValue(forKey: KVOKey.isFinished.rawValue)
@@ -103,14 +103,14 @@ open class AsyncOperation: Operation {
         didChangeValue(forKey: KVOKey.isFinished.rawValue)
     }
 
-    open override func cancel() {
+    override func cancel() {
         super.cancel()
         if !isExecuting {
             self.finish()
         }
     }
 
-    open override var description: String {
+    override var description: String {
         #if DEBUG
             if let name = self.name {
                 return name

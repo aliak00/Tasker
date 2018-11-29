@@ -1,4 +1,4 @@
-import Tasker
+@testable import Tasker
 import XCTest
 
 // This interceptor will take any task that is retriable, and re-execute it

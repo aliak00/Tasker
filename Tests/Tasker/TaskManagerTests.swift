@@ -1,4 +1,4 @@
-import Tasker
+@testable import Tasker
 import XCTest
 
 private extension TaskManagerSpy {
