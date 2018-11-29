@@ -2,6 +2,14 @@
 import XCTest
 
 final class AsyncAwaitTests: XCTestCase {
+
+    override func setUp() {
+        self.addTeardownBlock {
+            ensure(AsyncOperation.identifierCounter.value).becomes(0)
+            AsyncOperation.identifierCounter.value = 0
+        }
+    }
+
     func testAwaitInAsyncShouldComplete() {
         let task = AsyncAwaitSpy { () -> Int in
             let one = try! TaskSpy<Int> { callback in
@@ -100,10 +108,11 @@ final class AsyncAwaitTests: XCTestCase {
     func testAwaitFreeFunctionShouldThrowOnTimeOut() {
         let f = { (done: @escaping (Int) -> Void) -> Void in
             DispatchQueue.global(qos: .unspecified).async {
-                sleep(for: .seconds(10))
+                sleep(for: .milliseconds(100))
                 done(5)
             }
         }
+
         XCTAssertThrowsError(try await(f, timeout: .milliseconds(10)))
     }
 

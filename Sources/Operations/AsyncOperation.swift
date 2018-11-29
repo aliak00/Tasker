@@ -15,18 +15,19 @@ open class AsyncOperation: Operation {
         case finished
     }
 
+    private var _state: State = .ready
+
     public var state: State {
-        return self.lock.withScope {
-            let currentState: State
-            if _finished {
-                currentState = .finished
-            } else if _executing {
-                currentState = .executing
-            } else {
-                currentState = .ready
+        get {
+            return self.lock.withScope {
+                return self._state
             }
-            log(level: .debug, from: self, "\(self) getting state \(currentState)")
-            return currentState
+        }
+
+        set {
+            self.lock.withScope {
+                self._state = newValue
+            }
         }
     }
 
@@ -54,38 +55,24 @@ open class AsyncOperation: Operation {
         case isExecuting, isFinished, isCancelled
     }
 
-    private var _executing: Bool = false
     open private(set) override var isExecuting: Bool {
         get {
-            return self.lock.withScope {
-                log(level: .debug, from: self, "\(self) getting \(self._executing)")
-                return self._executing
-            }
+            return self.state == .executing
         }
         set {
             willChangeValue(forKey: KVOKey.isExecuting.rawValue)
-            self.lock.withScope {
-                log(level: .debug, from: self, "set \(self) to \(newValue)")
-                self._executing = newValue
-            }
+            self.state = .executing
             didChangeValue(forKey: KVOKey.isExecuting.rawValue)
         }
     }
 
-    private var _finished: Bool = false
     open private(set) override var isFinished: Bool {
         get {
-            return self.lock.withScope {
-                log(level: .debug, from: self, "\(self) getting \(self._finished)")
-                return self._finished
-            }
+            return self.state == .finished
         }
         set {
             willChangeValue(forKey: KVOKey.isFinished.rawValue)
-            self.lock.withScope {
-                log(level: .debug, from: self, "set \(self) to \(newValue)")
-                self._finished = newValue
-            }
+            self.state = .finished
             didChangeValue(forKey: KVOKey.isFinished.rawValue)
         }
     }
@@ -108,35 +95,19 @@ open class AsyncOperation: Operation {
     }
 
     open func finish() {
-        log(level: .debug, from: self, "will finish \(self)")
+        log(level: .debug, from: self, "finishing \(self)")
         willChangeValue(forKey: KVOKey.isExecuting.rawValue)
         willChangeValue(forKey: KVOKey.isFinished.rawValue)
-        let didFinish = self.lock.withScope { () -> Bool in
-            let cancelled = self.isCancelled
-            log(level: .debug, from: self, "finishing \(self), cancelled: \(cancelled), executing: \(self._executing)")
-            guard self._executing else {
-                return false
-            }
-            self._executing = false
-            self._finished = true
-            return true
-        }
-        guard didFinish else {
-            return
-        }
-        log(level: .debug, from: self, "did finish \(self)")
+        self.state = .finished
         didChangeValue(forKey: KVOKey.isExecuting.rawValue)
         didChangeValue(forKey: KVOKey.isFinished.rawValue)
     }
 
     open override func cancel() {
-        let alreadyCancelled = self.isCancelled
-        log(from: self, "cancelling \(self), isCancelled = \(alreadyCancelled)")
-        guard !alreadyCancelled else {
-            return
-        }
         super.cancel()
-        self.finish()
+        if !isExecuting {
+            self.finish()
+        }
     }
 
     open override var description: String {

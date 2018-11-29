@@ -10,6 +10,7 @@ extension TaskManager.Handle {
         let taskDidCancelCallback: (TaskError) -> Void
         let intercept: Interceptor
         let completionQueue: DispatchQueue?
+        var state: TaskState = .pending
 
         init(
             operation: AsyncOperation,

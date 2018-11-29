@@ -38,6 +38,7 @@ public class TaskManager {
 
     private let taskQueue = DispatchQueue(label: "Tasker.TaskManager.tasks")
     private let reactorQueue = DispatchQueue(label: "Tasker.TaskManager.reactors", attributes: [.concurrent])
+    private let taskDispatchGroup = DispatchGroup()
 
     private let interceptorManager: TaskInterceptorManager
 
@@ -111,14 +112,14 @@ public class TaskManager {
                 + "with interval: \(String(describing: interval)), "
                 + "on queue: \(completionQueue?.label as Any)", tags: TaskManager.kClrTags)
 
-        // Fire off a closure to set up the data in the handle.
-        self.taskQueue.async { [weak self] in
-            guard let strongSelf = self else {
-                log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
-                return
-            }
+        // We are beginning the lifetime of a task that is supposed to be executed.
+        // The corresponding call to leave() should occur after task.execute is called, or
+        // if for some reason task.execute could not be called
+        self.taskDispatchGroup.enter()
 
-            let intercept: (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void = { [weak task, weak handle] interval, completion in
+        // Fire off a closure to set up the data in the handle.
+        self.taskQueue.async {
+            let intercept: (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void = { [weak self, weak task, weak handle] interval, completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
                     return
@@ -135,11 +136,11 @@ public class TaskManager {
                 completionQueue: completionQueue
             )
 
-            strongSelf.pendingTasks[handle] = data
+            self.pendingTasks[handle] = data
             log(from: self, "did add \(handle)", tags: TaskManager.kTkQTags)
 
             if startImmediately {
-                strongSelf.startTask(for: handle, with: data, after: interval)
+                self.startTask(for: handle, with: data, after: interval)
             }
         }
 
@@ -153,9 +154,10 @@ public class TaskManager {
         completion: T.ResultCallback?
     ) -> AsyncOperation {
         return AsyncOperation { [weak self, weak task, weak handle] operation in
+
             var shouldFinish = true
             defer {
-                // Only if an error or something occured should we make the operaton finished
+                // If an error occured we mark the operaton finished
                 if shouldFinish {
                     operation.finish()
                 }
@@ -183,6 +185,10 @@ public class TaskManager {
 
             shouldFinish = false
 
+            strongSelf.taskQueue.sync {
+                strongSelf.data(for: handle)?.state = .executing
+            }
+
             // Make sure we prefer the explicit timeout over the configured task timeout
             strongSelf.executeAsyncOperation(operation, task: task, handle: handle, timeout: timeout ?? task.timeout, completion: completion)
         }
@@ -202,15 +208,13 @@ public class TaskManager {
             timeoutWorkItem = nil
         }
 
-        log(from: self, "will execute \(handle)", tags: TaskManager.kOpQTags)
+        log(from: self, "will execute \(handle) with timeout \(timeout)", tags: TaskManager.kOpQTags)
 
         // Considered putting a DispatchGroup here to signify when "only" the execute part of a Task is over,
         // but, because the API for DispatchGroup *requires* that every enter() MUST have a leave(), capturing
         // self weakly would not be an option. So we go for a less accurate version of all Task.execute being
         // run and use the operation queue's wait instead.
         task.execute { [weak self, weak task, weak handle] result in
-
-            // If the execute function never returns, the operation will never finish.
 
             var shouldFinish = true
             defer {
@@ -327,6 +331,7 @@ public class TaskManager {
             log(level: .verbose, from: strongSelf, "will finish \(handle)", tags: TaskManager.kTkQTags)
             if let data = strongSelf.data(for: handle, remove: true) {
                 assert(data.operation === operation)
+                data.state = .finished
                 log(level: .verbose, from: strongSelf, "did finish \(handle)", tags: TaskManager.kTkQTags)
                 (data.completionQueue ?? strongSelf.taskQueue).async {
                     completion?(result)
@@ -343,6 +348,7 @@ public class TaskManager {
     public func waitTillAllTasksFinished() {
         log(level: .verbose, from: self, "begin waiting")
         self.operationQueue.waitUntilAllOperationsAreFinished()
+        self.taskDispatchGroup.wait()
         log(level: .verbose, from: self, "end waiting")
     }
 
@@ -356,6 +362,7 @@ public class TaskManager {
             guard let data = self.pendingTasks.removeValue(forKey: handle) else {
                 return nil
             }
+            self.taskDispatchGroup.leave()
             return data
         } else {
             guard let data = self.pendingTasks[handle] else {
@@ -721,24 +728,20 @@ public class TaskManager {
     }
 
     func taskState(for handle: Handle) -> TaskState {
-        let maybeOperation = self.taskQueue.sync { () -> AsyncOperation? in
+        let result = self.taskQueue.sync { () -> (state: TaskState, cancelled: Bool) in
             guard let data = self.data(for: handle) else {
                 log(level: .verbose, from: self, "\(handle) not found", tags: TaskManager.kTkQTags)
-                return nil
+                return (.finished, false)
             }
-            log(from: self, "\(handle) operation  is \(data.operation.state)", tags: TaskManager.kTkQTags)
-            return data.operation
+            let cancelled = data.operation.isCancelled
+            log(from: self, "\(handle) is \(data.state), cancelled is \(cancelled)", tags: TaskManager.kTkQTags)
+            return (data.state, cancelled)
         }
-        guard let operation = maybeOperation else {
+
+        if result.cancelled {
             return .finished
-        }
-        switch (operation.state, operation.isCancelled) {
-        case (.finished, _), (_, true):
-            return .finished
-        case (.executing, _):
-            return .executing
-        case (.ready, _):
-            return .pending
+        } else {
+            return result.state
         }
     }
 }

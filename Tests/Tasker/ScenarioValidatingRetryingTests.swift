@@ -1,95 +1,103 @@
 @testable import Tasker
 import XCTest
 
-private struct UserProfile {
-    var name: String
-}
-
-private class User {
-    enum ID {
-        case valid
-        case invalid
+// Simulates a human being that may be alive or dead
+private class Hippo {
+    enum Status {
+        case alive
+        case dead
     }
 
-    var id: ID = .invalid
-    var profile: UserProfile?
+    var status: Status = .dead
+    var name: String?
 }
 
-private struct UserDead: Error {}
-private struct UserInvalid: Error {}
+// These are the different errors that may be encountered in this simulation
+private struct Unrevivable: Error {}
+private struct Dead: Error {}
 private struct RandomFailure: Error {}
 
+// This simulates any task that can be retried
 private protocol Retriable {
     var maxRetryCount: Int { get }
 }
 
-private protocol UserDependent {
-    var weakUser: Weak<User> { get }
+// This simulates a protocol that must be implemented for any task that depends on an alive hippo
+private protocol HippoRequired {
+    var weakHippo: Weak<Hippo> { get }
 }
 
-private class UserTask: Task, UserDependent, Retriable {
+// Simulates a task that depends on a live hippo and can be retried if it fails.
+private class EatGobbledygook: Task, HippoRequired, Retriable {
     typealias SuccessValue = Void
-    var weakUser: Weak<User>
+
+    var weakHippo: Weak<Hippo>
     let maxRetryCount = 3
-    init(user: User) {
-        self.weakUser = Weak(user)
+
+    init(hippo: Hippo) {
+        self.weakHippo = Weak(hippo)
     }
 
     func execute(completion: @escaping ResultCallback) {
-        guard self.weakUser.value?.id == .valid else {
-            completion(.failure(UserInvalid()))
+        // Hippo must be alive
+        guard self.weakHippo.value?.status == .alive else {
+            completion(.failure(Dead()))
             return
         }
+        // Simulate some random failure that could result from whatever
         guard arc4random_uniform(2) != 0 else {
             completion(.failure(RandomFailure()))
             return
         }
+        // Yay, success, the hippo gobbldygooked
         completion(.success(()))
     }
 }
 
-private class GetProfileTask: Task, UserDependent {
-    typealias SuccessValue = UserProfile
-    var weakUser: Weak<User>
-    let profile: UserProfile
-    init(user: User, profile: UserProfile = UserProfile(name: "Abe")) {
-        self.weakUser = Weak(user)
-        self.profile = profile
+// This simulates doing something that just needs a hippo, but cannot be retried
+private class GetHippoNameTask: Task, HippoRequired {
+
+    typealias SuccessValue = String
+    var weakHippo: Weak<Hippo>
+    let name: String
+    init(hippo: Hippo, name: String = "Abe") {
+        self.weakHippo = Weak(hippo)
+        self.name = name
     }
 
     func execute(completion: @escaping ResultCallback) {
-        guard let user = self.weakUser.value, user.id == .valid else {
-            completion(.failure(UserInvalid()))
+        guard let hippo = self.weakHippo.value, hippo.status == .alive else {
+            completion(.failure(Dead()))
             return
         }
 
-        completion(.success(self.profile))
+        completion(.success(self.name))
     }
 }
 
-// This interceptor will take any task that is UserDependent and then if it's own
+// This reactor will take any task that is UserDependent and then if it's own
 // internal user is still present, will set set the user in the task to something
 // valid and re-execute
-private class ValidateUserReactor: TaskReactor {
-    weak var user: User?
-    init(user: User) {
-        self.user = user
+private class ReviveTheHippoReactor: TaskReactor {
+    weak var hippo: Hippo?
+    init(hippo: Hippo) {
+        self.hippo = hippo
     }
 
     var configuration: TaskReactorConfiguration {
         return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
-    func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with _: TaskHandle) -> Bool where T: Task {
-        return result.failureValue is UserInvalid && (task as? UserDependent)?.weakUser.value === self.user
+    func shouldExecute<T>(after result: Result<T.SuccessValue>, from _: T, with _: TaskHandle) -> Bool where T: Task {
+        return result.failureValue is Dead
     }
 
     func execute(done: @escaping (Error?) -> Void) {
-        guard let user = self.user else {
-            done(UserDead())
+        guard let hippo = self.hippo else {
+            done(Unrevivable())
             return
         }
-        user.id = .valid
+        hippo.status = .alive
         done(nil)
     }
 }
@@ -124,34 +132,34 @@ private class RetryReactor: TaskReactor {
 
 class ScenarioValidatingRetryingTests: XCTestCase {
     func testShouldAllWork() {
-        // Ensure user starts off as invalid
-        let user = User()
-        XCTAssertEqual(user.id, User.ID.invalid)
+        let hippo = Hippo()
+        XCTAssertEqual(hippo.status, Hippo.Status.dead)
 
         // Create manager that validates and retries
-        let manager = TaskManagerSpy(reactors: [ValidateUserReactor(user: user), RetryReactor()])
+        let manager = TaskManagerSpy(reactors: [ReviveTheHippoReactor(hippo: hippo), RetryReactor()])
 
-        // Run tasks that fail randomly
+        // Run tasks that should fail randomly
         let numTasks = 20
         for _ in (0..<numTasks).yielded(by: .milliseconds(1)) {
-            manager.add(task: UserTask(user: user))
+            manager.add(task: EatGobbledygook(hippo: hippo))
         }
 
-        // All of them should have completed (after retries/refresh) and user should be valid
+        // All of them should have completed retries and all the hippo should be alive
         ensure(manager.completionCallCount).becomes(numTasks)
-        XCTAssertEqual(user.id, User.ID.valid)
+        XCTAssertEqual(hippo.status, Hippo.Status.alive)
 
-        // Invalidate user and try GetProfileTask
-        user.id = .invalid
-        let profile = UserProfile(name: "Jimbo")
-        var returnedResult: GetProfileTask.Result!
-        let handle = manager.add(task: GetProfileTask(user: user, profile: profile)) { result in
+        // Kill hippo and try to get it's name
+        hippo.status = .dead
+        let name = "Jimbo"
+        var returnedResult: GetHippoNameTask.Result?
+        let handle = manager.add(task: GetHippoNameTask(hippo: hippo, name: name)) { result in
             returnedResult = result
         }
 
-        // Profile result shuld be expected and user should be valid
+        // Name result should be expected and hippo should be alive
+        manager.waitTillAllTasksFinished()
         ensure(handle.state).becomes(TaskState.finished)
-        XCTAssertEqual(returnedResult.successValue?.name, profile.name)
-        XCTAssertEqual(user.id, User.ID.valid)
+        XCTAssertEqual(returnedResult?.successValue, name)
+        XCTAssertEqual(hippo.status, Hippo.Status.alive)
     }
 }

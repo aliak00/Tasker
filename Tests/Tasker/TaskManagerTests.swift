@@ -16,8 +16,10 @@ private extension TaskManagerSpy {
 }
 
 class TaskManagerTests: XCTestCase {
-    override func tearDown() {
-        ensure(kTaskSpyCounter.value).becomes(0)
+    override func setUp() {
+        self.addTeardownBlock {
+            ensure(kTaskSpyCounter.value).becomes(0)
+        }
     }
 
     func testAddingATaskShouldExecuteIt() {
