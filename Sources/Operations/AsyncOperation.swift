@@ -19,13 +19,13 @@ open class AsyncOperation: Operation {
 
     public var state: State {
         get {
-            return self.lock.withScope {
+            return self.lock.scope {
                 return self._state
             }
         }
 
         set {
-            self.lock.withScope {
+            self.lock.scope {
                 self._state = newValue
             }
         }
