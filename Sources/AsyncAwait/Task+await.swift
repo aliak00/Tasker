@@ -9,7 +9,7 @@ extension Task {
     ) throws -> SuccessValue {
         let semaphore = DispatchSemaphore(value: 0)
         var maybeResult: Result?
-        (taskManager ?? TaskManager.shared).add(
+        let handle = (taskManager ?? TaskManager.shared).add(
             task: self,
             startImmediately: true
         ) { result in
@@ -17,6 +17,7 @@ extension Task {
             semaphore.signal()
         }
         if let timeout = timeout, semaphore.wait(timeout: .now() + timeout) == .timedOut {
+            handle.cancel()
             throw TaskError.timedOut
         } else {
             semaphore.wait()
