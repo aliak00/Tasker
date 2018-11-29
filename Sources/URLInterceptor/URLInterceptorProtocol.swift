@@ -33,7 +33,7 @@ class URLInterceptorProtocol: URLProtocol {
     override func startLoading() {
         log(from: self, "starting \(self.request)")
         guard let key = request.allHTTPHeaderFields?[URLInterceptor.key], let taskManager = URLInterceptor.globalStore[key] else {
-            self.client?.urlProtocol(self, didFailWithError: GenericError.CannotComply())
+            self.client?.urlProtocol(self, didFailWithError: URLInterceptorError.keyNotFound)
             return
         }
         let task = URLInterceptor.DataTask(self.normalizeRequest(request))

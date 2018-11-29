@@ -18,6 +18,12 @@ private extension URLSessionConfiguration {
 }
 
 ///
+public enum URLInterceptorError: Error {
+    ///
+    case keyNotFound
+}
+
+///
 public class URLInterceptor {
     static var globalStore = SynchronizedDictionary<String, TaskManager>()
 
