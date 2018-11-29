@@ -208,7 +208,7 @@ public class TaskManager {
             timeoutWorkItem = nil
         }
 
-        log(from: self, "will execute \(handle) with timeout \(timeout)", tags: TaskManager.kOpQTags)
+        log(from: self, "will execute \(handle) with timeout \(String(describing: timeout))", tags: TaskManager.kOpQTags)
 
         // Considered putting a DispatchGroup here to signify when "only" the execute part of a Task is over,
         // but, because the API for DispatchGroup *requires* that every enter() MUST have a leave(), capturing
