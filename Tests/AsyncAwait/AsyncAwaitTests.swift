@@ -2,6 +2,14 @@
 import XCTest
 
 final class AsyncAwaitTests: XCTestCase {
+
+    override func setUp() {
+        self.addTeardownBlock {
+            ensure(AsyncOperation.identifierCounter.value).becomes(0)
+            AsyncOperation.identifierCounter.value = 0
+        }
+    }
+
     func testAwaitInAsyncShouldComplete() {
         let task = AsyncAwaitSpy { () -> Int in
             let one = try! TaskSpy<Int> { callback in
@@ -82,23 +90,30 @@ final class AsyncAwaitTests: XCTestCase {
     }
 
     func testAsyncAwaitFreeFunctionsShouldSuccess() {
-        let f = { () -> Int in
-            sleep(for: .milliseconds(10))
-            return 5
+
+        let f = { (done: @escaping (Int) -> Void) -> Void in
+            DispatchQueue.global(qos: .unspecified).async {
+                sleep(for: .milliseconds(10))
+                done(5)
+            }
         }
-        XCTAssertEqual(try await(f()), 5)
+
+        XCTAssertEqual(try await(f), 5)
 
         var value: Int? = 0
-        async(f()) { value = $0.successValue }
+        async(5) { value = $0.successValue }
         ensure(value).becomes(5)
     }
 
     func testAwaitFreeFunctionShouldThrowOnTimeOut() {
-        let f = { () -> Int in
-            sleep(for: .seconds(1))
-            return 5
+        let f = { (done: @escaping (Int) -> Void) -> Void in
+            DispatchQueue.global(qos: .unspecified).async {
+                sleep(for: .milliseconds(100))
+                done(5)
+            }
         }
-        XCTAssertThrowsError(try await(f(), timeout: .milliseconds(10)))
+
+        XCTAssertThrowsError(try await(f, timeout: .milliseconds(10)))
     }
 
     // func testAwaitShouldCallCompletionOnSpecifiedQueue() {

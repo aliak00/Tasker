@@ -4,11 +4,10 @@ import XCTest
 class TaskHandleTests: XCTestCase {
     override func setUp() {
         TaskManager.Handle.counter.value = 0
-    }
-
-    override func tearDown() {
-        ensure(AsyncOperation.identifierCounter.value).becomes(0)
-        AsyncOperation.identifierCounter.value = 0
+        self.addTeardownBlock {
+            ensure(AsyncOperation.identifierCounter.value).becomes(0)
+            AsyncOperation.identifierCounter.value = 0
+        }
     }
 
     func testCancelShouldCancelATask() {

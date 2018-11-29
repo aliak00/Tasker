@@ -2,6 +2,13 @@
 import XCTest
 
 final class AsyncOperationTests: XCTestCase {
+    override func setUp() {
+        self.addTeardownBlock {
+            ensure(AsyncOperation.identifierCounter.value).becomes(0)
+            AsyncOperation.identifierCounter.value = 0
+        }
+    }
+
     func testCreatingOperationShouldStartInReadyState() {
         let operation = AsyncOperationSpy { _ in }
         XCTAssertEqual(operation.state, AsyncOperation.State.ready)
@@ -52,7 +59,7 @@ final class AsyncOperationTests: XCTestCase {
     }
 
     func testCancellingAfterExecutingShouldCallFinish() {
-        let operation = AsyncOperationSpy { _ in }
+        let operation = AsyncOperationSpy { $0.finish() }
         operation.start()
         ensure(operation.state).becomes(.executing)
         operation.cancel()

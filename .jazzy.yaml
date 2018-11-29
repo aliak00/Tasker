@@ -13,7 +13,7 @@ custom_categories:
   - name: "Async Await"
     children:
       - async(_:completion:)
-      - await(_:timeout:)
+      - task(_:)
       - AnyTask
       - AnyResult
   - name: Task Management

@@ -60,9 +60,10 @@ public class AnyTask<T>: Task {
      type T of this AnyTask
 
      - parameter task: The `Task` object that this will wrap
-    */
-    public convenience init<U: Task>(fromTask task: U) where U.SuccessValue == SuccessValue {
-        self.init(timeout: task.timeout) { completion in
+     - parameter timeout: Specify if you wan to overwrites `Task.timeout`.
+     */
+    public convenience init<U: Task>(fromTask task: U, timeout: DispatchTimeInterval? = nil) where U.SuccessValue == SuccessValue {
+        self.init(timeout: timeout ?? task.timeout) { completion in
             task.execute(completion: completion)
         }
     }
