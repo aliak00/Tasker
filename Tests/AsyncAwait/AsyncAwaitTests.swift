@@ -89,8 +89,7 @@ final class AsyncAwaitTests: XCTestCase {
         ensure(task.completionCallCount).stays(1)
     }
 
-    func testAsyncAwaitFreeFunctionsShouldSuccess() {
-
+    func testAsyncAwaitFreeFunctionsShouldSucceeedWithValue() {
         let f = { (done: @escaping (Int) -> Void) -> Void in
             DispatchQueue.global(qos: .unspecified).async {
                 sleep(for: .milliseconds(10))
@@ -103,6 +102,22 @@ final class AsyncAwaitTests: XCTestCase {
         var value: Int? = 0
         async(5) { value = $0.successValue }
         ensure(value).becomes(5)
+    }
+
+    func testAwaitFreeFunctionsShouldSucceeedWithResult() {
+        let f = { (done: @escaping (Result<Int>) -> Void) -> Void in
+            done(.success(5))
+        }
+
+        XCTAssertEqual(try await(f), 5)
+    }
+
+    func testAwaitFreeFunctionsShouldFailWithResult() {
+        let f = { (done: @escaping (Result<Int>) -> Void) -> Void in
+            done(.failure(TaskError.unknown))
+        }
+
+        XCTAssertThrowsError(try await(f))
     }
 
     func testAwaitFreeFunctionShouldThrowOnTimeOut() {
