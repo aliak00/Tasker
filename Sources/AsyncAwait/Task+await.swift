@@ -1,10 +1,14 @@
 import Foundation
 
 extension Task {
-    ///
+    /**
+     Will execute the task synchronously and await the result. Throws an error on failure.
+
+     - parameter taskManager: which instance of `TaskManager` you want to use. Defaults to `TaskManager.shared`
+     - parameter timeout: after how long should the task timeout. This overwrites `Task.timeout` if there is one
+     */
     public func await(
         with taskManager: TaskManager? = nil,
-        queue _: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil
     ) throws -> SuccessValue {
         let semaphore = DispatchSemaphore(value: 0)

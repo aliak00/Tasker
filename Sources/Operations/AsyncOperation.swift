@@ -9,15 +9,16 @@ class AsyncOperation: Operation {
 
     static let queue = DispatchQueue(label: "Tasker.AsyncOperation", attributes: [.concurrent])
 
-    public enum State {
-        case ready
-        case executing
-        case finished
+    enum State: String {
+        case pending = "isPending"
+        case ready = "isReady"
+        case executing = "isExecuting"
+        case finished = "isFinished"
     }
 
-    private var _state: State = .ready
+    private var _state: State = .pending
 
-    var state: State {
+    private(set) var state: State {
         get {
             return self.lock.scope {
                 return self._state
@@ -25,9 +26,11 @@ class AsyncOperation: Operation {
         }
 
         set {
+            willChangeValue(forKey: newValue.rawValue)
             self.lock.scope {
                 self._state = newValue
             }
+            didChangeValue(forKey: newValue.rawValue)
         }
     }
 
@@ -51,41 +54,34 @@ class AsyncOperation: Operation {
         return true
     }
 
-    private enum KVOKey: String {
-        case isExecuting, isFinished, isCancelled
+    override var isReady: Bool {
+        get {
+            return self.state == .ready
+        }
     }
 
-    private(set) override var isExecuting: Bool {
+    override var isExecuting: Bool {
         get {
             return self.state == .executing
         }
-        set {
-            willChangeValue(forKey: KVOKey.isExecuting.rawValue)
-            self.state = .executing
-            didChangeValue(forKey: KVOKey.isExecuting.rawValue)
-        }
     }
 
-    private(set) override var isFinished: Bool {
+    override var isFinished: Bool {
         get {
             return self.state == .finished
-        }
-        set {
-            willChangeValue(forKey: KVOKey.isFinished.rawValue)
-            self.state = .finished
-            didChangeValue(forKey: KVOKey.isFinished.rawValue)
         }
     }
 
     override func start() {
+        assert(self.state == .ready || self.isCancelled)
         log(from: self, "starting \(self)")
         guard !self.isCancelled else {
             log(from: self, "cancelled, aborting \(self)")
-            self.isFinished = true
+            self.state = .finished
             return
         }
         log(from: self, "executing \(self)")
-        self.isExecuting = true
+        self.state = .executing
         AsyncOperation.queue.async { [weak self] in
             guard let strongSelf = self else {
                 return
@@ -96,18 +92,20 @@ class AsyncOperation: Operation {
 
     func finish() {
         log(level: .debug, from: self, "finishing \(self)")
-        willChangeValue(forKey: KVOKey.isExecuting.rawValue)
-        willChangeValue(forKey: KVOKey.isFinished.rawValue)
         self.state = .finished
-        didChangeValue(forKey: KVOKey.isExecuting.rawValue)
-        didChangeValue(forKey: KVOKey.isFinished.rawValue)
     }
 
     override func cancel() {
         super.cancel()
         if !isExecuting {
-            self.finish()
+            self.state = .finished
         }
+    }
+
+    func markReady() {
+        assert(self.state == .pending)
+        log(level: .debug, from: self, "readying \(self)")
+        self.state = .ready
     }
 
     override var description: String {

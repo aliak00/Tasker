@@ -380,6 +380,7 @@ public class TaskManager {
             #endif
         }
         self.operationQueue.addOperation(operation)
+        operation.markReady()
         log(level: .verbose, from: self, "did queue \(handle)", tags: TaskManager.kTkQTags)
     }
 

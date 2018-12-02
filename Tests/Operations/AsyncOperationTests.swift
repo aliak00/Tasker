@@ -9,25 +9,34 @@ final class AsyncOperationTests: XCTestCase {
         }
     }
 
-    func testCreatingOperationShouldStartInReadyState() {
+    func testCreatingOperationShouldStartInPendingState() {
         let operation = AsyncOperationSpy { _ in }
+        XCTAssertEqual(operation.state, AsyncOperation.State.pending)
+    }
+
+    func testMarkingOperationReadyShouldGoToReadyState() {
+        let operation = AsyncOperationSpy { _ in }
+        operation.markReady()
         XCTAssertEqual(operation.state, AsyncOperation.State.ready)
     }
 
     func testStartingOperationShouldGoToExecuting() {
         let operation = AsyncOperationSpy { _ in }
+        operation.markReady()
         operation.start()
         ensure(operation.state).becomes(.executing)
     }
 
     func testStartingOperationShouldCallExecutor() {
         let operation = AsyncOperationSpy { _ in }
+        operation.markReady()
         operation.start()
         ensure(operation.executorCallCount).becomes(1)
     }
 
     func testStartingOperationShouldGoToFinished() {
         let operation = AsyncOperation { $0.finish() }
+        operation.markReady()
         operation.start()
         ensure(operation.state).becomes(.finished)
     }
@@ -38,31 +47,41 @@ final class AsyncOperationTests: XCTestCase {
         for _ in 0..<100 {
             operations.append(AsyncOperation { $0.finish() })
         }
+        operations.forEach { $0.markReady()  }
         queue.addOperations(operations, waitUntilFinished: true)
         operations.forEach { XCTAssertEqual($0.state, AsyncOperation.State.finished) }
     }
 
-    func testCancellingBeforeBeforeStartingShouldNotCallExecutor() {
-        let operation = AsyncOperationSpy { _ in }
+    func testCancellingBeforeStartingShouldNotCallExecutor() {
+        let operation = AsyncOperationSpy { $0.finish() }
+        operation.markReady()
         operation.cancel()
         operation.start()
         ensure(operation.executorCallCount).stays(0)
         XCTAssertEqual(operation.state, AsyncOperation.State.finished)
     }
 
-    func testCancellingBeforeBeforeStartingShouldNotCallFinish() {
-        let operation = AsyncOperationSpy { _ in }
+    func testCancellingBeforeStartingShouldNotCallFinish() {
+        let operation = AsyncOperationSpy { $0.finish() }
         operation.cancel()
         operation.start()
-        XCTAssertEqual(operation.finishCallCount, 1)
+        XCTAssertEqual(operation.finishCallCount, 0)
         XCTAssertEqual(operation.state, AsyncOperation.State.finished)
     }
 
-    func testCancellingAfterExecutingShouldCallFinish() {
-        let operation = AsyncOperationSpy { $0.finish() }
-        operation.start()
-        ensure(operation.state).becomes(.executing)
-        operation.cancel()
-        ensure(operation.state).becomes(.finished)
+    func testStartingAndCancellingManyTasksShouldWork() {
+        let queue = OperationQueue()
+        var operations: [AsyncOperation] = []
+        let numTasks = 100
+        for _ in 0..<numTasks {
+            let operation = AsyncOperationSpy { $0.finish() }
+            operations.append(operation)
+            queue.addOperation(operation)
+        }
+        operations.forEach { XCTAssertEqual($0.state, AsyncOperation.State.pending) }
+        operations.forEach { $0.markReady() }
+        operations.forEach { $0.cancel() }
+        queue.waitUntilAllOperationsAreFinished()
+        operations.forEach { XCTAssertEqual($0.state, AsyncOperation.State.finished) }
     }
 }

@@ -36,9 +36,9 @@ class AsyncAwaitSpy<T>: TaskSpy<T> {
     }
 
     @discardableResult
-    func await(queue: DispatchQueue? = nil, timeout: DispatchTimeInterval? = nil) throws -> T {
+    func await(timeout: DispatchTimeInterval? = nil) throws -> T {
         do {
-            let value = try super.await(queue: queue, timeout: timeout)
+            let value = try super.await(timeout: timeout)
             self.completionCallData.append(.success(value))
             return value
         } catch {
