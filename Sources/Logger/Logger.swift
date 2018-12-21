@@ -7,8 +7,22 @@ private extension DispatchTime {
     }
 }
 
-///
+/**
+ The logger class is used within the library to output logs of what is going on. Multi-threading and task management is very
+ complicated and having logs can help immensely when it comes to debugging purposes
+
+ Everytime the log function is called, a number of tags are automatically produced that are attached to the message. These are:
+    * the function name that the log is called from
+    * The thread that the log is called from (UI or BG - for background)
+    * The filename
+    * The log level (see `LogLevel`)
+
+ This class is also made public so the API is meant to be stable
+
+ There're also a number of predefined tags that the logs from within the library use. See `LogTags` for a list.
+ */
 public class Logger {
+
     /// Shared logger object
     public static let shared: Logger = {
         let logger = Logger(synchronousOutput: true)

@@ -1,6 +1,9 @@
 import Foundation
 
 class TaskInterceptorManager {
+
+    private static let kTags = [LogTags.onInterceptorQueue]
+
     enum InterceptionResult {
         case ignore
         case execute([TaskManager.Handle])
@@ -60,7 +63,7 @@ class TaskInterceptorManager {
         var interceptorIndexHoldingTask: Int?
         var interceptorIndicesRequestingExecute: [Int] = []
         for (index, interceptor) in self.interceptors.enumerated() {
-            log(from: self, "intercepting \(handle) with \(interceptor)")
+            log(from: self, "intercepting \(handle) with \(interceptor)", tags: TaskInterceptorManager.kTags)
 
             switch interceptor.intercept(task: &task, currentBatchCount: self.batchedHandles[index]?.count ?? 0) {
             case .forceExecute:
@@ -80,13 +83,13 @@ class TaskInterceptorManager {
         }
 
         if shouldBeIgnored && !shouldBeForceExecuted {
-            log(from: self, "discarding task for \(handle)")
+            log(from: self, "discarding task for \(handle)", tags: TaskInterceptorManager.kTags)
             handle.discard()
             return .ignore
         }
 
         if let index = interceptorIndexHoldingTask, !shouldBeForceExecuted {
-            log(from: self, "holding task for \(handle)")
+            log(from: self, "holding task for \(handle)", tags: TaskInterceptorManager.kTags)
             self.batchedHandles[index] = self.batchedHandles[index] ?? []
             self.batchedHandles[index]?.append(Weak(handle))
             return .ignore
@@ -102,10 +105,10 @@ class TaskInterceptorManager {
             self.batchedHandles[index] = nil
         }
 
-        log(from: self, "carrying on with task for \(handle)")
+        log(from: self, "carrying on with task for \(handle)", tags: TaskInterceptorManager.kTags)
 
         if handlesToRelease.count > 0 {
-            log(from: self, "\(handle) releasing batched handles \(handlesToRelease)")
+            log(from: self, "\(handle) releasing batched handles \(handlesToRelease)", tags: TaskInterceptorManager.kTags)
         }
 
         let handles = handlesToRelease + [handle]

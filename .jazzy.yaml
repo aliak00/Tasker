@@ -31,4 +31,6 @@ custom_categories:
       - URLInterceptor
   - name: Logging
     children:
-      - Logger
+     - Logger
+     - LogTags
+     - LogLevel
