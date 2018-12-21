@@ -1,22 +1,5 @@
 import Foundation
 
-private extension TaskManager {
-    var refKey: String {
-        return String(describing: ObjectIdentifier(self).hashValue)
-    }
-}
-
-private extension URLSessionConfiguration {
-    func copy(for type: URLProtocol.Type, manager: TaskManager) -> URLSessionConfiguration {
-        var copyOfHeaders = self.httpAdditionalHeaders ?? [:]
-        copyOfHeaders[URLInterceptor.key] = manager.refKey
-        let copyOfConfig = self
-        copyOfConfig.httpAdditionalHeaders = copyOfHeaders
-        copyOfConfig.protocolClasses = [type]
-        return copyOfConfig
-    }
-}
-
 ///
 public enum URLInterceptorError: Error {
     ///
@@ -47,5 +30,22 @@ public class URLInterceptor {
     deinit {
         URLInterceptor.globalStore[self.taskManager.refKey] = nil
         log(from: self, "removed task manager with global key \(self.taskManager.refKey)")
+    }
+}
+
+private extension TaskManager {
+    var refKey: String {
+        return String(describing: ObjectIdentifier(self).hashValue)
+    }
+}
+
+private extension URLSessionConfiguration {
+    func copy(for type: URLProtocol.Type, manager: TaskManager) -> URLSessionConfiguration {
+        var copyOfHeaders = self.httpAdditionalHeaders ?? [:]
+        copyOfHeaders[URLInterceptor.key] = manager.refKey
+        let copyOfConfig = self
+        copyOfConfig.httpAdditionalHeaders = copyOfHeaders
+        copyOfConfig.protocolClasses = [type]
+        return copyOfConfig
     }
 }

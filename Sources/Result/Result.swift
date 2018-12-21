@@ -1,7 +1,15 @@
 import Foundation
 
+/**
+ This associated enum encapsulates either a success value of an error. This is used by most of the
+ functions that work with a completion callback
+ */
 public enum Result<T> {
+
+    /// Represents a successful result
     case success(T)
+
+    /// Represents a failure result
     case failure(Error)
 
     var successValue: T? {

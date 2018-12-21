@@ -10,26 +10,10 @@ public class TaskManager {
      */
     public static let shared = TaskManager()
 
-    /**
-     Thes log tags can be passed to filter the logs produced by the TaskManager. This can be used
-     to aid in debugging, or to get information about what your tasks are up to.
-
-     - SeeAlso `Logger'
-     */
-    public struct LoggerTag {
-        public static let onTaskQueue = "tq"
-        public static let onOperationQueue = "oq"
-        public static let callback = "cb"
-        public static let onReactorQueue = "rq"
-        public static let caller = "caller"
-    }
-
-    private static let kOpQTags = [LoggerTag.onOperationQueue]
-    private static let kCbOpQTags = [LoggerTag.onOperationQueue, LoggerTag.callback]
-    private static let kTkQTags = [LoggerTag.onTaskQueue]
-    private static let kCbReQTags = [LoggerTag.onReactorQueue, LoggerTag.callback]
-    private static let kClrTags = [LoggerTag.caller]
-    private static let kReQTags = [LoggerTag.onReactorQueue]
+    private static let kOpQTags = [LogTags.onOperationQueue]
+    private static let kTkQTags = [LogTags.onTaskQueue]
+    private static let kClrTags = [LogTags.caller]
+    private static let kReQTags = [LogTags.onReactorQueue]
 
     private static var identifierCounter = AtomicInt()
 
@@ -227,28 +211,28 @@ public class TaskManager {
             timeoutWorkItem?.cancel()
 
             guard let strongSelf = self else {
-                log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kCbOpQTags)
+                log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kClrTags)
                 return
             }
 
             guard let handle = handle else {
-                log(level: .verbose, from: strongSelf, "\(T.self) handle dead", tags: TaskManager.kCbOpQTags)
+                log(level: .verbose, from: strongSelf, "\(T.self) handle dead", tags: TaskManager.kClrTags)
                 return
             }
 
             guard let task = task else {
-                log(level: .verbose, from: self, "\(handle) task dead", tags: TaskManager.kCbOpQTags)
+                log(level: .verbose, from: self, "\(handle) task dead", tags: TaskManager.kClrTags)
                 return
             }
 
             guard !operation.isCancelled else {
-                log(level: .verbose, from: self, "\(handle) operation cancelled", tags: TaskManager.kCbOpQTags)
+                log(level: .verbose, from: self, "\(handle) operation cancelled", tags: TaskManager.kClrTags)
                 return
             }
 
             shouldFinish = false
 
-            log(from: strongSelf, "did execute \(handle)", tags: TaskManager.kCbOpQTags)
+            log(from: strongSelf, "did execute \(handle)", tags: TaskManager.kClrTags)
 
             strongSelf.finishExecutingTask(
                 task,
@@ -547,16 +531,16 @@ public class TaskManager {
                         maybeTimeoutWorkItem?.cancel()
 
                         guard let strongSelf = self else {
-                            log(level: .verbose, from: self, "manager dead", tags: TaskManager.kCbReQTags)
+                            log(level: .verbose, from: self, "manager dead", tags: TaskManager.kClrTags)
                             return
                         }
 
                         guard !reactorWorkItem.isCancelled else {
-                            log(level: .verbose, from: strongSelf, "reactor \(index) cancelled", tags: TaskManager.kCbReQTags)
+                            log(level: .verbose, from: strongSelf, "reactor \(index) cancelled", tags: TaskManager.kClrTags)
                             return
                         }
 
-                        log(from: strongSelf, "did execute reactor \(index)", tags: TaskManager.kCbReQTags)
+                        log(from: strongSelf, "did execute reactor \(index)", tags: TaskManager.kClrTags)
 
                         // Get off of whichever queue reactor execute completed on
                         strongSelf.taskQueue.async { [weak self] in

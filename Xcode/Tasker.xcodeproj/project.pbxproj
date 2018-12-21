@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E10588C0219CBE610020976B /* Tasker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E10588B7219CBE600020976B /* Tasker.framework */; };
 		E10588C7219CBE610020976B /* Tasker_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = E10588B9219CBE610020976B /* Tasker_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E1CB507221CD0FF100823D6C /* LogTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CB507121CD0FF100823D6C /* LogTags.swift */; };
+		E1CB507321CD0FF100823D6C /* LogTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CB507121CD0FF100823D6C /* LogTags.swift */; };
 		E1CC6BF2219CC3EE00B465A5 /* Tasker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1CC6BE9219CC3ED00B465A5 /* Tasker.framework */; };
 		E1CC6BF9219CC3EE00B465A5 /* Tasker_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = E1CC6BEB219CC3ED00B465A5 /* Tasker_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E1CC6C02219CC45D00B465A5 /* LoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058879219CB93A0020976B /* LoggerTests.swift */; };
@@ -189,6 +191,7 @@
 		E10588BA219CBE610020976B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E10588BF219CBE610020976B /* Tasker-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tasker-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E10588CE219CBF6D0020976B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E1CB507121CD0FF100823D6C /* LogTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTags.swift; sourceTree = "<group>"; };
 		E1CC6BE9219CC3ED00B465A5 /* Tasker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tasker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1CC6BEB219CC3ED00B465A5 /* Tasker_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tasker_iOS.h; sourceTree = "<group>"; };
 		E1CC6BEC219CC3ED00B465A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -287,6 +290,7 @@
 			isa = PBXGroup;
 			children = (
 				E1058830219CB9270020976B /* Log.swift */,
+				E1CB507121CD0FF100823D6C /* LogTags.swift */,
 				E1058831219CB9270020976B /* Logger.swift */,
 				E1058832219CB9270020976B /* LogLevel.swift */,
 			);
@@ -762,6 +766,7 @@
 				E1CC6C0E219CC49A00B465A5 /* AnyResult.swift in Sources */,
 				E1CC6C0D219CC49A00B465A5 /* AsyncOperation.swift in Sources */,
 				E1CC6C18219CC49A00B465A5 /* TaskReactor.swift in Sources */,
+				E1CB507221CD0FF100823D6C /* LogTags.swift in Sources */,
 				E1CC6C0B219CC49A00B465A5 /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -828,6 +833,7 @@
 				E1CC6C2C219CC49B00B465A5 /* AnyResult.swift in Sources */,
 				E1CC6C2B219CC49B00B465A5 /* AsyncOperation.swift in Sources */,
 				E1CC6C36219CC49B00B465A5 /* TaskReactor.swift in Sources */,
+				E1CB507321CD0FF100823D6C /* LogTags.swift in Sources */,
 				E1CC6C29219CC49B00B465A5 /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
