@@ -10,12 +10,6 @@ xcodebuild_arguments: ["-scheme", "Tasker-macOS", "-project", "Xcode/Tasker.xcod
 abstract: docs/abstracts/*.md
 
 custom_categories:
-  - name: "Async Await"
-    children:
-      - async(_:completion:)
-      - task(_:)
-      - AnyTask
-      - AnyResult
   - name: Task Management
     children:
       - Task
@@ -26,11 +20,20 @@ custom_categories:
       - TaskError
       - TaskState
       - InterceptCommand
-  - name: URL Session Interceptor
-    children:
-      - URLInterceptor
+      - Result
   - name: Logging
     children:
      - Logger
      - LogTags
      - LogLevel
+  - name: "Async Await"
+    children:
+      - async(_:completion:)
+      - await(_:timeout:)
+      - task(_:)
+      - AnyTask
+      - AnyResult
+  - name: URL Session Interceptor
+    children:
+      - URLInterceptor
+      - URLInterceptorError

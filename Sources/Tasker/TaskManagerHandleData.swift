@@ -5,7 +5,7 @@ extension TaskManager.Handle {
         typealias Interceptor = (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
 
         var operation: AsyncOperation
-        let taskReference: Any
+        let taskReference: AnyObject
         let completionErrorCallback: (TaskError) -> Void
         let taskDidCancelCallback: (TaskError) -> Void
         let intercept: Interceptor

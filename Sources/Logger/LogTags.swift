@@ -4,7 +4,8 @@ import Foundation
  Thes log tags can be passed to filter the logs produced by Tasker. This can be used
  to aid in debugging, or to get information about what your tasks are up to.
 
- - SeeAlso `Logger'
+ SeeAlso:
+    - `Logger`
  */
 public struct LogTags {
     /// The queue that a task is being handled on

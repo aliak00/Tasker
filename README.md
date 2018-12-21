@@ -2,7 +2,18 @@
 
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
-Tasker is a task manager that's built on top of OperationQueue and GCD that has a notion of *interception* and *reaction*. `Interceptors` allow you to modify a task before it's executed and also allow you to control the execution of a task (e.g. batch them, hold then, cancel them, etc.). `Reactors` allow you do something in reaction to the a task's completion _before_ the result is passed to the caller (e.g. run a job, requeue the task, cancel the task, etc).
+* [Tasks](#tasks)
+    + [Starting a task](#starting-a-task)
+    + [Intercepting a task](#intercepting-a-task)
+    + [Reacting to a task](#reacting-to-a-task)
+    + [Cancelling a task](#cancelling-a-task)
+* [Debugging and Logging](#debugging-and-logging)
+* [Add-ons](#add-ons)
+    + [Async/Await](#async-await)
+        - [Async/await are also available as free functions that work on closures.](#async-await-are-also-available-as-free-functions-that-work-on-closures)
+    + [URLInterceptor](#urlinterceptor)
+
+Tasker is a task manager that's built on top of OperationQueue and GCD that has a notion of *interception* and *reaction*. `Interceptors` allow you to modify a task before it's executed and also allow you to control the execution of a task (e.g. batch them, hold them, cancel them, etc.). `Reactors` allow you do something in reaction to the a task's completion _before_ the result is passed to the caller (e.g. run a job, requeue the task, cancel the task, etc).
 
 Tasker also comes with some added functionality on top:
 * Async and await
@@ -10,7 +21,7 @@ Tasker also comes with some added functionality on top:
 
 ## Tasks
 
-A task is any unit of work that is to be carried out. It is protocol based and has a main function called `execute` that is called when the task is supposed to be executed. When a task is completed, a callback with a `Result<T>` is called by the implementaiton of the `Task`.
+A task is any unit of work that is to be carried out. It is protocol based and has a main function called `execute` that is called when the task is supposed to be executed. When a task is completed, a callback with a `Result<T>` is called by the implementation of the `Task`.
 
 E.g.
 ```swift
@@ -31,11 +42,26 @@ class DecodeImage: Task {
 
 Note that tasks are _reference_ types. They must be because they are easier to reason about and they can be intercepted and reacted to so if we made copies and passed them around you'd have to be very careful with state. When a task is finished, the `completion` callback is called with the result of the task.
 
-If for any reason, the task is cancelled, the task's `didCancel` function is called and you are free to handle that as you see fit.
+If for any reason, the task is cancelled, the task's `didCancel` function is called and you are free to handle that as you see fit. For e.g. 
+
+```swift
+class DecodeImage: Task {
+    ...
+    var task: URLSessionTask
+    func execute(completion: @escaping Result<Data>) {
+        task = URLSession.shared.dataTask(...)
+    }
+    func didCancel(with error: Error) {
+        // Cancel your URLSessionTask
+        task.cancel();
+    }
+    ...
+}
+```
 
 ### Starting a task
 
-To start a task you can either create a `TaskManager` that or use the default one provided:
+To start a task you can either create a `TaskManager` instance or use the default one provided:
 
 ```swift
 // Create a task
@@ -60,8 +86,6 @@ TaskManager.shared.add(task: DecodeImage(), after: .seconds(30))
 
 Everytime you add a task you get back a handle that can start or cancel a task. You can also query the state of a task and each task is given an incremented identifier.
 
-There's a convenience `task` function that takes an autoclosure that can be used to start a task as well:
-
 ### Intercepting a task
 
 Every task is _intercepted_ before it is executed by the `TaskManager` that owns it. The `TaskInterceptor` protocol has one method:
@@ -70,7 +94,7 @@ Every task is _intercepted_ before it is executed by the `TaskManager` that owns
 func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand
 ```
 
-Intercept is called with a reference to the task that is about to be executed. You can modify the reference to the task and the command you return will determine what happens to the task. See the docs for details on `InterceptCommand`.
+Intercept is called with a reference to the task that is about to be executed. You can modify the reference to the task and the command you return will determine what happens to the task. One of the parameters is a `currentBatchCount`; this is there because you can `hold` a task, so this tells you how many is held. Useful for batching events to an analytics system for e.g. See the docs for details on `InterceptCommand`.
 
 You enable an interceptor by passing an array of interceptors to a `TaskManager` object upon creation only.
 
@@ -110,7 +134,7 @@ A number of additions that are built on top of the shared task manager are also 
 
 ### Async/Await
 
-Async await functionality comes out of the box with Tasker. You can execute a `Task` you create directly synchronously or asynchronously by calling the extention `async` or `await` functions on your task:
+Async await functionality comes out of the box with Tasker. You can execute a `Task` you create directly synchronously or asynchronously by calling the extension `async` or `await` functions on your task:
 
 ```swift
 do {
