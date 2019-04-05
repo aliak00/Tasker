@@ -5,7 +5,7 @@ public typealias AnyResult = Result<Any>
 
 public extension Result where T == Any {
     ///
-    public init<T>(_ result: Result<T>) {
+    init<T>(_ result: Result<T>) {
         switch result {
         case let .success(value):
             self = .success(value)

@@ -14,7 +14,7 @@ func log<T>(
     if let tag = tag {
         tags.append(tag)
     }
-    Logger.shared.log(level: level, object, tags: tags, force: force, file, function, line)
+    Logger.shared.log(level: level, object(), tags: tags, force: force, file, function, line)
 }
 
 func log<T, S>(
@@ -32,5 +32,5 @@ func log<T, S>(
     if let tag = tag {
         tags.append(tag)
     }
-    Logger.shared.log(level: level, from: type, object, tags: tags, force: force, file, function, line)
+    Logger.shared.log(level: level, from: type, object(), tags: tags, force: force, file, function, line)
 }

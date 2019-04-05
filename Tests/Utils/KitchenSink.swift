@@ -17,6 +17,8 @@ func sleep(for interval: DispatchTimeInterval) {
         usleep(useconds_t(1000 * 1000 * value))
     case .never:
         break
+    @unknown default:
+        fatalError()
     }
 }
 

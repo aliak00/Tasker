@@ -43,8 +43,8 @@ extension TaskManager.Handle: CustomStringConvertible {
 }
 
 extension TaskManager.Handle: Hashable {
-    var hashValue: Int {
-        return self.identifier
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.identifier)
     }
 
     static func == (lhs: TaskManager.Handle, rhs: TaskManager.Handle) -> Bool {
