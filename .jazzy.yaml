@@ -13,6 +13,7 @@ custom_categories:
   - name: Task Management
     children:
       - Task
+      - TaskHandle
       - TaskManager
       - TaskInterceptor
       - TaskReactor

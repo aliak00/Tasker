@@ -1,7 +1,7 @@
 import Foundation
 
 /**
- This enum represents the various number of errors that can occur during the execution of a task
+ This enum represents the various errors that can occur during the execution of a task
 */
 public enum TaskError: Error {
     /**
@@ -22,7 +22,7 @@ public enum TaskError: Error {
     /// A task was cancelled
     case cancelled
 
-    /// A task timedout
+    /// A task timed out
     case timedOut
 
     /// An unknown error occured

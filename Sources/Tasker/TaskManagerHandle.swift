@@ -1,8 +1,9 @@
 import Foundation
 
 extension TaskManager {
+    // A concrete handle to the type of task that TaskManager keeps a track of
     class Handle: TaskHandle {
-        fileprivate weak var owner: TaskManager?
+        private weak var owner: TaskManager?
 
         public let identifier: Int
 
@@ -33,9 +34,11 @@ extension TaskManager {
 
 extension TaskManager.Handle: CustomStringConvertible {
     var description: String {
-        var ownerIdentifier: String = "<unowned>."
+        let ownerIdentifier: String
         if let owner = self.owner {
             ownerIdentifier = "\(owner.identifier)."
+        } else {
+            ownerIdentifier = "<unowned>."
         }
 
         return "handle.\(ownerIdentifier)\(self.identifier)"
