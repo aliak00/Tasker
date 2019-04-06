@@ -265,21 +265,12 @@
 				E1058848219CB9270020976B /* Collections */,
 				E105882F219CB9270020976B /* Logger */,
 				E1058842219CB9270020976B /* Operations */,
-				E105882C219CB9270020976B /* Result */,
 				E105884D219CB9270020976B /* Tasker */,
 				E1058833219CB9270020976B /* URLInterceptor */,
 				E1058839219CB9270020976B /* Utils */,
 			);
 			name = Sources;
 			path = ../Sources;
-			sourceTree = "<group>";
-		};
-		E105882C219CB9270020976B /* Result */ = {
-			isa = PBXGroup;
-			children = (
-				E105882E219CB9270020976B /* AnyResult.swift */,
-			);
-			path = Result;
 			sourceTree = "<group>";
 		};
 		E105882F219CB9270020976B /* Logger */ = {
@@ -351,6 +342,7 @@
 				E1D8BAE921ADE18E00A9BD07 /* AsyncAwait.swift */,
 				E1058846219CB9270020976B /* Task+async.swift */,
 				E1058847219CB9270020976B /* Task+await.swift */,
+				E105882E219CB9270020976B /* AnyResult.swift */,
 			);
 			path = AsyncAwait;
 			sourceTree = "<group>";
