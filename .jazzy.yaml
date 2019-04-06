@@ -37,4 +37,5 @@ custom_categories:
   - name: URL Session Interceptor
     children:
       - URLInterceptor
+      - URLInterceptorTask
       - URLInterceptorError

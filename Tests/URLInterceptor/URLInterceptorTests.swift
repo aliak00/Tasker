@@ -3,7 +3,7 @@ import XCTest
 
 private class Interceptor: TaskInterceptor {
     func intercept<T>(task: inout T, currentBatchCount _: Int) -> InterceptCommand where T: Task {
-        guard let task = task as? URLInterceptor.DataTask else {
+        guard let task = task as? URLInterceptorTask else {
             return .execute
         }
         task.request.addValue("hahaha", forHTTPHeaderField: "hahaha")
@@ -18,7 +18,7 @@ private class Reactor: TaskReactor {
     }
 
     func shouldExecute<T: Task>(after result: T.Result, from task: T, with _: TaskHandle) -> Bool {
-        guard let result = result as? URLInterceptor.DataTask.Result else {
+        guard let result = result as? URLInterceptorTask.Result else {
             return false
         }
         if case .success = result {
