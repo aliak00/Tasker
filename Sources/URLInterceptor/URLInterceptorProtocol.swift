@@ -40,7 +40,7 @@ class URLInterceptorProtocol: URLProtocol {
         self.handle = taskManager.add(task: task) { [weak self, weak task] result in
             guard let strongSelf = self else { return }
             do {
-                let tuple = try result.materialize()
+                let tuple = try result.get()
                 if let response = tuple.response {
                     strongSelf.client?.urlProtocol(strongSelf, didReceive: response, cacheStoragePolicy: .allowed)
                 }

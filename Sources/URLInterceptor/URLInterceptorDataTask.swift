@@ -15,7 +15,7 @@ extension URLInterceptor {
         public typealias SuccessValue = (data: Data?, response: URLResponse?, error: Error?)
 
         ///
-        public func execute(completion: @escaping (Result<(data: Data?, response: URLResponse?, error: Error?)>) -> Void) {
+        public func execute(completion: @escaping CompletionCallback) {
             self.task = URLSession.shared.dataTask(with: self.request) { data, response, error in
                 let value: SuccessValue = (data, response, error)
                 completion(.success(value))

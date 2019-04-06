@@ -1,11 +1,11 @@
 import Foundation
 
 ///
-public typealias AnyResult = Result<Any>
+public typealias AnyResult = Result<Any, Error>
 
-public extension Result where T == Any {
+public extension Result where Success == Any, Failure == Error {
     ///
-    init<T>(_ result: Result<T>) {
+    init<T, E: Error>(_ result: Result<T, E>) {
         switch result {
         case let .success(value):
             self = .success(value)

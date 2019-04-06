@@ -13,7 +13,7 @@ public class AnyTask<T>: Task {
     */
     public typealias SuccessValue = T
 
-    var executeThunk: (@escaping ResultCallback) -> Void
+    var executeThunk: (@escaping CompletionCallback) -> Void
 
     /**
      Initialize the AnyTask with an execution block that is given a "done" callback that must
@@ -22,7 +22,7 @@ public class AnyTask<T>: Task {
      - parameter timeout: after how long the task timeout
      - parameter execute: the execution block.
      */
-    public init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping AnyTask.ResultCallback) -> Void)) {
+    public init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping AnyTask.CompletionCallback) -> Void)) {
         self.executeThunk = { completion in
             execute { result in
                 completion(result)
@@ -76,7 +76,7 @@ public class AnyTask<T>: Task {
     /**
      The `Task.execute` function calls the execution block was given to an initilzer
     */
-    public func execute(completion: @escaping ResultCallback) {
+    public func execute(completion: @escaping CompletionCallback) {
         self.executeThunk(completion)
     }
 }

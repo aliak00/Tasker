@@ -12,7 +12,7 @@ extension Task {
         timeout: DispatchTimeInterval? = nil
     ) throws -> SuccessValue {
         let semaphore = DispatchSemaphore(value: 0)
-        var maybeResult: Result?
+        var maybeResult: Self.Result?
         let handle = (taskManager ?? TaskManager.shared).add(
             task: self,
             startImmediately: true

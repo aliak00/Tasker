@@ -27,7 +27,7 @@ class ReactorSpy: TaskReactor {
         self.executeBlock(done)
     }
 
-    func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with handle: TaskHandle) -> Bool where T: Task {
+    func shouldExecute<T>(after result: T.Result, from task: T, with handle: TaskHandle) -> Bool where T: Task {
         let anyResult = AnyResult(result)
         defer {
             self.shouldExecuteCallData.append((anyResult, Weak(task), handle))

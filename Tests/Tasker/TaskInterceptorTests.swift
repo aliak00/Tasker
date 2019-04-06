@@ -21,7 +21,7 @@ class TaskInterceptorTests: XCTestCase {
         let interceptor = InterceptorSpy()
         interceptor.interceptBlock = { anyTask, _ in
             let task = anyTask as! TaskSpy<Void>
-            task.executeCallBackData.append(AnyResult(Result<Int>.success(1)))
+            task.executeCallBackData.append(AnyResult(Result<Int, Error>.success(1)))
             return .execute
         }
         let manager = TaskManagerSpy(interceptors: [interceptor])

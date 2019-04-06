@@ -85,7 +85,7 @@ public class TaskManager {
         after interval: DispatchTimeInterval? = nil,
         timeout: DispatchTimeInterval? = nil,
         completeOn completionQueue: DispatchQueue? = nil,
-        completion: T.ResultCallback? = nil
+        completion: T.CompletionCallback? = nil
     ) -> TaskHandle {
         let handle = Handle(owner: self)
         let operation = self.createAsyncOperationForHandle(handle, task: task, timeout: timeout, completion: completion)
@@ -135,7 +135,7 @@ public class TaskManager {
         _ handle: TaskManager.Handle,
         task: T,
         timeout: DispatchTimeInterval?,
-        completion: T.ResultCallback?
+        completion: T.CompletionCallback?
     ) -> AsyncOperation {
         return AsyncOperation { [weak self, weak task, weak handle] operation in
 
@@ -183,7 +183,7 @@ public class TaskManager {
         task: T,
         handle: Handle,
         timeout: DispatchTimeInterval?,
-        completion: T.ResultCallback?
+        completion: T.CompletionCallback?
     ) {
         let timeoutWorkItem: DispatchWorkItem?
         if let timeout = timeout {
@@ -249,7 +249,7 @@ public class TaskManager {
         handle: Handle,
         operation: AsyncOperation,
         result: T.Result,
-        completion: T.ResultCallback?
+        completion: T.CompletionCallback?
     ) {
         // Now we are really finished no matter what. This Operation should be removed from the OperationQueue
         operation.finish()

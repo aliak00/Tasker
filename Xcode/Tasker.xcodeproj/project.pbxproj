@@ -26,7 +26,6 @@
 		E1CC6C0C219CC49A00B465A5 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058832219CB9270020976B /* LogLevel.swift */; };
 		E1CC6C0D219CC49A00B465A5 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058843219CB9270020976B /* AsyncOperation.swift */; };
 		E1CC6C0E219CC49A00B465A5 /* AnyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105882E219CB9270020976B /* AnyResult.swift */; };
-		E1CC6C0F219CC49A00B465A5 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105882D219CB9270020976B /* Result.swift */; };
 		E1CC6C10219CC49A00B465A5 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058856219CB9270020976B /* Task.swift */; };
 		E1CC6C11219CC49A00B465A5 /* TaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058850219CB9270020976B /* TaskError.swift */; };
 		E1CC6C12219CC49A00B465A5 /* TaskHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058852219CB9270020976B /* TaskHandle.swift */; };
@@ -54,7 +53,6 @@
 		E1CC6C2A219CC49B00B465A5 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058832219CB9270020976B /* LogLevel.swift */; };
 		E1CC6C2B219CC49B00B465A5 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058843219CB9270020976B /* AsyncOperation.swift */; };
 		E1CC6C2C219CC49B00B465A5 /* AnyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105882E219CB9270020976B /* AnyResult.swift */; };
-		E1CC6C2D219CC49B00B465A5 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105882D219CB9270020976B /* Result.swift */; };
 		E1CC6C2E219CC49B00B465A5 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058856219CB9270020976B /* Task.swift */; };
 		E1CC6C2F219CC49B00B465A5 /* TaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058850219CB9270020976B /* TaskError.swift */; };
 		E1CC6C30219CC49B00B465A5 /* TaskHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058852219CB9270020976B /* TaskHandle.swift */; };
@@ -137,7 +135,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E105882D219CB9270020976B /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		E105882E219CB9270020976B /* AnyResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyResult.swift; sourceTree = "<group>"; };
 		E1058830219CB9270020976B /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		E1058831219CB9270020976B /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -281,7 +278,6 @@
 			isa = PBXGroup;
 			children = (
 				E105882E219CB9270020976B /* AnyResult.swift */,
-				E105882D219CB9270020976B /* Result.swift */,
 			);
 			path = Result;
 			sourceTree = "<group>";
@@ -760,7 +756,6 @@
 				E1CC6C07219CC49A00B465A5 /* AtomicInt.swift in Sources */,
 				E1CC6C21219CC49A00B465A5 /* Weak.swift in Sources */,
 				E1CC6C05219CC49A00B465A5 /* Task+async.swift in Sources */,
-				E1CC6C0F219CC49A00B465A5 /* Result.swift in Sources */,
 				E1CC6C09219CC49A00B465A5 /* SynchronizedDictionary.swift in Sources */,
 				E1CC6C12219CC49A00B465A5 /* TaskHandle.swift in Sources */,
 				E1CC6C10219CC49A00B465A5 /* Task.swift in Sources */,
@@ -827,7 +822,6 @@
 				E1CC6C25219CC49B00B465A5 /* AtomicInt.swift in Sources */,
 				E1CC6C3F219CC49B00B465A5 /* Weak.swift in Sources */,
 				E1CC6C23219CC49B00B465A5 /* Task+async.swift in Sources */,
-				E1CC6C2D219CC49B00B465A5 /* Result.swift in Sources */,
 				E1CC6C27219CC49B00B465A5 /* SynchronizedDictionary.swift in Sources */,
 				E1CC6C30219CC49B00B465A5 /* TaskHandle.swift in Sources */,
 				E1CC6C2E219CC49B00B465A5 /* Task.swift in Sources */,

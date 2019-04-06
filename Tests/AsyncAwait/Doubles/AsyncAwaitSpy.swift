@@ -6,9 +6,9 @@ class AsyncAwaitSpy<T>: TaskSpy<T> {
         return self.completionCallData.count
     }
 
-    var completionCallData: SynchronizedArray<Result<T>> = []
+    var completionCallData: SynchronizedArray<AsyncAwaitSpy.Result> = []
 
-    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> Result<T>) {
+    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> AsyncAwaitSpy.Result) {
         self.init(timeout: timeout) { completion in
             completion(execute())
         }
@@ -25,7 +25,7 @@ class AsyncAwaitSpy<T>: TaskSpy<T> {
         after interval: DispatchTimeInterval? = nil,
         queue: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,
-        completion: ((Result<T>) -> Void)? = nil
+        completion: CompletionCallback? = nil
     ) -> TaskHandle {
         return super.async(with: nil, after: interval, queue: queue, timeout: timeout) { [weak self] result in
             defer {

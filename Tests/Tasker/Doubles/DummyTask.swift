@@ -3,7 +3,7 @@ import Tasker
 
 class DummyTask: Task {
     typealias SuccessValue = Void
-    func execute(completion: @escaping (Result<Void>) -> Void) {
+    func execute(completion: @escaping CompletionCallback) {
         completion(.success(()))
     }
 }

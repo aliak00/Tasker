@@ -10,12 +10,12 @@ class TaskSpy<T>: AnyTask<T> {
 
     var executeCallBackData: SynchronizedArray<AnyResult> = []
 
-    override init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping ResultCallback) -> Void)) {
+    override init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping CompletionCallback) -> Void)) {
         super.init(timeout: timeout, execute: execute)
         kTaskSpyCounter.getAndIncrement()
     }
 
-    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> Result<T>) {
+    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> TaskSpy.Result) {
         self.init(timeout: timeout) { completion in
             completion(execute())
         }
@@ -38,8 +38,8 @@ class TaskSpy<T>: AnyTask<T> {
         kTaskSpyCounter.getAndDecrement()
     }
 
-    override func execute(completion: @escaping ResultCallback) {
-        let wrappedCompletion: ResultCallback = { [weak self] result in
+    override func execute(completion: @escaping CompletionCallback) {
+        let wrappedCompletion: CompletionCallback = { [weak self] result in
             completion(result)
             self?.executeCallBackData.append(AnyResult(result))
         }

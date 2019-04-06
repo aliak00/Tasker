@@ -105,7 +105,7 @@ final class AsyncAwaitTests: XCTestCase {
     }
 
     func testAwaitFreeFunctionsShouldSucceeedWithResult() {
-        let f = { (done: @escaping (Result<Int>) -> Void) -> Void in
+        let f = { (done: @escaping (Result<Int, Error>) -> Void) -> Void in
             done(.success(5))
         }
 
@@ -113,7 +113,7 @@ final class AsyncAwaitTests: XCTestCase {
     }
 
     func testAwaitFreeFunctionsShouldFailWithResult() {
-        let f = { (done: @escaping (Result<Int>) -> Void) -> Void in
+        let f = { (done: @escaping (Result<Int, Error>) -> Void) -> Void in
             done(.failure(TaskError.unknown))
         }
 

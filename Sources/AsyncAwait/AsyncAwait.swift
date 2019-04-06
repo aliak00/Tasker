@@ -16,7 +16,7 @@ import Foundation
  - parameter closure: the expression to call asynchronously
  - parameter completion: the callback with the result of the closure
  */
-public func async<R>(_ closure: @escaping @autoclosure () -> R, completion: ((Result<R>) -> Void)? = nil) {
+public func async<R>(_ closure: @escaping @autoclosure () -> R, completion: ((Result<R, Error>) -> Void)? = nil) {
     AnyTask<R> { callback in
         callback(.success(closure()))
     }.async { result in
@@ -97,14 +97,14 @@ public func await(_ function: @escaping (@escaping () -> Void) -> Void, timeout:
  computing the result
 
  - parameter function: an asynchronous function that has a `done` callback as it's only parameter. The done callback
-    must take the expected `Result<T>` of the asynchronous operation as its only parameter
+    must take the expected `Result<T, Error>` of the asynchronous operation as its only parameter
  - parameter timeout: how long to wait or this function to finish
  */
-public func await<T>(_ function: @escaping (@escaping (Result<T>) -> Void) -> Void, timeout: DispatchTimeInterval? = nil) throws -> T {
+public func await<T>(_ function: @escaping (@escaping (Result<T, Error>) -> Void) -> Void, timeout: DispatchTimeInterval? = nil) throws -> T {
     return try AnyTask<T> { callback in
         function { result in
             do {
-                let value = try result.materialize()
+                let value = try result.get()
                 callback(.success(value))
             } catch {
                 callback(.failure(error))

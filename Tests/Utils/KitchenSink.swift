@@ -1,6 +1,26 @@
 import Foundation
 import XCTest
 
+extension Result {
+    var failureValue: Failure? {
+        switch self {
+        case let .failure(value):
+            return value
+        default:
+            return nil
+        }
+    }
+
+    var successValue: Success? {
+        switch self {
+        case let .success(value):
+            return value
+        default:
+            return nil
+        }
+    }
+}
+
 func sleep(for interval: DispatchTimeInterval) {
     switch interval {
     case let .microseconds(value):

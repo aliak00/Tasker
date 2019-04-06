@@ -38,7 +38,7 @@ private class EatGobbledygook: Task, HippoRequired, Retriable {
         self.weakHippo = Weak(hippo)
     }
 
-    func execute(completion: @escaping ResultCallback) {
+    func execute(completion: @escaping CompletionCallback) {
         // Hippo must be alive
         guard self.weakHippo.value?.status == .alive else {
             completion(.failure(Dead()))
@@ -65,7 +65,7 @@ private class GetHippoNameTask: Task, HippoRequired {
         self.name = name
     }
 
-    func execute(completion: @escaping ResultCallback) {
+    func execute(completion: @escaping CompletionCallback) {
         guard let hippo = self.weakHippo.value, hippo.status == .alive else {
             completion(.failure(Dead()))
             return
@@ -88,7 +88,7 @@ private class ReviveTheHippoReactor: TaskReactor {
         return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
-    func shouldExecute<T>(after result: Result<T.SuccessValue>, from _: T, with _: TaskHandle) -> Bool where T: Task {
+    func shouldExecute<T>(after result: T.Result, from _: T, with _: TaskHandle) -> Bool where T: Task {
         return result.failureValue is Dead
     }
 
@@ -110,7 +110,7 @@ private class RetryReactor: TaskReactor {
         return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
-    func shouldExecute<T>(after result: Result<T.SuccessValue>, from task: T, with handle: TaskHandle) -> Bool where T: Task {
+    func shouldExecute<T>(after result: T.Result, from task: T, with handle: TaskHandle) -> Bool where T: Task {
         if result.failureValue is RandomFailure, let task = task as? Retriable {
             guard task.maxRetryCount > 0 else {
                 return false
