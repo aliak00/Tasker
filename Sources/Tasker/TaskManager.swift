@@ -22,7 +22,6 @@ public class TaskManager {
 
     private let taskQueue = DispatchQueue(label: "Tasker.TaskManager.tasks")
     private let reactorQueue = DispatchQueue(label: "Tasker.TaskManager.reactors", attributes: [.concurrent])
-    private let taskDispatchGroup = DispatchGroup()
 
     private let interceptorManager: TaskInterceptorManager
 
@@ -95,11 +94,6 @@ public class TaskManager {
                 + "task: \(T.self), "
                 + "with interval: \(String(describing: interval)), "
                 + "on queue: \(completionQueue?.label as Any)", tags: TaskManager.kClrTags)
-
-        // We are beginning the lifetime of a task that is supposed to be executed.
-        // The corresponding call to leave() should occur after task.execute is called, or
-        // if for some reason task.execute could not be called
-        self.taskDispatchGroup.enter()
 
         // Fire off a closure to set up the data in the handle.
         self.taskQueue.async {
@@ -332,7 +326,6 @@ public class TaskManager {
     public func waitTillAllTasksFinished() {
         log(level: .verbose, from: self, "begin waiting")
         self.operationQueue.waitUntilAllOperationsAreFinished()
-        self.taskDispatchGroup.wait()
         log(level: .verbose, from: self, "end waiting")
     }
 
@@ -346,7 +339,6 @@ public class TaskManager {
             guard let data = self.pendingTasks.removeValue(forKey: handle) else {
                 return nil
             }
-            self.taskDispatchGroup.leave()
             return data
         } else {
             guard let data = self.pendingTasks[handle] else {

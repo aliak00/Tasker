@@ -85,8 +85,8 @@ class TaskManagerTests: XCTestCase {
         manager.launch(task: TaskSpy<Void> { cb in
             count.getAndIncrement()
             cb(.success(()))
-        }, count: 100)
+        }, count: 1000)
         manager.waitTillAllTasksFinished()
-        XCTAssertEqual(count.value, 100)
+        XCTAssertEqual(count.value, 1000)
     }
 }
