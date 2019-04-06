@@ -261,8 +261,6 @@
 			isa = PBXGroup;
 			children = (
 				E1058844219CB9270020976B /* AsyncAwait */,
-				E1058837219CB9270020976B /* Atomics */,
-				E1058848219CB9270020976B /* Collections */,
 				E105882F219CB9270020976B /* Logger */,
 				E1058842219CB9270020976B /* Operations */,
 				E105884D219CB9270020976B /* Tasker */,
@@ -305,6 +303,8 @@
 		E1058839219CB9270020976B /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E1058848219CB9270020976B /* Collections */,
+				E1058837219CB9270020976B /* Atomics */,
 				E105883C219CB9270020976B /* Locking */,
 				E105883E219CB9270020976B /* Weak */,
 			);
