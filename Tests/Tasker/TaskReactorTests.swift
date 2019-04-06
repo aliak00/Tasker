@@ -24,7 +24,6 @@ class TaskReactorTests: XCTestCase {
         XCTAssertNil(manager.completionCallData.data.first?.failureValue)
     }
 
-    // TODO: have seen this fail a couple of times
     func testTaskManagerShouldReExecuteTasksIfReactorSaysRequeue() {
         let reactor = ReactorSpy(configuration: TaskReactorConfiguration(requeuesTask: true))
         reactor.executeBlock = { done in
