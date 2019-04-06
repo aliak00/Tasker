@@ -86,6 +86,7 @@ public class TaskManager {
         completeOn completionQueue: DispatchQueue? = nil,
         completion: T.CompletionCallback? = nil
     ) -> TaskHandle {
+        // Create a handle to this task, and also setup an Operation object that will be associated with this Task
         let handle = Handle(owner: self)
         let operation = self.createAsyncOperationForHandle(handle, task: task, timeout: timeout, completion: completion)
 
@@ -93,10 +94,14 @@ public class TaskManager {
             "will add \(handle) - "
                 + "task: \(T.self), "
                 + "with interval: \(String(describing: interval)), "
-                + "on queue: \(completionQueue?.label as Any)", tags: TaskManager.kClrTags)
+                + "on queue: \(completionQueue?.label as Any)",
+            tags: TaskManager.kClrTags)
 
-        // Fire off a closure to set up the data in the handle.
+        // Fire off a closure to set up the data in the handle. Everything is going to take place on the
+        // taskQueue from now onwards. We cannot add the handle to the list of pending tasks here because all access
+        // to pending tasks has to be thread safe.
         self.taskQueue.async {
+            // Setup the intercept callback for this task. We just wrap it and pass it through to the interceptor manager
             let intercept: (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void = { [weak self, weak task, weak handle] interval, completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
@@ -114,6 +119,8 @@ public class TaskManager {
                 completionQueue: completionQueue
             )
 
+            // This should be the only place in this file (other than in the data function) where this collection
+            // is accessed.
             self.pendingTasks[handle] = data
             log(from: self, "did add \(handle)", tags: TaskManager.kTkQTags)
 
@@ -122,6 +129,11 @@ public class TaskManager {
             }
         }
 
+        // There's a point in time where the handle is returned to the user and the handle has yet to be added to
+        // the collection of pendingTasks. At this point, in theory, the client can call a function on the handle
+        // and the handle will have no data associated with it yet.
+        // This should never happen in theory because `taskQueue` is a serial queue, so the block above will have
+        // been added to be executed before a client can call anything on the handle.
         return handle
     }
 
@@ -248,6 +260,7 @@ public class TaskManager {
         // Now we are really finished no matter what. This Operation should be removed from the OperationQueue
         operation.finish()
 
+        // Get on to the task queue since we were previously on whichever thread Task.execute was on.
         self.taskQueue.async { [weak self, weak task, weak handle] in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "\(T.self).execute => manager dead", tags: TaskManager.kTkQTags)
@@ -266,40 +279,51 @@ public class TaskManager {
 
             // Now check if we need to execute any of the reactors. If we do and the reactor is configured
             // to requeue the task then we are done here. Else we fire up the reactors and finish the task
-            let reactionData = strongSelf.reactors.enumerated().reduce((indices: [Int](), requeueTask: false, suspendQueue: false)) { memo, pair in
-                let index = pair.offset
-                let reactor = pair.element
-                var indices = memo.indices
-                var requeueTask = memo.requeueTask
-                var suspendQueue = memo.suspendQueue
-                if reactor.shouldExecute(after: result, from: task, with: handle) {
-                    indices.append(index)
-                    requeueTask = memo.requeueTask || reactor.configuration.requeuesTask
-                    suspendQueue = memo.suspendQueue || reactor.configuration.suspendsTaskQueue
-                }
-                return (indices, requeueTask, suspendQueue)
-            }
+            let reactionData = strongSelf
+                .reactors
+                .enumerated()
+                .reduce((indicesToRun: [Int](), requeueTask: false, suspendQueue: false)) { memo, pair in
+                    let index = pair.offset
+                    let reactor = pair.element
+                    var indices = memo.indicesToRun
+                    var requeueTask = memo.requeueTask
+                    var suspendQueue = memo.suspendQueue
+                    if reactor.shouldExecute(after: result, from: task, with: handle) {
+                        indices.append(index)
+                        // If any of the reactors say we need to requeue, then we need to requeue
+                        requeueTask = memo.requeueTask || reactor.configuration.requeuesTask
 
-            if reactionData.indices.count > 0 {
+                        // If any of the reactors say we need to suspent, then we need to suspend
+                        suspendQueue = memo.suspendQueue || reactor.configuration.suspendsTaskQueue
+                    }
+                    return (indices, requeueTask, suspendQueue)
+                }
+
+            // If we have any reactors to run, let's run them
+            if reactionData.indicesToRun.count > 0 {
                 log(from: strongSelf,
-                    "\(handle) launching reactors \(reactionData.indices) - "
+                    "\(handle) launching reactors \(reactionData.indicesToRun) - "
                         + "after result \(result), "
                         + "requeue: \(reactionData.requeueTask), "
                         + "suspend: \(reactionData.suspendQueue)",
                     tags: TaskManager.kTkQTags)
                 strongSelf.launchReactors(
-                    at: reactionData.indices,
+                    withIndices: reactionData.indicesToRun,
                     on: handle,
                     requeueTask: reactionData.requeueTask,
                     suspendQueue: reactionData.suspendQueue
                 )
 
+                // The launchReactors function will requeue the task, so we just return now.
                 if reactionData.requeueTask {
                     return
                 }
             } else {
                 log(level: .debug, from: strongSelf, "\(handle) caused no reactions", tags: TaskManager.kTkQTags)
             }
+
+            // And the task is officiall done! Sanity check one more time for a cancelled task, and finish things off by
+            // removing the handle form the list of pending tasks
 
             guard !operation.isCancelled else {
                 log(level: .verbose, from: strongSelf, "task.execute => operation for \(handle) dead or cancelled", tags: TaskManager.kTkQTags)
@@ -315,6 +339,12 @@ public class TaskManager {
                     completion?(result)
                 }
             } else {
+                // Even though operation.isCancelled returned false, in theory, the task could've already been cancelled
+                // in a number of ways:
+                // * User called handle.cancel (but then the handle should've been dead 🤔)
+                // * Task timeout (but then the handle should've been dead 🤔)
+                // * A reactor on the task failed (head hurt to think 🤯)
+                // * A reactor on the task timeout (head hurt to think 🤯)
                 log(level: .verbose, from: strongSelf, "did not finish \(handle)", tags: TaskManager.kTkQTags)
             }
         }
@@ -461,7 +491,7 @@ public class TaskManager {
         return timeoutWorkItem
     }
 
-    private func launchReactors(at indices: [Int], on finishedHandle: Handle, requeueTask: Bool, suspendQueue: Bool) {
+    private func launchReactors(withIndices indices: [Int], on finishedHandle: Handle, requeueTask: Bool, suspendQueue: Bool) {
         //
         // Executing the reactors involves the following:
         //

@@ -1,11 +1,18 @@
 import Foundation
 
 /**
- A task reactor allows you to control what the task manager should after a task is completed
+ A task reactor allows you to control what the task manager should do after a task is completed,
+ and before the completion callback is called.
+
+ ## Multiple reactors
+
+ If a there're multiple reactors that are supposed to be run for a task then the options set in the
+ `TaskReactorConfiguration` are OR'ed together to determine what to do with the task. I.e. if one reactor
+ of `n` reactors is configured to reqeue a task, then the task will be requeued.
  */
 public protocol TaskReactor {
     /**
-     Return true if you want this interceptor to be executed
+     Return true if you want this reactor to be executed
 
      - parameter after: the result of the task that was just executed
      - parameter from: the actual task that was just executed
