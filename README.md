@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/aliak00/Tasker.svg?branch=master)](https://travis-ci.org/aliak00/Tasker)
 [![license](https://img.shields.io/github/license/aliak00/Tasker.svg)](https://github.com/aliak00/Tasker/blob/master/LICENSE)
 
+[Full API docs](https://aliak00.github.io/Tasker/)
 
 * [Quick look](#quick-look)
 * [Tasks](#tasks)

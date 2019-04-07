@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+set -e
+set -o pipefail
+
 xcodebuild -scheme Tasker-iOS \
     -project Xcode/Tasker.xcodeproj \
     -sdk iphonesimulator \
