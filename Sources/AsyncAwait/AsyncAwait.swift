@@ -63,13 +63,13 @@ public func task<R>(_ closure: @escaping @autoclosure () -> R) -> AnyTask<R> {
  XCTAssertEqual(try await(f), 5)
  ```
 
- - parameter function: an asynchronous function that has a `done` callback as it's only parameter. The done callback
-    must take the expected value of the asynchronous operation as its only parameter
  - parameter timeout: how long to wait or this function to finish
+ - parameter block: an asynchronous function that has a `done` callback as it's only parameter. The done callback
+    must take the expected value of the asynchronous operation as its only parameter
  */
-public func await<T>(_ function: @escaping (@escaping (T) -> Void) -> Void, timeout: DispatchTimeInterval? = nil) throws -> T {
+public func await<T>(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping (T) -> Void) -> Void) throws -> T {
     return try AnyTask<T> { callback in
-        function { result in
+        block { result in
             callback(.success(result))
         }
     }.await(timeout: timeout)
@@ -79,13 +79,13 @@ public func await<T>(_ function: @escaping (@escaping (T) -> Void) -> Void, time
  Calls an asynchronous function and waits for completion. The function that is passed in must have a completion
  callback, and this is assumed to be the callback that is called when the asynchronous function is done.
 
- - parameter function: an asynchronous function that has a `done` callback as it's only parameter. The `done` callback
+ - parameter block: an asynchronous function that has a `done` callback as it's only parameter. The `done` callback
     must be called when the asynchronous operation completes.
  - parameter timeout: how long to wait or this function to finish
  */
-public func await(_ function: @escaping (@escaping () -> Void) -> Void, timeout: DispatchTimeInterval? = nil) throws  {
+public func await(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping () -> Void) -> Void) throws  {
     try AnyTask<Void> { callback in
-        function {
+        block {
             callback(.success(()))
         }
     }.await(timeout: timeout)
@@ -100,9 +100,9 @@ public func await(_ function: @escaping (@escaping () -> Void) -> Void, timeout:
     must take the expected `Result<T, Error>` of the asynchronous operation as its only parameter
  - parameter timeout: how long to wait or this function to finish
  */
-public func await<T>(_ function: @escaping (@escaping (Result<T, Error>) -> Void) -> Void, timeout: DispatchTimeInterval? = nil) throws -> T {
+public func await<T>(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) throws -> T {
     return try AnyTask<T> { callback in
-        function { result in
+        block { result in
             do {
                 let value = try result.get()
                 callback(.success(value))

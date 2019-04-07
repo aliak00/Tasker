@@ -97,7 +97,7 @@ final class AsyncAwaitTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(try await(f), 5)
+        XCTAssertEqual(try await(block: f), 5)
 
         var value: Int? = 0
         async(5) { value = $0.successValue }
@@ -109,7 +109,7 @@ final class AsyncAwaitTests: XCTestCase {
             done(.success(5))
         }
 
-        XCTAssertEqual(try await(f), 5)
+        XCTAssertEqual(try await(block: f), 5)
     }
 
     func testAwaitFreeFunctionsShouldFailWithResult() {
@@ -117,7 +117,7 @@ final class AsyncAwaitTests: XCTestCase {
             done(.failure(TaskError.unknown))
         }
 
-        XCTAssertThrowsError(try await(f))
+        XCTAssertThrowsError(try await(block: f))
     }
 
     func testAwaitFreeFunctionShouldThrowOnTimeOut() {
@@ -128,7 +128,7 @@ final class AsyncAwaitTests: XCTestCase {
             }
         }
 
-        XCTAssertThrowsError(try await(f, timeout: .milliseconds(10)))
+        XCTAssertThrowsError(try await(timeout: .milliseconds(10), block: f))
     }
 
     // func testAwaitShouldCallCompletionOnSpecifiedQueue() {
