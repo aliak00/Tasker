@@ -1,8 +1,9 @@
 # Tasker - a task manager with async await
 
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![CocoaPods Version](https://img.shields.io/cocoapods/v/Tasker.svg?style=flat)](http://cocoadocs.org/docsets/Tasker)
-[![License](https://img.shields.io/cocoapods/l/Tasker.svg?style=flat)](/LICENSE)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Build Status](https://travis-ci.org/aliak00/Tasker.svg?branch=master)](https://travis-ci.org/aliak00/Tasker)
+[![license](https://img.shields.io/github/license/aliak00/Tasker.svg)](https://github.com/aliak00/Tasker/blob/master/LICENSE)
 
 
 * [Quick look](#quick-look)
