@@ -16,10 +16,10 @@ A task management framework with async and await functionality
                        DESC
 
   s.homepage         = 'https://github.com/aliak00/Tasker'
-  s.license          = { :type => 'APACHE-2', :file => 'LICENSE' }
+  s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Ali Akhtarzada' => 'ali.akhtarzada@gmail.com' }
   s.source           = { :git => 'git@github.com:aliak00/Tasker.git', :tag => s.version.to_s }
-  s.swift_version    = '4.2'
+  s.swift_version    = '5.0'
 
   s.ios.deployment_target = '9.0'
 
