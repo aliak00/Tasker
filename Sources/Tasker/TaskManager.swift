@@ -440,7 +440,6 @@ public class TaskManager {
             switch result {
             case .ignore:
                 log(level: .verbose, from: self, "will not queue \(handle)")
-                break
             case let .execute(handles):
                 // Queue up all the handles that are to be executed
                 strongSelf.taskQueue.async {

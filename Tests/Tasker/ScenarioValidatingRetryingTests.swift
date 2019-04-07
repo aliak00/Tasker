@@ -56,7 +56,6 @@ private class EatGobbledygook: Task, HippoRequired, Retriable {
 
 // This simulates doing something that just needs a hippo, but cannot be retried
 private class GetHippoNameTask: Task, HippoRequired {
-
     typealias SuccessValue = String
     var weakHippo: Weak<Hippo>
     let name: String

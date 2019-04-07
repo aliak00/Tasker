@@ -2,7 +2,7 @@ import Foundation
 
 /**
  This enum represents the various errors that can occur during the execution of a task
-*/
+ */
 public enum TaskError: Error {
     /**
      A `TaskReactor`'s `execute` function failed.

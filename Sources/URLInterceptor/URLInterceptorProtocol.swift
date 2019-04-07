@@ -38,7 +38,6 @@ class URLInterceptorProtocol: URLProtocol {
     weak var handle: TaskHandle?
 
     override func startLoading() {
-
         log(from: self, "starting \(self.request)")
 
         // Get a hold of out taskManager

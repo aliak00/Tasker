@@ -46,7 +46,7 @@ struct Ensure<T: Equatable> {
         var lastValue = self.block()
         var passed = lastValue == value
         let start = DispatchTime.now()
-        while DispatchTime.now() < start + timeout && !passed {
+        while DispatchTime.now() < start + timeout, !passed {
             sleep(for: .milliseconds(1))
             lastValue = self.block()
             passed = lastValue == value
@@ -64,7 +64,7 @@ struct Ensure<T: Equatable> {
         var lastValue = self.block()
         var passed = lastValue == value
         let start = DispatchTime.now()
-        while DispatchTime.now() < start + interval && passed {
+        while DispatchTime.now() < start + interval, passed {
             sleep(for: .milliseconds(1))
             lastValue = self.block()
             passed = lastValue == value

@@ -1,7 +1,6 @@
 import Foundation
 
 class SynchronizedArray<Element>: ExpressibleByArrayLiteral {
-
     required init(arrayLiteral elements: Element...) {
         self.array = elements
     }
@@ -20,7 +19,7 @@ class SynchronizedArray<Element>: ExpressibleByArrayLiteral {
     subscript(index: Int) -> Element {
         get {
             return self.queue.sync {
-                return self.array[index]
+                self.array[index]
             }
         }
         set {
@@ -32,7 +31,7 @@ class SynchronizedArray<Element>: ExpressibleByArrayLiteral {
 
     var count: Int {
         return self.queue.sync {
-            return self.array.count
+            self.array.count
         }
     }
 

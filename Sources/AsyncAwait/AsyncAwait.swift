@@ -83,7 +83,7 @@ public func await<T>(timeout: DispatchTimeInterval? = nil, block: @escaping (@es
     must be called when the asynchronous operation completes.
  - parameter timeout: how long to wait or this function to finish
  */
-public func await(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping () -> Void) -> Void) throws  {
+public func await(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping () -> Void) -> Void) throws {
     try AnyTask<Void> { callback in
         block {
             callback(.success(()))

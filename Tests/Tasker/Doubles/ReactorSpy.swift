@@ -17,6 +17,7 @@ class ReactorSpy: TaskReactor {
     var shouldExecuteCallCount: Int {
         return self.shouldExecuteCallData.count
     }
+
     var shouldExecuteCallData: SynchronizedArray<(anyResult: AnyResult, weakAnyTask: Weak<AnyObject>, handle: TaskHandle)> = []
     var shouldExecuteBlock: (AnyResult, AnyObject, TaskHandle) -> Bool = { _, _, _ in true }
 

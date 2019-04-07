@@ -2,7 +2,6 @@
 import XCTest
 
 final class AsyncAwaitTests: XCTestCase {
-
     override func setUp() {
         self.addTeardownBlock {
             ensure(AsyncOperation.identifierCounter.value).becomes(0)

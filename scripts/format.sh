@@ -15,5 +15,6 @@ if [[ -z "${TRAVIS}" ]]; then
         --enable spaceInsideBraces \
         --enable consecutiveBlankLines \
         --enable linebreakAtEndOfFile \
+        --disable isEmpty \
         --header strip
 fi
