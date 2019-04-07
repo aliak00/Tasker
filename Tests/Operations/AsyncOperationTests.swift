@@ -47,7 +47,7 @@ final class AsyncOperationTests: XCTestCase {
         for _ in 0..<100 {
             operations.append(AsyncOperation { $0.finish() })
         }
-        operations.forEach { $0.markReady() }
+        operations.forEach { $0.markReady()  }
         queue.addOperations(operations, waitUntilFinished: true)
         operations.forEach { XCTAssertEqual($0.state, AsyncOperation.State.finished) }
     }

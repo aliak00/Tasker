@@ -7,7 +7,7 @@ import Foundation
  Every `TaskManager` has a queue of tasks and this queue keeps on growing as long as tasks are added to the manager.
  A reactor has the power to pause this queue while it is being executed and can also tell a manager to requeue
  any task that causes this reaction
- */
+*/
 public struct TaskReactorConfiguration {
     let timeout: DispatchTimeInterval?
     let requeuesTask: Bool

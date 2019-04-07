@@ -20,7 +20,8 @@ import Foundation
  Tasks are reference types because the task manager has to keep track of all the tasks that are floating around.
 
  */
-public protocol Task: AnyObject {
+public protocol Task: class {
+
     /// The type of a successful execution of a task
     associatedtype SuccessValue
 

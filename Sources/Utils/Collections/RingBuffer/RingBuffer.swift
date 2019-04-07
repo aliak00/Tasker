@@ -2,7 +2,7 @@ import Foundation
 
 struct RingBuffer<Element> {
     fileprivate var array: [Element] = []
-    private var currentIndex = 0
+    fileprivate var currentIndex = 0
     let capacity: Int
 
     init(desiredCapacity: Int, initialElements: [Element]) {

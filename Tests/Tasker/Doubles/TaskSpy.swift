@@ -10,7 +10,7 @@ class TaskSpy<T>: AnyTask<T> {
 
     var executeCallBackData: SynchronizedArray<AnyResult> = []
 
-    override init(timeout: DispatchTimeInterval? = nil, execute: @escaping (@escaping CompletionCallback) -> Void) {
+    override init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping CompletionCallback) -> Void)) {
         super.init(timeout: timeout, execute: execute)
         kTaskSpyCounter.getAndIncrement()
     }

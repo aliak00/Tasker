@@ -3,8 +3,8 @@ import Foundation
 /**
  This is a handle to a task that is given to the `TaskManager` and can be used to control
  the task.
- */
-public protocol TaskHandle: AnyObject {
+*/
+public protocol TaskHandle: class {
     /// Cancels the task
     func cancel()
     /// Starts the task if it hasn't already been started
