@@ -1,5 +1,5 @@
 included:
-  - Swooft/Sources
+  - Sources/
 
 disabled_rules:
   - identifier_name
