@@ -1,7 +1,6 @@
 import Foundation
 
 class TaskInterceptorManager {
-
     private static let kTags = [LogTags.onInterceptorQueue]
 
     enum InterceptionResult {
@@ -76,13 +75,13 @@ class TaskInterceptorManager {
                 shouldBeIgnored = true
                 interceptorIndexHoldingTask = nil
             case .hold:
-                if interceptorIndexHoldingTask == nil && !shouldBeForceExecuted && !shouldBeIgnored {
+                if interceptorIndexHoldingTask == nil, !shouldBeForceExecuted, !shouldBeIgnored {
                     interceptorIndexHoldingTask = index
                 }
             }
         }
 
-        if shouldBeIgnored && !shouldBeForceExecuted {
+        if shouldBeIgnored, !shouldBeForceExecuted {
             log(from: self, "discarding task for \(handle)", tags: TaskInterceptorManager.kTags)
             handle.discard()
             return .ignore
@@ -107,7 +106,7 @@ class TaskInterceptorManager {
 
         log(from: self, "carrying on with task for \(handle)", tags: TaskInterceptorManager.kTags)
 
-        if handlesToRelease.count > 0 {
+        if !handlesToRelease.isEmpty {
             log(from: self, "\(handle) releasing batched handles \(handlesToRelease)", tags: TaskInterceptorManager.kTags)
         }
 

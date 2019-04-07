@@ -300,7 +300,7 @@ public class TaskManager {
                 }
 
             // If we have any reactors to run, let's run them
-            if reactionData.indicesToRun.count > 0 {
+            if !reactionData.indicesToRun.isEmpty {
                 log(from: strongSelf,
                     "\(handle) launching reactors \(reactionData.indicesToRun) - "
                         + "after result \(result), "
@@ -440,7 +440,6 @@ public class TaskManager {
             switch result {
             case .ignore:
                 log(level: .verbose, from: self, "will not queue \(handle)")
-                break
             case let .execute(handles):
                 // Queue up all the handles that are to be executed
                 strongSelf.taskQueue.async {
@@ -467,7 +466,7 @@ public class TaskManager {
                 __dispatch_assert_queue(self.taskQueue)
             #endif
         }
-        if self.interceptorManager.count == 0 {
+        if self.interceptorManager.isEmpty {
             self.justQueueTask(for: handle, with: data, after: interval)
         } else {
             self.interceptThenQueueTask(for: handle, with: data, after: interval)
@@ -525,7 +524,7 @@ public class TaskManager {
 
             // No need to run executors that are already executing
             let reactorIndices = Set(indices).subtracting(strongSelf.executingReactors)
-            guard reactorIndices.count > 0 else {
+            guard !reactorIndices.isEmpty else {
                 log(from: strongSelf, "already executing \(strongSelf.executingReactors)", tags: TaskManager.kTkQTags)
                 return
             }
@@ -614,7 +613,7 @@ public class TaskManager {
             }
 
             // If we only had immediate reactors make sure queue is suspended and requeue tasks
-            if strongSelf.executingReactors.count == 0 {
+            if strongSelf.executingReactors.isEmpty {
                 log(from: strongSelf, "unsuspending task queue", tags: TaskManager.kTkQTags)
                 strongSelf.operationQueue.isSuspended = false
                 strongSelf.requeueTasks()
@@ -671,7 +670,7 @@ public class TaskManager {
             #endif
         }
         self.executingReactors.remove(index)
-        if self.executingReactors.count == 0 {
+        if self.executingReactors.isEmpty {
             // Stop interceptor queue and ensure task queue is not suspended
             self.operationQueue.isSuspended = false
             self.requeueTasks()

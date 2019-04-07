@@ -22,7 +22,6 @@ private extension DispatchTime {
  There're also a number of predefined tags that the logs from within the library use. See `LogTags` for a list.
  */
 public class Logger {
-
     /// Shared logger object
     public static let shared: Logger = {
         let logger = Logger(synchronousOutput: true)
@@ -280,7 +279,7 @@ public class Logger {
         line: Int = #line,
         context: String?
     ) {
-        guard (self._enabled && self.transports.count > 0) || force else {
+        guard (self._enabled && !self.transports.isEmpty) || force else {
             return
         }
 
@@ -299,11 +298,11 @@ public class Logger {
         }
 
         var shouldOutputToTransports = true
-        if self.ignoredTags.count > 0 && self.ignoredTags.intersection(allTags).count > 0 {
+        if !self.ignoredTags.isEmpty && !self.ignoredTags.intersection(allTags).isEmpty {
             shouldOutputToTransports = false
         }
 
-        if self.allowedTags.count > 0 && self.allowedTags.intersection(allTags).count == 0 {
+        if !self.allowedTags.isEmpty && self.allowedTags.intersection(allTags).isEmpty {
             shouldOutputToTransports = false
         }
 
@@ -312,7 +311,7 @@ public class Logger {
         }
 
         var tagsString = ""
-        if explicitTags.count > 0 && self._outputTags {
+        if !explicitTags.isEmpty, self._outputTags {
             tagsString = ",\(explicitTags.joined(separator: ","))"
         }
 

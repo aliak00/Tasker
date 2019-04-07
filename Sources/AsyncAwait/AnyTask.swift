@@ -7,10 +7,9 @@ import Foundation
  `AnyTask`s schedules execution blocks on `TaskManager.shared`.
  */
 public class AnyTask<T>: Task {
-
     /**
      Alias of the "successful" return value of your execution block
-    */
+     */
     public typealias SuccessValue = T
 
     var executeThunk: (@escaping CompletionCallback) -> Void
@@ -22,7 +21,7 @@ public class AnyTask<T>: Task {
      - parameter timeout: after how long the task timeout
      - parameter execute: the execution block.
      */
-    public init(timeout: DispatchTimeInterval? = nil, execute: (@escaping (@escaping AnyTask.CompletionCallback) -> Void)) {
+    public init(timeout: DispatchTimeInterval? = nil, execute: @escaping (@escaping AnyTask.CompletionCallback) -> Void) {
         self.executeThunk = { completion in
             execute { result in
                 completion(result)
@@ -70,12 +69,12 @@ public class AnyTask<T>: Task {
 
     /**
      The timeout passed in the initializer
-    */
+     */
     public let timeout: DispatchTimeInterval?
 
     /**
      The `Task.execute` function calls the execution block was given to an initilzer
-    */
+     */
     public func execute(completion: @escaping CompletionCallback) {
         self.executeThunk(completion)
     }

@@ -21,7 +21,7 @@ class AsyncOperation: Operation {
     private(set) var state: State {
         get {
             return self.lock.scope {
-                return self._state
+                self._state
             }
         }
 
@@ -55,21 +55,15 @@ class AsyncOperation: Operation {
     }
 
     override var isReady: Bool {
-        get {
-            return self.state == .ready
-        }
+        return self.state == .ready
     }
 
     override var isExecuting: Bool {
-        get {
-            return self.state == .executing
-        }
+        return self.state == .executing
     }
 
     override var isFinished: Bool {
-        get {
-            return self.state == .finished
-        }
+        return self.state == .finished
     }
 
     override func start() {
@@ -97,7 +91,7 @@ class AsyncOperation: Operation {
 
     override func cancel() {
         super.cancel()
-        if !isExecuting {
+        if !self.isExecuting {
             self.state = .finished
         }
     }
