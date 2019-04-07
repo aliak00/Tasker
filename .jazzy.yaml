@@ -30,7 +30,7 @@ custom_categories:
   - name: "Async Await"
     children:
       - async(_:completion:)
-      - await(_:timeout:)
+      - await(timeout:block:)
       - task(_:)
       - AnyTask
       - AnyResult
