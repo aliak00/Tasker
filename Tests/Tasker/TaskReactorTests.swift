@@ -27,31 +27,36 @@ class TaskReactorTests: XCTestCase {
     func testTaskManagerShouldReExecuteTasksIfReactorSaysRequeue() {
         let reactor = ReactorSpy(configuration: TaskReactorConfiguration(requeuesTask: true))
         reactor.executeBlock = { done in
+            print("executing")
             sleep(for: .milliseconds(1))
             done(nil)
         }
         reactor.shouldExecuteBlock = { anyResult, anyTask, _ in
-            guard (anyTask as! TaskSpy<Int>).executeCallBackData.count == 1 else {
-                return false
-            }
-            return (anyResult.successValue! as! Int) % 2 == 0
+            let task = anyTask as! TaskSpy<Int>
+            let value = anyResult.successValue! as! Int
+            print("should execute \(task.executeCallBackData.count), \(value), \(value.isMultiple(of: 2))")
+            return task.executeCallBackData.count == 1 && value.isMultiple(of: 2)
         }
 
         let manager = TaskManagerSpy(reactors: [reactor])
 
         // Run tasks that ask to be reacted to, and then not
-        let numTasks = 10
+        let numTasks = 100
         var tasks: [TaskSpy<Int>] = []
         for i in (0..<numTasks).yielded(by: .milliseconds(1)) {
-            let task = TaskSpy { $0(.success(i)) }
+            print(i)
+            let task = TaskSpy { () -> Int in print("block \(i)"); return i }
             tasks.append(task)
             manager.add(task: task)
         }
 
         ensure(manager.completionCallCount).becomes(numTasks)
 
+        print("##")
+
         for (index, task) in tasks.enumerated() {
-            if index % 2 == 0 {
+            print("\(index) - \(task.executeCallCount)")
+            if index.isMultiple(of: 2) {
                 XCTAssertEqual(task.executeCallCount, 2)
             } else {
                 XCTAssertEqual(task.executeCallCount, 1)

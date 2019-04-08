@@ -89,13 +89,6 @@ class AsyncOperation: Operation {
         self.state = .finished
     }
 
-    override func cancel() {
-        super.cancel()
-        if !self.isExecuting {
-            self.state = .finished
-        }
-    }
-
     func markReady() {
         assert(self.state == .pending)
         log(level: .debug, from: self, "readying \(self)")
