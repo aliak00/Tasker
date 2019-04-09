@@ -24,19 +24,11 @@ class TaskInterceptorManager {
     func intercept<T: Task>(
         task: inout T,
         for handle: TaskManager.Handle,
-        after interval: DispatchTimeInterval?,
         completion: @escaping (InterceptionResult) -> Void
     ) {
-        if let interval = interval {
-            self.queue.asyncAfter(deadline: .now() + interval) { [task] in
-                var task = task
-                completion(self.intercept(task: &task, handle: handle))
-            }
-        } else {
-            self.queue.async { [task] in
-                var task = task
-                completion(self.intercept(task: &task, handle: handle))
-            }
+        self.queue.async { [task] in
+            var task = task
+            completion(self.intercept(task: &task, handle: handle))
         }
     }
 

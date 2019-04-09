@@ -2,7 +2,7 @@ import Foundation
 
 extension TaskManager.Handle {
     class Data {
-        typealias Interceptor = (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
+        typealias Interceptor = (@escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
 
         var operation: AsyncOperation
         let taskReference: AnyObject
@@ -17,7 +17,7 @@ extension TaskManager.Handle {
             taskReference: AnyObject,
             completionErrorCallback: @escaping (TaskError) -> Void,
             taskDidCancelCallback: @escaping (TaskError) -> Void,
-            intercept: @escaping (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void,
+            intercept: @escaping Interceptor,
             completionQueue: DispatchQueue?
         ) {
             self.operation = operation

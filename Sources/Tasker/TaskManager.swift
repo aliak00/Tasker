@@ -102,12 +102,12 @@ public class TaskManager {
         // to pending tasks has to be thread safe.
         self.taskQueue.async {
             // Setup the intercept callback for this task. We just wrap it and pass it through to the interceptor manager
-            let intercept: (DispatchTimeInterval?, @escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void = { [weak self, weak task, weak handle] interval, completion in
+            let intercept: Handle.Data.Interceptor = { [weak self, weak task, weak handle] completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
                     return
                 }
-                strongSelf.interceptorManager.intercept(task: &task, for: handle, after: interval) { completion($0) }
+                strongSelf.interceptorManager.intercept(task: &task, for: handle) { completion($0) }
             }
 
             let data = Handle.Data(
@@ -390,44 +390,20 @@ public class TaskManager {
         log(level: .verbose, from: self, "did queue \(handle)", tags: TaskManager.kTkQTags)
     }
 
-    private func justQueueTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
-        if #available(iOS 10.0, OSX 10.12, *) {
-            #if !os(Linux)
-                __dispatch_assert_queue(self.taskQueue)
-            #endif
-        }
-        log(level: .verbose, from: self, "will queue \(handle)", tags: TaskManager.kTkQTags)
-        guard let interval = interval else {
-            self.queueOperation(data.operation, for: handle)
-            return
-        }
-        self.taskQueue.asyncAfter(deadline: .now() + interval) { [weak self, weak handle] in
-            guard let strongSelf = self else {
-                log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
-                return
-            }
-            guard let handle = handle else {
-                log(level: .verbose, from: self, "handle dead", tags: TaskManager.kTkQTags)
-                return
-            }
-            guard let data = strongSelf.data(for: handle) else {
-                log(level: .verbose, from: self, "will not queue \(handle)", tags: TaskManager.kTkQTags)
-                return
-            }
-            strongSelf.queueOperation(data.operation, for: handle)
-        }
-    }
-
-    private func interceptThenQueueTask(for handle: Handle, with data: Handle.Data, after interval: DispatchTimeInterval? = nil) {
+    private func interceptAndQueue(for handle: Handle, with data: Handle.Data) {
         // Getting the raw TaskData here so we better be on the taskQueue
         if #available(iOS 10.0, OSX 10.12, *) {
             #if !os(Linux)
                 __dispatch_assert_queue(self.taskQueue)
             #endif
         }
+        guard self.interceptorManager.count > 0 else {
+            self.queueOperation(data.operation, for: handle)
+            return
+        }
         // This calls the closure setup in Tasker.add, which has the InterceptorManager do that actual
         // work, ascynchronously.
-        data.intercept(interval) { [weak self, weak handle] result in
+        data.intercept { [weak self, weak handle] result in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "manager dead", tags: TaskManager.kClrTags)
                 return
@@ -465,10 +441,25 @@ public class TaskManager {
                 __dispatch_assert_queue(self.taskQueue)
             #endif
         }
-        if self.interceptorManager.count == 0 {
-            self.justQueueTask(for: handle, with: data, after: interval)
-        } else {
-            self.interceptThenQueueTask(for: handle, with: data, after: interval)
+        log(level: .verbose, from: self, "will queue \(handle)", tags: TaskManager.kTkQTags)
+        guard let interval = interval else {
+            self.interceptAndQueue(for: handle, with: data)
+            return
+        }
+        self.taskQueue.asyncAfter(deadline: .now() + interval) { [weak self, weak handle] in
+            guard let strongSelf = self else {
+                log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
+                return
+            }
+            guard let handle = handle else {
+                log(level: .verbose, from: self, "handle dead", tags: TaskManager.kTkQTags)
+                return
+            }
+            guard let data = strongSelf.data(for: handle) else {
+                log(level: .verbose, from: self, "will not queue \(handle)", tags: TaskManager.kTkQTags)
+                return
+            }
+            strongSelf.interceptAndQueue(for: handle, with: data)
         }
     }
 
