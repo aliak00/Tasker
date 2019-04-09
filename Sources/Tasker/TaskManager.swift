@@ -443,13 +443,12 @@ public class TaskManager {
             case let .execute(handles):
                 // Queue up all the handles that are to be executed
                 strongSelf.taskQueue.async {
+                    guard let strongSelf = self else {
+                        log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
+                        return
+                    }
                     for handle in handles {
-                        guard let strongSelf = self else {
-                            log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
-                            return
-                        }
-
-                        guard let data = self?.data(for: handle) else {
+                        guard let data = strongSelf.data(for: handle) else {
                             continue
                         }
                         strongSelf.queueOperation(data.operation, for: handle)
