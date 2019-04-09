@@ -602,13 +602,6 @@ public class TaskManager {
                 self.reactorQueue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem)
             }
         }
-
-        // If we only had immediate reactors make sure queue is suspended and requeue tasks
-        if self.executingReactors.count == 0 {
-            log(from: self, "unsuspending task queue", tags: TaskManager.kTkQTags)
-            self.operationQueue.isSuspended = false
-            self.requeueTasks()
-        }
     }
 
     private func requeueTasks() {
