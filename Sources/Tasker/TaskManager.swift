@@ -59,6 +59,9 @@ public class TaskManager {
         self.reactors = reactors
         self.interceptorManager = TaskInterceptorManager(interceptors)
         self.identifier = type(of: self).identifierCounter.getAndIncrement()
+        for index in 0..<reactors.count {
+            self.reactorAssoiciatedHandles[index] = Set<Handle>()
+        }
     }
 
     deinit {
@@ -476,6 +479,12 @@ public class TaskManager {
     }
 
     private func launchReactors(withIndices reactorIndices: [Int], on finishedHandle: Handle, requeueTask: Bool, suspendQueue: Bool) {
+        if #available(iOS 10.0, OSX 10.12, *) {
+            #if !os(Linux)
+            __dispatch_assert_queue(self.taskQueue)
+            #endif
+        }
+
         //
         // Executing the reactors involves the following:
         //
@@ -494,7 +503,6 @@ public class TaskManager {
 
             // Associate this handle with the reactors only if it's supposed to be requeued
             for index in reactorIndices {
-                self.reactorAssoiciatedHandles[index] = self.reactorAssoiciatedHandles[index] ?? Set<Handle>()
                 self.reactorAssoiciatedHandles[index]?.insert(finishedHandle)
             }
         }
