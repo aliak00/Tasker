@@ -313,17 +313,25 @@ public class TaskManager {
 
                 strongSelf.launchReactors(
                     withIndices: reactionData.indicesToRun,
-                    on: handle,
-                    requeueTask: reactionData.requeueTask,
-                    suspendQueue: reactionData.suspendQueue
+                    on: handle
                 )
 
-                // The launchReactors function will requeue the task, so we just return now.
+                if reactionData.suspendQueue {
+                    log(from: strongSelf, "suspending task queue", tags: TaskManager.kTkQTags)
+                    strongSelf.operationQueue.isSuspended = true
+                }
+
+                // If we need to requeue then requeue and return
                 if reactionData.requeueTask {
+                    log(from: strongSelf, "saving \(handle) to requeue list", tags: TaskManager.kTkQTags)
+                    strongSelf.tasksToRequeue.insert(handle)
+
+                    // Associate this handle with the reactors that were triggered
+                    for index in reactionData.indicesToRun {
+                        strongSelf.reactorAssoiciatedHandles[index]?.insert(handle)
+                    }
                     return
                 }
-            } else {
-                log(level: .debug, from: strongSelf, "\(handle) caused no reactions", tags: TaskManager.kTkQTags)
             }
 
             // And the task is officiall done! Sanity check one more time for a cancelled task, and finish things off by
@@ -478,33 +486,11 @@ public class TaskManager {
         return timeoutWorkItem
     }
 
-    private func launchReactors(withIndices reactorIndices: [Int], on finishedHandle: Handle, requeueTask: Bool, suspendQueue: Bool) {
+    private func launchReactors(withIndices reactorIndices: [Int], on finishedHandle: Handle) {
         if #available(iOS 10.0, OSX 10.12, *) {
             #if !os(Linux)
             __dispatch_assert_queue(self.taskQueue)
             #endif
-        }
-
-        //
-        // Executing the reactors involves the following:
-        //
-        // 1. Cull out reactors that are already executing
-        // 2. Note down immediate reactors
-        // 3. Queue up asynchronous reactors
-        // 4. Execute immediate reactors
-        // - If an interceptor says requeue a task, requeue
-        // - If an interceptor says pause task queue, then pause
-        // - When all queued reactors are done, restart task queue
-        //
-
-        if requeueTask {
-            log(from: self, "saving \(finishedHandle) to requeue list", tags: TaskManager.kTkQTags)
-            self.tasksToRequeue.insert(finishedHandle)
-
-            // Associate this handle with the reactors only if it's supposed to be requeued
-            for index in reactorIndices {
-                self.reactorAssoiciatedHandles[index]?.insert(finishedHandle)
-            }
         }
 
         // No need to run executors that are already executing
@@ -512,11 +498,6 @@ public class TaskManager {
         guard nonExecutingReactors.count > 0 else {
             log(from: self, "already executing \(self.executingReactors)", tags: TaskManager.kTkQTags)
             return
-        }
-
-        if suspendQueue {
-            log(from: self, "suspending task queue", tags: TaskManager.kTkQTags)
-            self.operationQueue.isSuspended = true
         }
 
         for index in nonExecutingReactors {
