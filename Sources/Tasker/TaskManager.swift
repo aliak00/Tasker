@@ -366,15 +366,9 @@ public class TaskManager {
             #endif
         }
         if remove {
-            guard let data = self.pendingTasks.removeValue(forKey: handle) else {
-                return nil
-            }
-            return data
+            return self.pendingTasks.removeValue(forKey: handle)
         } else {
-            guard let data = self.pendingTasks[handle] else {
-                return nil
-            }
-            return data
+            return self.pendingTasks[handle]
         }
     }
 
