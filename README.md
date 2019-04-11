@@ -1,5 +1,7 @@
 # Tasker - a task manager with async await
 
+**Warning**: This is alpha software right now and is open to wiledly breaking suggestions
+
 [![CocoaPods Version](https://img.shields.io/cocoapods/v/Tasker.svg?style=flat)](http://cocoadocs.org/docsets/Tasker)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Build Status](https://travis-ci.org/aliak00/Tasker.svg?branch=master)](https://travis-ci.org/aliak00/Tasker)
