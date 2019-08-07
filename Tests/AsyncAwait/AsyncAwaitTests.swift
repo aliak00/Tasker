@@ -98,9 +98,13 @@ final class AsyncAwaitTests: XCTestCase {
 
         XCTAssertEqual(try await(block: f), 5)
 
-        var value: Int? = 0
-        async(5) { value = $0.successValue }
-        ensure(value).becomes(5)
+        let value = Atomic<Int?>(nil)
+
+        async(5) { (r) in
+            value.value = r.successValue
+        }
+
+        ensure(value.value).becomes(5)
     }
 
     func testAwaitFreeFunctionsShouldSucceeedWithResult() {
