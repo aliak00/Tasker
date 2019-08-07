@@ -16,11 +16,9 @@ class AtomicInt: ExpressibleByIntegerLiteral {
 
     var value: Int {
         get {
-            var value: Int = 0
-            self.queue.sync {
-                value = self._value
+            return self.queue.sync {
+                self._value
             }
-            return value
         }
 
         set {
@@ -32,22 +30,20 @@ class AtomicInt: ExpressibleByIntegerLiteral {
 
     @discardableResult
     func getAndIncrement() -> Int {
-        var previousValue = 0
-        self.queue.sync {
-            previousValue = self._value
+        return self.queue.sync {
+            let previousValue = self._value
             self._value += 1
+            return previousValue
         }
-        return previousValue
     }
 
     @discardableResult
     func getAndDecrement() -> Int {
-        var previousValue = 0
-        self.queue.sync {
-            previousValue = self._value
+        return self.queue.sync {
+            let previousValue = self._value
             self._value -= 1
+            return previousValue
         }
-        return previousValue
     }
 
     func add(_ number: Int) {
