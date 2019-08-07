@@ -8,4 +8,5 @@ class DummyTask: Task {
     }
 }
 
-let kDummyTask = DummyTask()
+// It's mutable because it's passed to inout funcitons.
+var kDummyTask = DummyTask()

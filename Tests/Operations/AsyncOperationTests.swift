@@ -10,32 +10,33 @@ final class AsyncOperationTests: XCTestCase {
     }
 
     func testCreatingOperationShouldStartInPendingState() {
-        let operation = AsyncOperationSpy { _ in }
+        let operation = AsyncOperationSpy { _ in .done }
         XCTAssertEqual(operation.state, AsyncOperation.State.pending)
     }
 
     func testMarkingOperationReadyShouldGoToReadyState() {
-        let operation = AsyncOperationSpy { _ in }
+        let operation = AsyncOperationSpy { _ in .done }
         operation.markReady()
         XCTAssertEqual(operation.state, AsyncOperation.State.ready)
     }
 
     func testStartingOperationShouldGoToExecuting() {
-        let operation = AsyncOperationSpy { _ in }
+        let operation = AsyncOperationSpy { _ in .running }
         operation.markReady()
         operation.start()
         ensure(operation.state).becomes(.executing)
     }
 
     func testStartingOperationShouldCallExecutor() {
-        let operation = AsyncOperationSpy { _ in }
+        let operation = AsyncOperationSpy { _ in .done }
         operation.markReady()
         operation.start()
         ensure(operation.executorCallCount).becomes(1)
     }
 
     func testStartingOperationShouldGoToFinished() {
-        let operation = AsyncOperation { $0.finish() }
+        let operation = AsyncOperation()
+        operation.execute = { .done }
         operation.markReady()
         operation.start()
         ensure(operation.state).becomes(.finished)
@@ -45,7 +46,9 @@ final class AsyncOperationTests: XCTestCase {
         let queue = OperationQueue()
         var operations: [AsyncOperation] = []
         for _ in 0..<100 {
-            operations.append(AsyncOperation { $0.finish() })
+            let operation = AsyncOperation()
+            operation.execute = { .done }
+            operations.append(operation)
         }
         operations.forEach { $0.markReady() }
         queue.addOperations(operations, waitUntilFinished: true)
@@ -53,7 +56,7 @@ final class AsyncOperationTests: XCTestCase {
     }
 
     func testCancellingBeforeStartingShouldNotCallExecutor() {
-        let operation = AsyncOperationSpy { $0.finish() }
+        let operation = AsyncOperationSpy { _ in .done }
         operation.markReady()
         operation.cancel()
         operation.start()
@@ -62,7 +65,7 @@ final class AsyncOperationTests: XCTestCase {
     }
 
     func testCancellingBeforeStartingShouldNotCallFinish() {
-        let operation = AsyncOperationSpy { $0.finish() }
+        let operation = AsyncOperationSpy { _ in .done }
         operation.cancel()
         operation.start()
         XCTAssertEqual(operation.finishCallCount, 0)
@@ -74,7 +77,7 @@ final class AsyncOperationTests: XCTestCase {
         var operations: [AsyncOperation] = []
         let numTasks = 100
         for _ in 0..<numTasks {
-            let operation = AsyncOperationSpy { $0.finish() }
+            let operation = AsyncOperationSpy { _ in .done }
             operations.append(operation)
             queue.addOperation(operation)
         }

@@ -59,6 +59,9 @@ public class TaskManager {
         self.reactors = reactors
         self.interceptorManager = TaskInterceptorManager(interceptors)
         self.identifier = type(of: self).identifierCounter.getAndIncrement()
+        for index in 0..<reactors.count {
+            self.reactorAssoiciatedHandles[index] = Set<Handle>()
+        }
     }
 
     deinit {
@@ -143,45 +146,42 @@ public class TaskManager {
         timeout: DispatchTimeInterval?,
         completion: T.CompletionCallback?
     ) -> AsyncOperation {
-        return AsyncOperation { [weak self, weak task, weak handle] operation in
-
-            var shouldFinish = true
-            defer {
-                // If an error occured we mark the operaton finished
-                if shouldFinish {
-                    operation.finish()
-                }
-            }
-
+        let operation = AsyncOperation()
+        operation.execute = { [weak self, weak task, weak handle] in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kOpQTags)
-                return
+                return .done
             }
 
             guard let handle = handle else {
                 log(level: .verbose, from: self, "\(T.self) handle dead", tags: TaskManager.kOpQTags)
-                return
+                return .done
             }
 
             guard let task = task else {
                 log(level: .verbose, from: self, "\(handle) task dead", tags: TaskManager.kOpQTags)
-                return
+                return .done
             }
 
-            guard !operation.isCancelled else {
+            let maybeOperation = strongSelf.taskQueue.sync { () -> AsyncOperation? in
+                guard let data = strongSelf.data(for: handle), !data.operation.isCancelled else {
+                    return nil
+                }
+                data.state = .executing
+                return data.operation
+            }
+
+            guard let operation = maybeOperation else {
                 log(level: .verbose, from: self, "\(handle) operation cancelled", tags: TaskManager.kOpQTags)
-                return
-            }
-
-            shouldFinish = false
-
-            strongSelf.taskQueue.sync {
-                strongSelf.data(for: handle)?.state = .executing
+                return .done
             }
 
             // Make sure we prefer the explicit timeout over the configured task timeout
             strongSelf.executeAsyncOperation(operation, task: task, handle: handle, timeout: timeout ?? task.timeout, completion: completion)
+
+            return .running
         }
+        return operation
     }
 
     private func executeAsyncOperation<T: Task>(
@@ -307,19 +307,28 @@ public class TaskManager {
                         + "requeue: \(reactionData.requeueTask), "
                         + "suspend: \(reactionData.suspendQueue)",
                     tags: TaskManager.kTkQTags)
+
                 strongSelf.launchReactors(
                     withIndices: reactionData.indicesToRun,
-                    on: handle,
-                    requeueTask: reactionData.requeueTask,
-                    suspendQueue: reactionData.suspendQueue
+                    on: handle
                 )
 
-                // The launchReactors function will requeue the task, so we just return now.
+                if reactionData.suspendQueue {
+                    log(from: strongSelf, "suspending task queue", tags: TaskManager.kTkQTags)
+                    strongSelf.operationQueue.isSuspended = true
+                }
+
+                // If we need to requeue then requeue and return
                 if reactionData.requeueTask {
+                    log(from: strongSelf, "saving \(handle) to requeue list", tags: TaskManager.kTkQTags)
+                    strongSelf.tasksToRequeue.insert(handle)
+
+                    // Associate this handle with the reactors that were triggered
+                    for index in reactionData.indicesToRun {
+                        strongSelf.reactorAssoiciatedHandles[index]?.insert(handle)
+                    }
                     return
                 }
-            } else {
-                log(level: .debug, from: strongSelf, "\(handle) caused no reactions", tags: TaskManager.kTkQTags)
             }
 
             // And the task is officiall done! Sanity check one more time for a cancelled task, and finish things off by
@@ -474,133 +483,101 @@ public class TaskManager {
         return timeoutWorkItem
     }
 
-    private func launchReactors(withIndices indices: [Int], on finishedHandle: Handle, requeueTask: Bool, suspendQueue: Bool) {
-        //
-        // Executing the reactors involves the following:
-        //
-        // 1. Cull out reactors that are already executing
-        // 2. Note down immediate reactors
-        // 3. Queue up asynchronous reactors
-        // 4. Execute immediate reactors
-        // - If an interceptor says requeue a task, requeue
-        // - If an interceptor says pause task queue, then pause
-        // - When all queued reactors are done, restart task queue
-        //
-        self.taskQueue.async { [weak self, weak finishedHandle] in
+    private func launchReactors(withIndices reactorIndices: [Int], on finishedHandle: Handle) {
+        if #available(iOS 10.0, OSX 10.12, *) {
+            #if !os(Linux)
+            __dispatch_assert_queue(self.taskQueue)
+            #endif
+        }
 
-            guard let strongSelf = self else {
-                log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
-                return
-            }
+        // No need to run executors that are already executing
+        let nonExecutingReactors = Set(reactorIndices).subtracting(self.executingReactors)
+        guard nonExecutingReactors.count > 0 else {
+            log(from: self, "already executing \(self.executingReactors)", tags: TaskManager.kTkQTags)
+            return
+        }
 
-            if requeueTask, let handle = finishedHandle {
-                log(from: strongSelf, "saving \(handle) to requeue list", tags: TaskManager.kTkQTags)
-                strongSelf.tasksToRequeue.insert(handle)
+        for index in nonExecutingReactors {
+            let reactor = self.reactors[index]
+            let maybeTimeoutWorkItem = Atomic<DispatchWorkItem?>(nil)
+            var reactorWorkItem: DispatchWorkItem!
 
-                // Associate this handle with the reactors only if it's supposed to be requeued
-                for index in indices {
-                    strongSelf.reactorAssoiciatedHandles[index] = strongSelf.reactorAssoiciatedHandles[index] ?? Set<Handle>()
-                    strongSelf.reactorAssoiciatedHandles[index]?.insert(handle)
+            reactorWorkItem = DispatchWorkItem { [weak self] in
+                guard let strongSelf = self else {
+                    log(level: .verbose, from: self, "manager dead", tags: TaskManager.kReQTags)
+                    return
                 }
-            } else {
-                log(level: .verbose, from: strongSelf, "handle dead, cannot requeue", tags: TaskManager.kTkQTags)
+
+                log(from: strongSelf, "will execute reactor \(index): \(reactor.self)", tags: TaskManager.kReQTags)
+
+                reactor.execute { maybeError in
+
+                    maybeTimeoutWorkItem.run{ $0?.cancel() }
+
+                    guard let strongSelf = self else {
+                        log(level: .verbose, from: self, "manager dead", tags: TaskManager.kClrTags)
+                        return
+                    }
+
+                    guard !reactorWorkItem.isCancelled else {
+                        log(level: .verbose, from: strongSelf, "reactor \(index) cancelled", tags: TaskManager.kClrTags)
+                        return
+                    }
+
+                    log(from: strongSelf, "did execute reactor \(index)", tags: TaskManager.kClrTags)
+
+                    // Get off of whichever queue reactor execute completed on
+                    strongSelf.taskQueue.async {
+                        guard let strongSelf = self else {
+                            log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
+                            return
+                        }
+
+                        if let error = maybeError {
+                            strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorFailed(type: type(of: reactor), error: error))
+                        }
+
+                        strongSelf.removeExecutingReactor(at: index)
+                        log(from: strongSelf, "removed reactor \(index)", tags: TaskManager.kTkQTags)
+                    }
+                }
             }
 
-            // No need to run executors that are already executing
-            let reactorIndices = Set(indices).subtracting(strongSelf.executingReactors)
-            guard reactorIndices.count > 0 else {
-                log(from: strongSelf, "already executing \(strongSelf.executingReactors)", tags: TaskManager.kTkQTags)
-                return
-            }
+            self.executingReactors.insert(index)
+            self.reactorQueue.async(execute: reactorWorkItem)
 
-            if suspendQueue {
-                log(from: strongSelf, "suspending task queue", tags: TaskManager.kTkQTags)
-                strongSelf.operationQueue.isSuspended = true
-            }
+            // Give the async interceptor operation a timeout to complete
+            if let timeout = reactor.configuration.timeout {
+                let timeoutWorkItem = DispatchWorkItem { [weak self] in
 
-            for index in reactorIndices {
-                let reactor = strongSelf.reactors[index]
-                var maybeTimeoutWorkItem: DispatchWorkItem?
-                var reactorWorkItem: DispatchWorkItem!
-
-                reactorWorkItem = DispatchWorkItem { [weak self] in
                     guard let strongSelf = self else {
                         log(level: .verbose, from: self, "manager dead", tags: TaskManager.kReQTags)
                         return
                     }
 
-                    log(from: strongSelf, "will execute reactor \(index): \(reactor.self)", tags: TaskManager.kReQTags)
+                    strongSelf.taskQueue.async {
 
-                    reactor.execute { [weak self] maybeError in
+                        reactorWorkItem.cancel()
 
-                        maybeTimeoutWorkItem?.cancel()
+                        guard let timeoutWorkItem = maybeTimeoutWorkItem.value, !timeoutWorkItem.isCancelled else {
+                            log(from: self, "\(index) timeout work cancelled", tags: TaskManager.kTkQTags)
+                            return
+                        }
 
                         guard let strongSelf = self else {
-                            log(level: .verbose, from: self, "manager dead", tags: TaskManager.kClrTags)
+                            log(level: .verbose, from: self, "manager dead", tags: TaskManager.kReQTags)
                             return
                         }
 
-                        guard !reactorWorkItem.isCancelled else {
-                            log(level: .verbose, from: strongSelf, "reactor \(index) cancelled", tags: TaskManager.kClrTags)
-                            return
-                        }
+                        log(from: strongSelf, "reactor \(index) timed out", tags: TaskManager.kTkQTags)
 
-                        log(from: strongSelf, "did execute reactor \(index)", tags: TaskManager.kClrTags)
-
-                        // Get off of whichever queue reactor execute completed on
-                        strongSelf.taskQueue.async { [weak self] in
-                            guard let strongSelf = self else {
-                                log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
-                                return
-                            }
-
-                            if let error = maybeError {
-                                strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorFailed(type: type(of: reactor), error: error))
-                            }
-
-                            strongSelf.removeExecutingReactor(at: index)
-                            log(from: strongSelf, "removed reactor \(index)", tags: TaskManager.kTkQTags)
-                        }
+                        strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorTimedOut(type: type(of: reactor)))
+                        strongSelf.removeExecutingReactor(at: index)
                     }
                 }
 
-                strongSelf.executingReactors.insert(index)
-                strongSelf.reactorQueue.async(execute: reactorWorkItem)
-
-                // Give the async interceptor operation a timeout to complete
-                if let timeout = reactor.configuration.timeout {
-                    let timeoutWorkItem = DispatchWorkItem { [weak self] in
-
-                        strongSelf.taskQueue.async {
-                            reactorWorkItem.cancel()
-
-                            guard let timeoutWorkItem = maybeTimeoutWorkItem, !timeoutWorkItem.isCancelled else {
-                                log(from: self, "\(index) timeout work cancelled", tags: TaskManager.kTkQTags)
-                                return
-                            }
-
-                            guard let strongSelf = self else {
-                                log(level: .verbose, from: self, "manager dead", tags: TaskManager.kReQTags)
-                                return
-                            }
-
-                            log(from: strongSelf, "reactor \(index) timed out", tags: TaskManager.kTkQTags)
-
-                            strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorTimedOut(type: type(of: reactor)))
-                            strongSelf.removeExecutingReactor(at: index)
-                        }
-                    }
-
-                    maybeTimeoutWorkItem = timeoutWorkItem
-                    strongSelf.reactorQueue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem)
-                }
-            }
-
-            // If we only had immediate reactors make sure queue is suspended and requeue tasks
-            if strongSelf.executingReactors.count == 0 {
-                log(from: strongSelf, "unsuspending task queue", tags: TaskManager.kTkQTags)
-                strongSelf.operationQueue.isSuspended = false
-                strongSelf.requeueTasks()
+                maybeTimeoutWorkItem.value = timeoutWorkItem
+                self.reactorQueue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem)
             }
         }
     }
@@ -614,7 +591,9 @@ public class TaskManager {
         for handle in self.tasksToRequeue {
             if let data = self.data(for: handle) {
                 log(from: self, "requeueing \(handle)", tags: TaskManager.kTkQTags)
-                data.operation = AsyncOperation(executor: data.operation.executor)
+                let newOperation = AsyncOperation()
+                newOperation.execute = data.operation.execute
+                data.operation = newOperation
                 self.queueOperation(data.operation, for: handle)
             }
         }
