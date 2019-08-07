@@ -2,7 +2,7 @@
 import XCTest
 
 // This interceptor will take any task that is retriable, and re-execute it
-class BatchingInterceptor: TaskInterceptor {
+private class BatchingInterceptor: TaskInterceptor {
     func intercept<T: Task>(task _: inout T, currentBatchCount: Int) -> InterceptCommand {
         return currentBatchCount < 9 ? .hold : .execute
     }

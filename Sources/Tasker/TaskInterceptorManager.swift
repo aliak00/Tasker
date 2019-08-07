@@ -3,7 +3,7 @@ import Foundation
 class TaskInterceptorManager {
     private static let kTags = [LogTags.onInterceptorQueue]
 
-    enum InterceptionResult {
+    enum InterceptionResult : Equatable {
         case ignore
         case execute([TaskManager.Handle])
     }
@@ -18,7 +18,9 @@ class TaskInterceptorManager {
     }
 
     var count: Int {
-        return self.interceptors.count
+        return self.queue.sync {
+            self.interceptors.count
+        }
     }
 
     func intercept<T: Task>(
@@ -49,7 +51,7 @@ class TaskInterceptorManager {
         //
         // * If the result is go ahead with execution, then we execute everything that was on hold as well
         //
-        var shouldBeIgnored = false
+        var shouldBeDiscarded = false
         var shouldBeForceExecuted = false
         var interceptorIndexHoldingTask: Int?
         var interceptorIndicesRequestingExecute: [Int] = []
@@ -59,26 +61,27 @@ class TaskInterceptorManager {
             switch interceptor.intercept(task: &task, currentBatchCount: self.batchedHandles[index]?.count ?? 0) {
             case .forceExecute:
                 shouldBeForceExecuted = true
-                interceptorIndexHoldingTask = nil
                 fallthrough
             case .execute:
                 interceptorIndicesRequestingExecute.append(index)
             case .discard:
-                shouldBeIgnored = true
-                interceptorIndexHoldingTask = nil
+                shouldBeDiscarded = true
             case .hold:
-                if interceptorIndexHoldingTask == nil, !shouldBeForceExecuted, !shouldBeIgnored {
+                // First iterceptor to hold is the owner
+                if interceptorIndexHoldingTask == nil {
                     interceptorIndexHoldingTask = index
                 }
             }
         }
 
-        if shouldBeIgnored, !shouldBeForceExecuted {
+        // If we are discarding this and we did not encounter a force execute
+        if shouldBeDiscarded, !shouldBeForceExecuted {
             log(from: self, "discarding task for \(handle)", tags: TaskInterceptorManager.kTags)
             handle.discard()
             return .ignore
         }
 
+        // If we are holding this, and we did not encouter a force execute
         if let index = interceptorIndexHoldingTask, !shouldBeForceExecuted {
             log(from: self, "holding task for \(handle)", tags: TaskInterceptorManager.kTags)
             self.batchedHandles[index] = self.batchedHandles[index] ?? []
@@ -86,8 +89,12 @@ class TaskInterceptorManager {
             return .ignore
         }
 
+        // We are not discarding and we are not holding, so lets execute everything we can
+
         var handlesToRelease: [TaskManager.Handle] = []
         for index in interceptorIndicesRequestingExecute {
+            // Some interceptor asked for execution, so let's get all the batched
+            // handles for this interceptor
             for weakHandle in self.batchedHandles[index] ?? [] {
                 if let handle = weakHandle.value {
                     handlesToRelease.append(handle)

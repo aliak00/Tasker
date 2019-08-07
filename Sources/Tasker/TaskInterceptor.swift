@@ -19,7 +19,7 @@ public enum InterceptCommand {
     case discard
 
     /**
-     Ignored hold and execute commands and executes the task
+     Ignores hold and execute commands and executes the task
 
      - Note: This will cause all held tasks to be executed as well
      */

@@ -5,6 +5,10 @@ class SynchronizedArray<Element>: ExpressibleByArrayLiteral {
         self.array = elements
     }
 
+    required init(elements: [Element]) {
+        self.array = elements
+    }
+
     private var array: [Element] = []
     private let queue = DispatchQueue(label: "Tasker.Collections.SynchronizedArray")
 
