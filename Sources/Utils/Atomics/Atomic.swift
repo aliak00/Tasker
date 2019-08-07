@@ -29,6 +29,12 @@ class Atomic<T> {
         }
     }
 
+    func run(block: (inout T) -> Void) {
+        self.queue.sync {
+            block(&_value)
+        }
+    }
+
     @discardableResult
     func getAnd(set: (inout T) -> Void) -> T {
         return self.queue.sync {

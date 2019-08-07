@@ -502,7 +502,7 @@ public class TaskManager {
 
         for index in nonExecutingReactors {
             let reactor = self.reactors[index]
-            var maybeTimeoutWorkItem: DispatchWorkItem?
+            let maybeTimeoutWorkItem = Atomic<DispatchWorkItem?>(nil)
             var reactorWorkItem: DispatchWorkItem!
 
             reactorWorkItem = DispatchWorkItem { [weak self] in
@@ -515,7 +515,7 @@ public class TaskManager {
 
                 reactor.execute { maybeError in
 
-                    maybeTimeoutWorkItem?.cancel()
+                    maybeTimeoutWorkItem.run{ $0?.cancel() }
 
                     guard let strongSelf = self else {
                         log(level: .verbose, from: self, "manager dead", tags: TaskManager.kClrTags)
@@ -562,7 +562,7 @@ public class TaskManager {
 
                         reactorWorkItem.cancel()
 
-                        guard let timeoutWorkItem = maybeTimeoutWorkItem, !timeoutWorkItem.isCancelled else {
+                        guard let timeoutWorkItem = maybeTimeoutWorkItem.value, !timeoutWorkItem.isCancelled else {
                             log(from: self, "\(index) timeout work cancelled", tags: TaskManager.kTkQTags)
                             return
                         }
@@ -579,7 +579,7 @@ public class TaskManager {
                     }
                 }
 
-                maybeTimeoutWorkItem = timeoutWorkItem
+                maybeTimeoutWorkItem.value = timeoutWorkItem
                 self.reactorQueue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem)
             }
         }
