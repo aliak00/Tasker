@@ -1,7 +1,7 @@
 import Foundation
 
-struct AtomicInt: ExpressibleByIntegerLiteral {
-    init(integerLiteral value: Int) {
+class AtomicInt: ExpressibleByIntegerLiteral {
+    required init(integerLiteral value: Int) {
         self._value = value
     }
 
@@ -31,7 +31,7 @@ struct AtomicInt: ExpressibleByIntegerLiteral {
     }
 
     @discardableResult
-    mutating func getAndIncrement() -> Int {
+    func getAndIncrement() -> Int {
         var previousValue = 0
         self.queue.sync {
             previousValue = self._value
@@ -41,7 +41,7 @@ struct AtomicInt: ExpressibleByIntegerLiteral {
     }
 
     @discardableResult
-    mutating func getAndDecrement() -> Int {
+    func getAndDecrement() -> Int {
         var previousValue = 0
         self.queue.sync {
             previousValue = self._value
@@ -50,7 +50,7 @@ struct AtomicInt: ExpressibleByIntegerLiteral {
         return previousValue
     }
 
-    mutating func add(_ number: Int) {
+    func add(_ number: Int) {
         self.queue.sync {
             self._value += number
         }

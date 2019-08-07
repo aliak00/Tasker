@@ -81,7 +81,7 @@ class TaskManagerTests: XCTestCase {
 
     func testWaitingForAllTasksToFinish() {
         let manager = TaskManagerSpy()
-        var count = AtomicInt(0)
+        let count = AtomicInt(0)
         manager.launch(task: TaskSpy<Void> { cb in
             count.getAndIncrement()
             cb(.success(()))
