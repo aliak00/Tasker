@@ -150,15 +150,15 @@ class ScenarioValidatingRetryingTests: XCTestCase {
         // Kill hippo and try to get it's name
         hippo.status = .dead
         let name = "Jimbo"
-        var returnedResult: GetHippoNameTask.Result?
+        let returnedResult = Atomic<GetHippoNameTask.Result?>(nil)
         let handle = manager.add(task: GetHippoNameTask(hippo: hippo, name: name)) { result in
-            returnedResult = result
+            returnedResult.value = result
         }
 
         // Name result should be expected and hippo should be alive
         manager.waitTillAllTasksFinished()
         ensure(handle.state).becomes(TaskState.finished)
-        XCTAssertEqual(returnedResult?.successValue, name)
+        XCTAssertEqual(returnedResult.value?.successValue, name)
         XCTAssertEqual(hippo.status, Hippo.Status.alive)
     }
 }

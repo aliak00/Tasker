@@ -45,15 +45,15 @@ class TaskManagerTests: XCTestCase {
         let manager = TaskManagerSpy()
         let interval: DispatchTimeInterval = .milliseconds(20)
         let shouldStartAfter: DispatchTime = .now() + interval
-        var didStartAfter: DispatchTime!
+        let didStartAfter = Atomic<DispatchTime>(.distantFuture)
         let task = TaskSpy<Void> { cb in
-            didStartAfter = .now()
+            didStartAfter.value = .now()
             cb(.success(()))
         }
 
         manager.add(task: task, after: interval)
         ensure(manager.completionCallCount).becomes(1)
-        XCTAssertGreaterThan(didStartAfter, shouldStartAfter)
+        XCTAssertGreaterThan(didStartAfter.value, shouldStartAfter)
     }
 
     func testAddingManyTasksShouldCallAllCallbacks() {
