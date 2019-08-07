@@ -146,45 +146,42 @@ public class TaskManager {
         timeout: DispatchTimeInterval?,
         completion: T.CompletionCallback?
     ) -> AsyncOperation {
-        return AsyncOperation { [weak self, weak task, weak handle] operation in
-
-            var shouldFinish = true
-            defer {
-                // If an error occured we mark the operaton finished
-                if shouldFinish {
-                    operation.finish()
-                }
-            }
-
+        let operation = AsyncOperation()
+        operation.execute = { [weak self, weak task, weak handle] in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kOpQTags)
-                return
+                return .done
             }
 
             guard let handle = handle else {
                 log(level: .verbose, from: self, "\(T.self) handle dead", tags: TaskManager.kOpQTags)
-                return
+                return .done
             }
 
             guard let task = task else {
                 log(level: .verbose, from: self, "\(handle) task dead", tags: TaskManager.kOpQTags)
-                return
+                return .done
             }
 
-            guard !operation.isCancelled else {
+            let maybeOperation = strongSelf.taskQueue.sync { () -> AsyncOperation? in
+                guard let data = strongSelf.data(for: handle), !data.operation.isCancelled else {
+                    return nil
+                }
+                data.state = .executing
+                return data.operation
+            }
+
+            guard let operation = maybeOperation else {
                 log(level: .verbose, from: self, "\(handle) operation cancelled", tags: TaskManager.kOpQTags)
-                return
-            }
-
-            shouldFinish = false
-
-            strongSelf.taskQueue.sync {
-                strongSelf.data(for: handle)?.state = .executing
+                return .done
             }
 
             // Make sure we prefer the explicit timeout over the configured task timeout
             strongSelf.executeAsyncOperation(operation, task: task, handle: handle, timeout: timeout ?? task.timeout, completion: completion)
+
+            return .running
         }
+        return operation
     }
 
     private func executeAsyncOperation<T: Task>(
@@ -594,7 +591,9 @@ public class TaskManager {
         for handle in self.tasksToRequeue {
             if let data = self.data(for: handle) {
                 log(from: self, "requeueing \(handle)", tags: TaskManager.kTkQTags)
-                data.operation = AsyncOperation(executor: data.operation.executor)
+                let newOperation = AsyncOperation()
+                newOperation.execute = data.operation.execute
+                data.operation = newOperation
                 self.queueOperation(data.operation, for: handle)
             }
         }

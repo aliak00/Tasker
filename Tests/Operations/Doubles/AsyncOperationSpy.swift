@@ -7,10 +7,13 @@ class AsyncOperationSpy: AsyncOperation {
     var finishCallCount: AtomicInt = 0
     var cancelCallCount: AtomicInt = 0
 
-    override init(executor: @escaping (AsyncOperation) -> Void) {
-        super.init { op in
-            executor(op)
-            (op as! AsyncOperationSpy).executorCallCount += 1
+    init(executeBlock: @escaping (AsyncOperation) -> AsyncOperation.ExecuteResult) {
+        super.init()
+        self.execute = { [unowned self] () -> AsyncOperation.ExecuteResult in
+            defer {
+                self.executorCallCount += 1
+            }
+            return executeBlock(self)
         }
     }
 

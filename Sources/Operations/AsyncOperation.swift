@@ -1,13 +1,17 @@
 import Foundation
 
 class AsyncOperation: Operation {
+
+    enum ExecuteResult {
+        case done
+        case running
+    }
+
     private let lock: NSLocking = NSLock()
 
     #if DEBUG
         static var identifierCounter = AtomicInt()
     #endif
-
-    static let queue = DispatchQueue(label: "Tasker.AsyncOperation", attributes: [.concurrent])
 
     enum State: String {
         case pending = "isPending"
@@ -34,10 +38,9 @@ class AsyncOperation: Operation {
         }
     }
 
-    let executor: (AsyncOperation) -> Void
+    var execute: (() -> ExecuteResult)?
 
-    init(executor: @escaping (AsyncOperation) -> Void) {
-        self.executor = executor
+    override init() {
         super.init()
         #if DEBUG
             self.name = "asyncop.\(AsyncOperation.identifierCounter.getAndIncrement())"
@@ -76,11 +79,8 @@ class AsyncOperation: Operation {
         }
         log(from: self, "executing \(self)")
         self.state = .executing
-        AsyncOperation.queue.async { [weak self] in
-            guard let strongSelf = self else {
-                return
-            }
-            strongSelf.executor(strongSelf)
+        if case .done? = self.execute?() {
+            self.finish()
         }
     }
 
