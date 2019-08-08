@@ -38,7 +38,7 @@ class TaskHandleTests: XCTestCase {
         for i in 0..<numHandles {
             XCTAssertErrorEqual(TaskError.cancelled, manager.completionCallData[i].failureValue)
         }
-    }   
+    }
 
     func testStartShouldStartATask() {
         let manager = TaskManagerSpy()

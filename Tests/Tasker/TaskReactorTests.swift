@@ -31,9 +31,11 @@ class TaskReactorTests: XCTestCase {
             done(nil)
         }
         reactor.shouldExecuteBlock = { anyResult, anyTask, _ in
-            guard (anyTask as! TaskSpy<Int>).executeCallBackData.count == 1 else {
+            // Only on first task execution block
+            guard (anyTask as! TaskSpy<Int>).executeCallCount == 1 else {
                 return false
             }
+            // And only if even
             return (anyResult.successValue! as! Int) % 2 == 0
         }
 
@@ -60,37 +62,43 @@ class TaskReactorTests: XCTestCase {
     }
 
     func testTaskManagerShouldNotStartCompleteTasksTillAfterReactorIsCompleted() {
-        let reactor = ReactorSpy(configuration: TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true))
+        let reactor = ReactorSpy(configuration: TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: false))
 
-        // First let it hang, it should pause the queue then we can call the callback later to finish the interceptor
-        reactor.executeBlock = { reactor.executeCallCount == 0 ? () : $0(nil) }
-        reactor.shouldExecuteBlock = { _, _, _ in reactor.shouldExecuteCallCount == 0 }
+        // If reactor returns without calling the done callback, then TaskManager
+        // will just assume it's still running.
+        reactor.executeBlock = { _ in } // do nothing, never call done
 
+        // Only execute reactor on a task once
+        reactor.shouldExecuteBlock = { _, anyTask, _ in  (anyTask as! TaskSpy<Void>).executeCallCount == 1 }
+
+        // Trigger a task execution pipeline and therefore a reactor execution
         let manager = TaskManagerSpy(reactors: [reactor])
-        manager.add(task: kDummyTask)
+        manager.add(task: TaskSpy { $0(.success(())) })
 
-        // Wait till done callback passed to execute is captured
-        ensure(reactor.executeCallData.count).becomes(1)
+        ensure(reactor.executeCallCount).becomes(1)
 
-        // Run tasks that ask to be reactored and then not
+        // Add in a bunch more tasks
         var handles: [(TaskHandle, TaskSpy<Void>)] = []
-        for _ in (0..<50).yielded(by: .milliseconds(1)) {
+        for _ in 0..<50 {
             let task = TaskSpy { $0(.success(())) }
             handles.append((manager.add(task: task), task))
         }
 
         for (handle, task) in handles {
-            ensure(handle.state).becomes(.pending)
-            XCTAssertEqual(task.executeCallCount, 0)
+            ensure(handle.state).becomes(.executing)
+            XCTAssertEqual(task.executeCallCount, 1)
         }
 
+        ensure(manager.completionCallCount).stays(0)
+
+        // Call the done callback of the first reactor execute call
         reactor.executeCallData.data.first?(nil)
 
         ensure(manager.completionCallCount).becomes(handles.count + 1)
 
         for (handle, task) in handles {
             XCTAssertEqual(handle.state, TaskState.finished)
-            XCTAssertEqual(task.executeCallCount, 1)
+            XCTAssertEqual(task.executeCallCount, 2)
         }
     }
 }
