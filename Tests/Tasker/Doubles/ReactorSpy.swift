@@ -12,7 +12,7 @@ class ReactorSpy: TaskReactor {
     }
 
     var executeCallData: SynchronizedArray<(Error?) -> Void> = []
-    var executeBlock: (@escaping (Error?) -> Void) -> Void = { _ in }
+    var executeBlock: (@escaping (Error?) -> Void) -> Void = { done in done(nil) }
 
     var shouldExecuteCallCount: Int {
         return self.shouldExecuteCallData.count

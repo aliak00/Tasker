@@ -12,24 +12,33 @@ class TaskHandleTests: XCTestCase {
 
     func testCancelShouldCancelATask() {
         let numHandles = 100
-        let manager = TaskManagerSpy()
-        var handles: [TaskHandle] = []
 
+        let restartReactor = ReactorSpy(configuration: TaskReactorConfiguration(requeuesTask: true))
+        restartReactor.shouldExecuteBlock = { _, _, _ in true }
+
+        // We use a reactor so that if handlers finish before being cancelled we just requeue them
+        let manager = TaskManagerSpy(reactors: [restartReactor])
+
+        var handles: [TaskHandle] = []
         for _ in 0..<numHandles {
             let handle = manager.add(task: kDummyTask)
             handles.append(handle)
-            handle.cancel()
         }
-        handles.forEach { handle in
-            XCTAssertEqual(handle.state, TaskState.finished)
+
+        for i in 0..<numHandles {
+            handles[i].cancel()
         }
 
         ensure(manager.completionCallCount).becomes(numHandles)
 
+        handles.forEach { handle in
+            XCTAssertEqual(handle.state, TaskState.finished)
+        }
+
         for i in 0..<numHandles {
             XCTAssertErrorEqual(TaskError.cancelled, manager.completionCallData[i].failureValue)
         }
-    }
+    }   
 
     func testStartShouldStartATask() {
         let manager = TaskManagerSpy()
