@@ -127,7 +127,6 @@ class TaskReactorManager {
                         }
 
                         strongSelf.removeExecutingReactor(at: index)
-                        log(from: strongSelf, "removed reactor \(index)", tag: LogTags.onReactorQueue)
                     }
                 }
             }
@@ -167,8 +166,10 @@ class TaskReactorManager {
             #endif
         }
         self.executingReactors.remove(index)
+        log(from: self, "removed reactor \(index)", tag: LogTags.onReactorQueue)
         if self.executingReactors.count == 0 {
             let data = self.handlesToRequeue
+            log(level: .debug, "reactions completed, retrieved \(data.count) requeue handles")
             self.delegate?.reactorsCompleted(handlesToRequeue: data)
             self.handlesToRequeue = Set<TaskManager.Handle>()
         }

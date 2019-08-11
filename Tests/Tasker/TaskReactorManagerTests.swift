@@ -25,4 +25,27 @@ class TaskReactorManagerTests: XCTestCase {
         }
     }
 
+    func testRequeingReactorsShouldReleaseAllHandlesAfterDone() {
+        Logger.shared.addTransport({print($0)})
+        let reactor = ReactorSpy(configuration: .init(timeout: nil, requeuesTask: true, suspendsTaskQueue: false))
+        reactor.executeBlock = { _ in } // do nothing
+
+        let manager = TaskReactorManagerSpy(reactors: [reactor])
+        let delegate = TaskReactorDelegateSpy()
+        manager.delegate = delegate
+
+        // let handles queue
+        let count = 10
+        let handles = (0..<count).map { _ in manager.react() }
+
+        ensure(reactor.executeCallCount).becomes(1)
+        reactor.executeCallData.data.first?(nil) // release
+
+        ensure(manager.completionCallCount).becomes(count)
+
+        ensure(delegate.reactorsCompletedData.count).becomes(1)
+
+        XCTAssertEqual(delegate.reactorsCompletedData.data.first, Set(handles))
+    }
+
 }

@@ -3,14 +3,16 @@ import Foundation
 
 class TaskReactorDelegateSpy: TaskReactorManagerDelegate {
 
-    var reactorsCompletedData: SynchronizedArray<Set<TaskManager.Handle>> = []
+    typealias ReactorsCompletedData = (Set<TaskManager.Handle>)
+    var reactorsCompletedData: SynchronizedArray<ReactorsCompletedData> = []
     func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>) {
-        self.reactorsCompletedData.append(handlesToRequeue)
+        self.reactorsCompletedData.append(ReactorsCompletedData(handlesToRequeue))
     }
 
-    var reactorFailedData: SynchronizedArray<(associatedHandles: Set<TaskManager.Handle>, error: TaskError)> = []
+    typealias ReactorFailedData = (associatedHandles: Set<TaskManager.Handle>, error: TaskError)
+    var reactorFailedData: SynchronizedArray<ReactorFailedData> = []
     func reactorFailed(associatedHandles: Set<TaskManager.Handle>, error: TaskError) {
-        self.reactorFailedData.append((associatedHandles, error))
+        self.reactorFailedData.append(ReactorFailedData(associatedHandles, error))
     }
 }
 
@@ -33,13 +35,15 @@ class TaskReactorManagerSpy {
         }
     }
 
+    @discardableResult
     func react(
         result: Result<Void, Error> = Result<Void, Error>.success(()),
         completion: @escaping (TaskReactorManager.ReactionResult) -> Void = { _ in }
-    ) {
+    ) -> TaskManager.Handle {
         let handle = TaskManager.Handle()
         let task = DummyTask()
         self.react(task: task, result: result, handle: handle, completion: completion)
+        return handle
     }
 
     func react<T: Task>(
