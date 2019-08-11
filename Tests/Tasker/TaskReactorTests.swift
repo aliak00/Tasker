@@ -84,6 +84,9 @@ class TaskReactorTests: XCTestCase {
             handles.append((manager.add(task: task), task))
         }
 
+        // The execution count should stay 1
+        ensure(reactor.executeCallCount).stays(1)
+
         for (handle, task) in handles {
             ensure(handle.state).becomes(.executing)
             XCTAssertEqual(task.executeCallCount, 1)
@@ -94,10 +97,11 @@ class TaskReactorTests: XCTestCase {
         // Call the done callback of the first reactor execute call
         reactor.executeCallData.data.first?(nil)
 
+        // All tasks should complete
         ensure(manager.completionCallCount).becomes(handles.count + 1)
 
         for (handle, task) in handles {
-            XCTAssertEqual(handle.state, TaskState.finished)
+            ensure(handle.state).becomes(TaskState.finished)
             XCTAssertEqual(task.executeCallCount, 2)
         }
     }
