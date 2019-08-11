@@ -23,12 +23,15 @@ class TaskReactorManager {
         }
     }
 
-    typealias ReactionResult = (requeueTask: Bool, suspendQueue: Bool)
+    struct ReactionResult : Equatable {
+        let requeueTask: Bool
+        let suspendQueue: Bool
+    }
 
     func react<T: Task>(task: T, result: T.Result, handle: TaskManager.Handle, completion: @escaping (ReactionResult) -> Void) {
         // Complete immediately if there're no reactors
         guard !self.reactors.isEmpty else {
-            completion(ReactionResult(false, false))
+            completion(ReactionResult(requeueTask: false, suspendQueue: false))
             return
         }
 
@@ -67,7 +70,9 @@ class TaskReactorManager {
 
             self.launchReactors(indices: reactionData.indicesToRun)
 
-            completion((reactionData.requeueTask, reactionData.suspendQueue))
+            completion(
+                ReactionResult(requeueTask: reactionData.requeueTask, suspendQueue: reactionData.suspendQueue)
+            )
         }
     }
 

@@ -125,6 +125,10 @@
 		E1D8BAF521ADF76D00A9BD07 /* SynchronizedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BAF321ADF76D00A9BD07 /* SynchronizedArray.swift */; };
 		E1FAA2F322FF259B001703D4 /* TaskReactorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FAA2F222FF259B001703D4 /* TaskReactorManager.swift */; };
 		E1FAA2F422FF259B001703D4 /* TaskReactorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FAA2F222FF259B001703D4 /* TaskReactorManager.swift */; };
+		E1FAA2F923001C54001703D4 /* TaskReactorManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FAA2F823001C54001703D4 /* TaskReactorManagerTests.swift */; };
+		E1FAA2FA23001C54001703D4 /* TaskReactorManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FAA2F823001C54001703D4 /* TaskReactorManagerTests.swift */; };
+		E1FAA2FC23001C81001703D4 /* TaskReactorManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FAA2FB23001C81001703D4 /* TaskReactorManagerSpy.swift */; };
+		E1FAA2FD23001C81001703D4 /* TaskReactorManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FAA2FB23001C81001703D4 /* TaskReactorManagerSpy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -212,6 +216,8 @@
 		E1D8BAEC21ADF30C00A9BD07 /* AnyTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTaskTests.swift; sourceTree = "<group>"; };
 		E1D8BAF321ADF76D00A9BD07 /* SynchronizedArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchronizedArray.swift; sourceTree = "<group>"; };
 		E1FAA2F222FF259B001703D4 /* TaskReactorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskReactorManager.swift; sourceTree = "<group>"; };
+		E1FAA2F823001C54001703D4 /* TaskReactorManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskReactorManagerTests.swift; sourceTree = "<group>"; };
+		E1FAA2FB23001C81001703D4 /* TaskReactorManagerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskReactorManagerSpy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,6 +515,7 @@
 				E1058896219CB93A0020976B /* ScenarioValidatingRetryingTests.swift */,
 				E1058897219CB93A0020976B /* TaskInterceptorTests.swift */,
 				E122A10522FB46A90047A857 /* TaskInterceptorManagerTests.swift */,
+				E1FAA2F823001C54001703D4 /* TaskReactorManagerTests.swift */,
 				E1058898219CB93A0020976B /* TaskHandleTests.swift */,
 				E1058899219CB93A0020976B /* TaskReactorTests.swift */,
 				E105889A219CB93A0020976B /* ScenarioBatchingTests.swift */,
@@ -523,6 +530,7 @@
 				E1058891219CB93A0020976B /* ReactorSpy.swift */,
 				E1058892219CB93A0020976B /* TaskManagerSpy.swift */,
 				E122A10822FB47970047A857 /* TaskInterceptorManagerSpy.swift */,
+				E1FAA2FB23001C81001703D4 /* TaskReactorManagerSpy.swift */,
 				E1058893219CB93A0020976B /* TaskSpy.swift */,
 				E1058894219CB93A0020976B /* DummyTask.swift */,
 			);
@@ -807,11 +815,13 @@
 				E122A10622FB46A90047A857 /* TaskInterceptorManagerTests.swift in Sources */,
 				E1CC6C43219CC52500B465A5 /* YieldingIterator.swift in Sources */,
 				E1CC6C54219CC52500B465A5 /* ScenarioBatchingTests.swift in Sources */,
+				E1FAA2FC23001C81001703D4 /* TaskReactorManagerSpy.swift in Sources */,
 				E1CC6C46219CC52500B465A5 /* AsyncAwaitSpy.swift in Sources */,
 				E1CC6C40219CC52500B465A5 /* URLInterceptorTests.swift in Sources */,
 				E1CC6C4A219CC52500B465A5 /* InterceptorSpy.swift in Sources */,
 				E1CC6C4F219CC52500B465A5 /* TaskManagerTests.swift in Sources */,
 				E1CC6C48219CC52500B465A5 /* RingBufferTests.swift in Sources */,
+				E1FAA2F923001C54001703D4 /* TaskReactorManagerTests.swift in Sources */,
 				E1CC6C51219CC52500B465A5 /* TaskInterceptorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -878,11 +888,13 @@
 				E122A10722FB46A90047A857 /* TaskInterceptorManagerTests.swift in Sources */,
 				E1CC6C58219CC52600B465A5 /* YieldingIterator.swift in Sources */,
 				E1CC6C69219CC52600B465A5 /* ScenarioBatchingTests.swift in Sources */,
+				E1FAA2FD23001C81001703D4 /* TaskReactorManagerSpy.swift in Sources */,
 				E1CC6C5B219CC52600B465A5 /* AsyncAwaitSpy.swift in Sources */,
 				E1CC6C55219CC52600B465A5 /* URLInterceptorTests.swift in Sources */,
 				E1CC6C5F219CC52600B465A5 /* InterceptorSpy.swift in Sources */,
 				E1CC6C64219CC52600B465A5 /* TaskManagerTests.swift in Sources */,
 				E1CC6C5D219CC52600B465A5 /* RingBufferTests.swift in Sources */,
+				E1FAA2FA23001C54001703D4 /* TaskReactorManagerTests.swift in Sources */,
 				E1CC6C66219CC52600B465A5 /* TaskInterceptorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
