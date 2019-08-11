@@ -163,6 +163,7 @@ public class TaskManager {
                     return nil
                 }
                 data.state = .executing
+                log(level: .verbose, from: self, "\(handle) state set to executing")
                 return data.operation
             }
 
@@ -495,7 +496,7 @@ public class TaskManager {
                 return (.finished, false)
             }
             let cancelled = data.operation.isCancelled
-            log(from: self, "\(handle) is \(data.state), cancelled is \(cancelled)", tags: TaskManager.kTkQTags)
+            log(level: .verbose, from: self, "\(handle) state is \(data.state), cancelled is \(cancelled)", tags: TaskManager.kTkQTags)
             return (data.state, cancelled)
         }
 

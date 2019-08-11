@@ -88,8 +88,8 @@ class TaskReactorTests: XCTestCase {
         ensure(reactor.executeCallCount).stays(1)
 
         for (handle, task) in handles {
+            ensure(task.executeCallCount).becomes(1)
             ensure(handle.state).becomes(.executing)
-            XCTAssertEqual(task.executeCallCount, 1)
         }
 
         ensure(manager.completionCallCount).stays(0)

@@ -5,8 +5,8 @@ class TaskHandleTests: XCTestCase {
     override func setUp() {
         TaskManager.Handle.counter.value = 0
         self.addTeardownBlock {
-            ensure(AsyncOperation.identifierCounter.value).becomes(0)
-            AsyncOperation.identifierCounter.value = 0
+            ensure(AsyncOperation.referenceCounter.value).becomes(0)
+            AsyncOperation.referenceCounter.value = 0
         }
     }
 

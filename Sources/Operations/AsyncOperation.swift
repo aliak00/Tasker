@@ -11,6 +11,7 @@ class AsyncOperation: Operation {
 
     #if DEBUG
         static var identifierCounter = AtomicInt()
+        static var referenceCounter = AtomicInt()
     #endif
 
     enum State: String {
@@ -33,6 +34,7 @@ class AsyncOperation: Operation {
             willChangeValue(forKey: newValue.rawValue)
             self.lock.scope {
                 self._state = newValue
+                log(level: .verbose, from: self, "set \(self).state to \(newValue)")
             }
             didChangeValue(forKey: newValue.rawValue)
         }
@@ -43,13 +45,14 @@ class AsyncOperation: Operation {
     override init() {
         super.init()
         #if DEBUG
+            AsyncOperation.referenceCounter.getAndIncrement()
             self.name = "AsyncOp.\(AsyncOperation.identifierCounter.getAndIncrement())"
         #endif
     }
 
     #if DEBUG
         deinit {
-            AsyncOperation.identifierCounter.getAndDecrement()
+            AsyncOperation.referenceCounter.getAndDecrement()
         }
     #endif
 
@@ -71,7 +74,7 @@ class AsyncOperation: Operation {
 
     override func start() {
         assert(self.state == .ready || self.isCancelled)
-        log(from: self, "starting \(self)")
+        log(level: .debug, from: self, "starting \(self)")
         guard !self.isCancelled else {
             log(level: .debug, from: self, "cancelled, aborting \(self)")
             self.state = .finished
