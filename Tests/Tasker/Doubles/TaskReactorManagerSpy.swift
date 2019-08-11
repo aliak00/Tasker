@@ -1,22 +1,15 @@
 import Foundation
 @testable import Tasker
 
-class WrappedTaskReactorDelegate: TaskReactorManagerDelegate {
-    weak var delegate: TaskReactorManagerDelegate?
-
-    init(_ delegate: TaskReactorManagerDelegate) {
-        self.delegate = delegate
-    }
+class TaskReactorDelegateSpy: TaskReactorManagerDelegate {
 
     var reactorsCompletedData: SynchronizedArray<Set<TaskManager.Handle>> = []
     func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>) {
-        self.delegate?.reactorsCompleted(handlesToRequeue: handlesToRequeue)
         self.reactorsCompletedData.append(handlesToRequeue)
     }
 
     var reactorFailedData: SynchronizedArray<(associatedHandles: Set<TaskManager.Handle>, error: TaskError)> = []
     func reactorFailed(associatedHandles: Set<TaskManager.Handle>, error: TaskError) {
-        self.delegate?.reactorFailed(associatedHandles: associatedHandles, error: error)
         self.reactorFailedData.append((associatedHandles, error))
     }
 }
@@ -34,10 +27,19 @@ class TaskReactorManagerSpy {
         self.reactorManager = TaskReactorManager(reactors: reactors)
     }
 
-    var delegate: WrappedTaskReactorDelegate? {
+    weak var delegate: TaskReactorDelegateSpy? {
         didSet {
             self.reactorManager.delegate = self.delegate
         }
+    }
+
+    func react(
+        result: Result<Void, Error> = Result<Void, Error>.success(()),
+        completion: @escaping (TaskReactorManager.ReactionResult) -> Void = { _ in }
+    ) {
+        let handle = TaskManager.Handle()
+        let task = DummyTask()
+        self.react(task: task, result: result, handle: handle, completion: completion)
     }
 
     func react<T: Task>(

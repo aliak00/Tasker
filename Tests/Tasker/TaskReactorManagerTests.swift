@@ -11,11 +11,10 @@ class TaskReactorManagerTests: XCTestCase {
     }
 
     func testNoReactorsShouldCallCompletionWithNoReactors() {
-        let result = Result<Void, Error>.success(())
         let count = 10
         let reactorManager = TaskReactorManagerSpy()
         for _ in 0..<count {
-            reactorManager.react(task: kDummyTask, result: result, handle: kHandle)
+            reactorManager.react()
         }
         ensure(reactorManager.completionCallCount).becomes(count)
 
@@ -25,4 +24,5 @@ class TaskReactorManagerTests: XCTestCase {
             XCTAssertEqual(a, b)
         }
     }
+
 }
