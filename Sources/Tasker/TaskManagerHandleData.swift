@@ -1,6 +1,7 @@
 import Foundation
 
 extension TaskManager.Handle {
+    // TODO: make this a value type?
     class Data {
         typealias Interceptor = (@escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
 

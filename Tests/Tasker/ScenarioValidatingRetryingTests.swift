@@ -8,8 +8,26 @@ private class Hippo {
         case dead
     }
 
-    var status: Status = .dead
-    var name: String?
+    private var _status = Atomic<Status>(.dead)
+    private var _name = Atomic<String?>(nil)
+
+    var status: Status {
+        get {
+            return _status.value
+        }
+        set {
+            _status.value = newValue
+        }
+
+    }
+    var name: String? {
+        get {
+            return _name.value
+        }
+        set {
+            _name.value = newValue
+        }
+    }
 }
 
 // These are the different errors that may be encountered in this simulation

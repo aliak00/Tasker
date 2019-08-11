@@ -43,7 +43,7 @@ class AsyncOperation: Operation {
     override init() {
         super.init()
         #if DEBUG
-            self.name = "asyncop.\(AsyncOperation.identifierCounter.getAndIncrement())"
+            self.name = "AsyncOp.\(AsyncOperation.identifierCounter.getAndIncrement())"
         #endif
     }
 
@@ -73,11 +73,11 @@ class AsyncOperation: Operation {
         assert(self.state == .ready || self.isCancelled)
         log(from: self, "starting \(self)")
         guard !self.isCancelled else {
-            log(from: self, "cancelled, aborting \(self)")
+            log(level: .debug, from: self, "cancelled, aborting \(self)")
             self.state = .finished
             return
         }
-        log(from: self, "executing \(self)")
+        log(level: .debug, from: self, "executing \(self)")
         self.state = .executing
         if case .done? = self.execute?() {
             self.finish()
