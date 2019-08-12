@@ -42,7 +42,7 @@ struct Ensure<T: Equatable> {
         self.file = file
     }
 
-    func becomes(_ value: T, timeout: DispatchTimeInterval = .seconds(1)) {
+    func becomes(_ value: T, timeout: DispatchTimeInterval = .seconds(5)) {
         var lastValue = self.block()
         var passed = lastValue == value
         let start = DispatchTime.now()

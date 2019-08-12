@@ -22,17 +22,13 @@ class ReactorSpy: TaskReactor {
     var shouldExecuteBlock: (AnyResult, AnyObject, TaskHandle) -> Bool = { _, _, _ in true }
 
     func execute(done: @escaping (Error?) -> Void) {
-        defer {
-            self.executeCallData.append(done)
-        }
+        self.executeCallData.append(done)
         self.executeBlock(done)
     }
 
     func shouldExecute<T>(after result: T.Result, from task: T, with handle: TaskHandle) -> Bool where T: Task {
         let anyResult = AnyResult(result)
-        defer {
-            self.shouldExecuteCallData.append((anyResult, Weak(task), handle))
-        }
+        self.shouldExecuteCallData.append((anyResult, Weak(task), handle))
         return self.shouldExecuteBlock(anyResult, task, handle)
     }
 }

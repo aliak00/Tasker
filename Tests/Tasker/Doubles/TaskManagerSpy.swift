@@ -22,9 +22,7 @@ class TaskManagerSpy {
         completion: (@escaping (T.Result) -> Void) = { _ in }
     ) -> TaskHandle {
         return self.taskManager.add(task: task, startImmediately: startImmediately, after: interval) { [weak self] result in
-            defer {
-                self?.completionCallData.append(AnyResult(result))
-            }
+            self?.completionCallData.append(AnyResult(result))
             completion(result)
         }
     }
