@@ -12,11 +12,9 @@ class InterceptorSpy: TaskInterceptor {
     var interceptBlock: (AnyObject, Int) -> InterceptCommand = { _, _ in .execute }
 
     func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand {
+        self.interceptCallData.append((task, currentBatchCount))
         let result = self.interceptBlock(task, currentBatchCount)
-        defer {
-            self.interceptCallData.append((task, currentBatchCount))
-            self.interceptCallResultData.append(result)
-        }
+        self.interceptCallResultData.append(result)
         return result
     }
 }

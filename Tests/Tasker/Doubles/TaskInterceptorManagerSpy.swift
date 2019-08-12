@@ -20,9 +20,7 @@ class TaskInterceptorManagerSpy {
         completion: @escaping (TaskInterceptorManager.InterceptionResult) -> Void = { _ in }
     ) {
         self.interceptorManager.intercept(task: &task, for: handle) { [weak self] result in
-            defer {
-                self?.completionCallData.append(result)
-            }
+            self?.completionCallData.append(result)
             completion(result)
         }
     }

@@ -40,8 +40,8 @@ class TaskSpy<T>: AnyTask<T> {
 
     override func execute(completion: @escaping CompletionCallback) {
         let wrappedCompletion: CompletionCallback = { [weak self] result in
-            completion(result)
             self?.executeCallBackData.append(AnyResult(result))
+            completion(result)
         }
         self.executeThunk(wrappedCompletion)
     }

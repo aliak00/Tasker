@@ -53,9 +53,7 @@ class TaskReactorManagerSpy {
         completion: @escaping (TaskReactorManager.ReactionResult) -> Void = { _ in }
     ) {
         self.reactorManager.react(task: task, result: result, handle: handle) { [weak self] result in
-            defer {
-                self?.completionCallData.append(result)
-            }
+            self?.completionCallData.append(result)
             completion(result)
         }
     }
