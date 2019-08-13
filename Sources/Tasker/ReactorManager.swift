@@ -7,8 +7,12 @@ class ReactorManager {
     weak var delegate: ReactorManagerDelegate?
     let reactors: [Reactor]
 
+    struct RequeueData: Equatable {
+        var reintercept: Bool = false
+    }
+
     private var executingReactors = Set<Int>()
-    private var handlesToRequeue = Set<TaskManager.Handle>() // TODO: Can/should these handles be weak?
+    private var handlesToRequeue: [TaskManager.Handle: RequeueData] = [:] // TODO: Can/should these handles be weak?
     private var assoiciatedHandles: [Int: Set<TaskManager.Handle>] = [:] // TODO: Can/should these handles be weak?
 
     init(reactors: [Reactor]) {
@@ -34,12 +38,13 @@ class ReactorManager {
             let reactionData = self
                 .reactors
                 .enumerated()
-                .reduce((indicesToRun: [Int](), requeueTask: false, suspendQueue: false)) { memo, pair in
+                .reduce((indicesToRun: [Int](), requeueTask: false, suspendQueue: false, reintercept: false)) { memo, pair in
                     let index = pair.offset
                     let reactor = pair.element
                     var indices = memo.indicesToRun
                     var requeueTask = memo.requeueTask
                     var suspendQueue = memo.suspendQueue
+                    var reintercept = memo.reintercept
                     if reactor.shouldExecute(after: result, from: task, with: handle) {
                         indices.append(index)
                         // If any of the reactors say we need to requeue, then we need to requeue
@@ -47,20 +52,30 @@ class ReactorManager {
 
                         // If any of the reactors say we need to suspend, then we need to suspend
                         suspendQueue = memo.suspendQueue || reactor.configuration.suspendsTaskQueue
+
+                        // If any say it must be reintercepted, then we say yes
+                        reintercept = memo.reintercept || reactor.configuration.reinterceptOnRequeue
                     }
-                    return (indices, requeueTask, suspendQueue)
+                    return (indices, requeueTask, suspendQueue, reintercept)
                 }
 
             log(level: .verbose, from: self, "\(handle) reaction result is \(reactionData)")
 
             if reactionData.requeueTask {
                 log(from: self, "saving \(handle) to requeue list", tag: LogTags.onReactorQueue)
-                self.handlesToRequeue.insert(handle)
 
-                // Associate this handle with the reactors that will be triggered
-                for index in reactionData.indicesToRun {
-                    self.assoiciatedHandles[index]?.insert(handle)
+                // Store some meta data with this handle so we know what do to after re release the queue
+                if var value = self.handlesToRequeue[handle] {
+                    value.reintercept = value.reintercept || reactionData.reintercept
+                    self.handlesToRequeue[handle] = value
+                } else {
+                    self.handlesToRequeue[handle] = RequeueData(reintercept: reactionData.reintercept)
                 }
+            }
+
+            // Associate this handle with the reactors that will be triggered
+            for index in reactionData.indicesToRun {
+                self.assoiciatedHandles[index]?.insert(handle)
             }
 
             self.launchReactors(indices: reactionData.indicesToRun)
@@ -165,7 +180,7 @@ class ReactorManager {
             let data = self.handlesToRequeue
             log(level: .debug, "reactions completed, retrieved \(data.count) requeue handles")
             self.delegate?.reactorsCompleted(handlesToRequeue: data)
-            self.handlesToRequeue = Set<TaskManager.Handle>()
+            self.handlesToRequeue = [TaskManager.Handle: RequeueData]()
         }
     }
 
@@ -178,7 +193,7 @@ class ReactorManager {
 
         let data = self.assoiciatedHandles[index] ?? Set<TaskManager.Handle>()
         for handle in data {
-            if self.handlesToRequeue.remove(handle) != nil {
+            if self.handlesToRequeue.removeValue(forKey: handle) != nil {
                 log(from: self, "removed \(handle) from requeue list", tag: LogTags.onReactorQueue)
             }
         }

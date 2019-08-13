@@ -99,7 +99,7 @@ public class TaskManager {
         // to pending tasks has to be thread safe.
         self.taskQueue.async {
             // Setup the intercept callback for this task. We just wrap it and pass it through to the interceptor manager
-            let intercept: Handle.Data.InterceptionCallback = { [weak self, weak task, weak handle] completion in
+            let interceptionCallback: Handle.Data.InterceptionCallback = { [weak self, weak task, weak handle] completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
                     return
@@ -112,7 +112,7 @@ public class TaskManager {
                 taskReference: task,
                 completionErrorCallback: { completion?(.failure($0)) },
                 taskDidCancelCallback: { [weak task] in task?.didCancel(with: $0) },
-                intercept: intercept,
+                interceptionCallback: interceptionCallback,
                 completionQueue: completionQueue
             )
 
@@ -354,7 +354,7 @@ public class TaskManager {
         }
         // This calls the closure setup in Tasker.add, which has the InterceptorManager do that actual
         // work, ascynchronously.
-        data.intercept { [weak self, weak handle] result in
+        data.interceptionCallback { [weak self, weak handle] result in
             guard let strongSelf = self else {
                 log(level: .verbose, from: self, "manager dead", tags: TaskManager.kClrTags)
                 return
@@ -508,15 +508,19 @@ public class TaskManager {
 }
 
 extension TaskManager: ReactorManagerDelegate {
-    func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>) {
+    func reactorsCompleted(handlesToRequeue: [TaskManager.Handle: ReactorManager.RequeueData]) {
         self.taskQueue.async {
             for handle in handlesToRequeue {
-                if let data = self.data(for: handle) {
+                if let data = self.data(for: handle.key) {
                     log(from: self, "requeueing \(handle)", tags: TaskManager.kTkQTags)
                     let newOperation = AsyncOperation()
                     newOperation.execute = data.operation.execute
                     data.operation = newOperation
-                    self.queueOperation(data.operation, for: handle)
+                    if handle.value.reintercept {
+                        self.interceptAndQueue(for: handle.key, with: data)
+                    } else {
+                        self.queueOperation(newOperation, for: handle.key)
+                    }
                 }
             }
         }

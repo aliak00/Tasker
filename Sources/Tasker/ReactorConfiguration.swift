@@ -12,6 +12,7 @@ public struct ReactorConfiguration {
     let timeout: DispatchTimeInterval?
     let requeuesTask: Bool
     let suspendsTaskQueue: Bool
+    let reinterceptOnRequeue: Bool
 
     /**
      Initializes a configuration
@@ -20,15 +21,18 @@ public struct ReactorConfiguration {
      - parameter requeuesTask: should that task that causes this reaction be requeued
      - parameter suspendsQueue: should the task manager suspend execution of any further tasks until
         the reaction is complete
+     - parameter reintercept: should the interceptors be run again if a task is requeued?
      */
     public init(
         timeout: DispatchTimeInterval? = nil,
         requeuesTask: Bool = false,
-        suspendsTaskQueue: Bool = false
+        suspendsTaskQueue: Bool = false,
+        reinterceptOnRequeue: Bool = false
     ) {
         self.timeout = timeout
         self.requeuesTask = requeuesTask
         self.suspendsTaskQueue = suspendsTaskQueue
+        self.reinterceptOnRequeue = reinterceptOnRequeue
     }
 
     /**

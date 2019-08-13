@@ -15,6 +15,7 @@
     + [Intercepting a task](#intercepting-a-task)
     + [Reacting to a task](#reacting-to-a-task)
     + [Cancelling a task](#cancelling-a-task)
+* [Reintercepting tasks](#reintercepting-tasks)
 * [Async/Await](#asyncawait)
     + [Async/await as free functions over closures.](#asyncawait-as-free-functions-over-closures)
 * [URLTaskManager](#urltaskmanager)
@@ -171,6 +172,10 @@ handle.cancel()
 ```
 
 And then `Task.didCancel(...)`  is called in response to that with `TaskError.cancelled`. The `didCancel` method could also be called as a result of other errors.
+
+## Reintercepting tasks
+
+An interceptor is only run once on a task by default. The case where you would want to re-reun an interceptor would be if a reaction caused a requeuing of the task. In that case, whether or not a task is reintercepted depends on the reactor configuration. You can set `ReactorConfiguration.reinterceptOnRequeue` to control this behavior.
 
 ## Async/Await
 

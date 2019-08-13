@@ -1,12 +1,11 @@
 @testable import Tasker
 
 class ReactorManagerDelegateSpy: ReactorManagerDelegate {
-    typealias ReactorsCompletedData = Set<TaskManager.Handle>
 
-    var reactorsCompletedData: SynchronizedArray<ReactorsCompletedData> = []
+    var reactorsCompletedData: SynchronizedArray<[TaskManager.Handle: ReactorManager.RequeueData]> = []
 
-    func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>) {
-        self.reactorsCompletedData.append(ReactorsCompletedData(handlesToRequeue))
+    func reactorsCompleted(handlesToRequeue: [TaskManager.Handle: ReactorManager.RequeueData]) {
+        self.reactorsCompletedData.append(handlesToRequeue)
     }
 
     typealias ReactorFailedData = (associatedHandles: Set<TaskManager.Handle>, error: TaskError)

@@ -35,7 +35,9 @@ class ReactorManagerTests: XCTestCase {
 
         // let handles queue
         let count = 10
-        let handles = (0..<count).map { _ in manager.react() }
+        let handles = (0..<count).reduce(into: [TaskManager.Handle: ReactorManager.RequeueData]()) { (dict, i) in
+            dict[manager.react()] = ReactorManager.RequeueData(reintercept: false)
+        }
 
         ensure(reactor.executeCallCount).becomes(1)
         reactor.executeCallData.data.first?(nil) // release
@@ -44,6 +46,6 @@ class ReactorManagerTests: XCTestCase {
 
         ensure(delegate.reactorsCompletedData.count).becomes(1)
 
-        XCTAssertEqual(delegate.reactorsCompletedData.data.first, Set(handles))
+        XCTAssertEqual(delegate.reactorsCompletedData.data.first, handles)
     }
 }
