@@ -31,7 +31,7 @@ private class Hippo {
 }
 
 // These are the different errors that may be encountered in this simulation
-private enum HippoError : Error {
+private enum HippoError: Error {
     case unrevivable
     case dead
     case random
@@ -100,7 +100,7 @@ private class ReviveTheHippoReactor: Reactor {
 
     weak var hippo: Hippo?
 
-    func shouldExecute<T: Task>(after result: T.Result, from task: T, with: Handle) -> Bool {
+    func shouldExecute<T: Task>(after result: T.Result, from task: T, with _: Handle) -> Bool {
         guard let hippoTask = task as? HasHippo else {
             return false
         }
