@@ -10,7 +10,7 @@ class TaskManagerSpy {
 
     var completionCallData: SynchronizedArray<AnyResult> = []
 
-    init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
+    init(interceptors: [Interceptor] = [], reactors: [Reactor] = []) {
         self.taskManager = TaskManager(interceptors: interceptors, reactors: reactors)
     }
 
@@ -20,7 +20,7 @@ class TaskManagerSpy {
         startImmediately: Bool = true,
         after interval: DispatchTimeInterval? = nil,
         completion: (@escaping (T.Result) -> Void) = { _ in }
-    ) -> TaskHandle {
+    ) -> Handle {
         return self.taskManager.add(task: task, startImmediately: startImmediately, after: interval) { [weak self] result in
             self?.completionCallData.append(AnyResult(result))
             completion(result)

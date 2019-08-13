@@ -142,7 +142,7 @@ Everytime you add a task you get back a handle that can start or cancel a task. 
 
 ### Intercepting a task
 
-Every task is _intercepted_ before it is executed by the `TaskManager` that owns it. You can control how a task is intercepted by implementing a `TaskInterceptor`, which has one method:
+Every task is _intercepted_ before it is executed by the `TaskManager` that owns it. You can control how a task is intercepted by implementing a `Interceptor`, which has one method:
 
 ```swift
 func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand
@@ -154,15 +154,15 @@ You enable an interceptor by passing an array of interceptors to a `TaskManager`
 
 ### Reacting to a task
 
-After a task is done executing, it's time for reactors to be called. `TaskReactor`s allow you to re-process a task if the need arises, or cancel a task that you deem unworthy to complete. You enable reactors by passing an array of them to a `TaskManager` object upon creation (just like interceptors).
+After a task is done executing, it's time for reactors to be called. `Reactor`s allow you to re-process a task if the need arises, or cancel a task that you deem unworthy to complete. You enable reactors by passing an array of them to a `TaskManager` object upon creation (just like interceptors).
 
-A reactor is first asked if it is supposed to execute. It is given the task that just completed, the result of that task's execution, and the task handle that owns it. If `TaskReactor.shouldExecute(...)` returns true, then `TaskReactor.execute(...)` function is called.
+A reactor is first asked if it is supposed to execute. It is given the task that just completed, the result of that task's execution, and the task handle that owns it. If `Reactor.shouldExecute(...)` returns true, then `Reactor.execute(...)` function is called.
 
-Every reactor can have its own `TaskReactorConfiguration`, which can control how the `TaskManager` behaves while a reaction is in progress. For example if you want no more tasks to be executed while you are executing the reactor, or if you want to re-execute the task that caused this reaction, after the reactor is done.
+Every reactor can have its own `ReactorConfiguration`, which can control how the `TaskManager` behaves while a reaction is in progress. For example if you want no more tasks to be executed while you are executing the reactor, or if you want to re-execute the task that caused this reaction, after the reactor is done.
 
 ### Cancelling a task
 
-Whenever you add a task to a task manager, you get back a handle that is unique to that task. The `TaskHandle` can be used to cancel a task.
+Whenever you add a task to a task manager, you get back a handle that is unique to that task. The `Handle` can be used to cancel a task.
 
 ```swift
 let handle = TaskManager.shared.add(task: DecodeImage(), startImmediately: false)
@@ -278,7 +278,7 @@ class Reactor: URLTaskReactor {
             }
         }
 
-        func shouldExecute(after result: URLT.Result, from task: URLTask, with _: TaskHandle) -> Bool {
+        func shouldExecute(after result: URLT.Result, from task: URLTask, with _: Handle) -> Bool {
             // One can return true if there's a 401 UNAUTHORIZED http response code.
             if case let .success(value) = result {
                 return value.(response as? HTTPURLResponse)?.statusCode == 401

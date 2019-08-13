@@ -1,13 +1,13 @@
 @testable import Tasker
 import XCTest
 
-class TaskReactorTests: XCTestCase {
+class ReactorTests: XCTestCase {
     override func tearDown() {
         ensure(kTaskSpyCounter.value).becomes(0)
     }
 
     func testTaskManagerShouldCancelReactorOnTimeout() {
-        let reactor = ReactorSpy(configuration: TaskReactorConfiguration(timeout: .milliseconds(5), requeuesTask: true))
+        let reactor = ReactorSpy(configuration: ReactorConfiguration(timeout: .milliseconds(5), requeuesTask: true))
         reactor.executeBlock = { sleep(for: .milliseconds(10)); $0(nil) }
         let manager = TaskManagerSpy(reactors: [reactor])
         manager.add(task: TaskSpy { $0(.success(())) })
@@ -16,7 +16,7 @@ class TaskReactorTests: XCTestCase {
     }
 
     func testTaskManagerShouldCompleteReactorIfUnderTimeout() {
-        let reactor = ReactorSpy(configuration: TaskReactorConfiguration(timeout: .milliseconds(10)))
+        let reactor = ReactorSpy(configuration: ReactorConfiguration(timeout: .milliseconds(10)))
         reactor.executeBlock = { sleep(for: .milliseconds(5)); $0(nil) }
         let manager = TaskManagerSpy(reactors: [reactor])
         manager.add(task: TaskSpy { $0(.success(())) })
@@ -25,7 +25,7 @@ class TaskReactorTests: XCTestCase {
     }
 
     func testTaskManagerShouldReExecuteTasksIfReactorSaysRequeue() {
-        let reactor = ReactorSpy(configuration: TaskReactorConfiguration(requeuesTask: true))
+        let reactor = ReactorSpy(configuration: ReactorConfiguration(requeuesTask: true))
         reactor.executeBlock = { done in
             sleep(for: .milliseconds(1))
             done(nil)
@@ -62,14 +62,14 @@ class TaskReactorTests: XCTestCase {
     }
 
     func testTaskManagerShouldNotStartCompleteTasksTillAfterReactorIsCompleted() {
-        let reactor = ReactorSpy(configuration: TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: false))
+        let reactor = ReactorSpy(configuration: ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: false))
 
         // If reactor returns without calling the done callback, then TaskManager
         // will just assume it's still running.
         reactor.executeBlock = { _ in } // do nothing, never call done
 
         // Only execute reactor on a task once
-        reactor.shouldExecuteBlock = { _, anyTask, _ in  (anyTask as! TaskSpy<Void>).executeCallCount == 1 }
+        reactor.shouldExecuteBlock = { _, anyTask, _ in (anyTask as! TaskSpy<Void>).executeCallCount == 1 }
 
         // Trigger a task execution pipeline and therefore a reactor execution
         let manager = TaskManagerSpy(reactors: [reactor])
@@ -78,7 +78,7 @@ class TaskReactorTests: XCTestCase {
         ensure(reactor.executeCallCount).becomes(1)
 
         // Add in a bunch more tasks
-        var handles: [(TaskHandle, TaskSpy<Void>)] = []
+        var handles: [(Handle, TaskSpy<Void>)] = []
         for _ in 0..<10 {
             let task = TaskSpy { $0(.success(())) }
             handles.append((manager.add(task: task), task))

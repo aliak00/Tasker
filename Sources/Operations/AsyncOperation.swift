@@ -1,7 +1,6 @@
 import Foundation
 
 class AsyncOperation: Operation {
-
     enum ExecuteResult {
         case done
         case running

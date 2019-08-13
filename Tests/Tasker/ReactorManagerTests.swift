@@ -3,7 +3,7 @@ import XCTest
 
 private let kHandle = TaskManager.Handle()
 
-class TaskReactorManagerTests: XCTestCase {
+class ReactorManagerTests: XCTestCase {
     override func setUp() {
         self.addTeardownBlock {
             ensure(kTaskSpyCounter.value).becomes(0)
@@ -12,7 +12,7 @@ class TaskReactorManagerTests: XCTestCase {
 
     func testNoReactorsShouldCallCompletionWithNoReactors() {
         let count = 10
-        let reactorManager = TaskReactorManagerSpy()
+        let reactorManager = ReactorManagerSpy()
         for _ in 0..<count {
             reactorManager.react()
         }
@@ -20,18 +20,17 @@ class TaskReactorManagerTests: XCTestCase {
 
         for i in 0..<count {
             let a = reactorManager.completionCallData.data[i]
-            let b = TaskReactorManager.ReactionResult(requeueTask: false, suspendQueue: false)
+            let b = ReactorManager.ReactionResult(requeueTask: false, suspendQueue: false)
             XCTAssertEqual(a, b)
         }
     }
 
     func testRequeingReactorsShouldReleaseAllHandlesAfterDone() {
-        Logger.shared.addTransport({print($0)})
         let reactor = ReactorSpy(configuration: .init(timeout: nil, requeuesTask: true, suspendsTaskQueue: false))
         reactor.executeBlock = { _ in } // do nothing
 
-        let manager = TaskReactorManagerSpy(reactors: [reactor])
-        let delegate = TaskReactorDelegateSpy()
+        let manager = ReactorManagerSpy(reactors: [reactor])
+        let delegate = ReactorManagerDelegateSpy()
         manager.delegate = delegate
 
         // let handles queue
@@ -47,5 +46,4 @@ class TaskReactorManagerTests: XCTestCase {
 
         XCTAssertEqual(delegate.reactorsCompletedData.data.first, Set(handles))
     }
-
 }

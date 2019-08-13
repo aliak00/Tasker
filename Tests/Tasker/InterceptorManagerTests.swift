@@ -3,7 +3,7 @@ import XCTest
 
 private let kHandle = TaskManager.Handle()
 
-class TaskInterceptorManagerTests: XCTestCase {
+class InterceptorManagerTests: XCTestCase {
     override func setUp() {
         self.addTeardownBlock {
             ensure(kTaskSpyCounter.value).becomes(0)
@@ -12,7 +12,7 @@ class TaskInterceptorManagerTests: XCTestCase {
 
     func testNoInterceptorShouldDefaultToExecute() {
         let count = 10
-        let interceptorManager = TaskInterceptorManagerSpy()
+        let interceptorManager = InterceptorManagerSpy()
         for _ in 0..<count {
             interceptorManager.intercept(task: &kDummyTask, for: kHandle)
         }
@@ -23,13 +23,13 @@ class TaskInterceptorManagerTests: XCTestCase {
     }
 
     func testBatchingInterceptorBatchesThenReleasesAll() {
-        let maxBatchCount = 10;
+        let maxBatchCount = 10
         let interceptor = InterceptorSpy()
-        interceptor.interceptBlock = { anyTask, currentBatchCount in
-            return currentBatchCount < (maxBatchCount - 1) ? .hold : .execute
+        interceptor.interceptBlock = { _, currentBatchCount in
+            currentBatchCount < (maxBatchCount - 1) ? .hold : .execute
         }
 
-        let interceptorManager = TaskInterceptorManagerSpy(interceptors: [interceptor])
+        let interceptorManager = InterceptorManagerSpy(interceptors: [interceptor])
 
         for _ in 0..<maxBatchCount {
             interceptorManager.intercept(task: &kDummyTask, for: kHandle)
@@ -39,7 +39,7 @@ class TaskInterceptorManagerTests: XCTestCase {
 
         XCTAssertEqual(
             Array(interceptorManager.completionCallData.data[0..<9]),
-            Array(repeating: TaskInterceptorManager.InterceptionResult.ignore, count: 9)
+            Array(repeating: InterceptorManager.InterceptionResult.ignore, count: 9)
         )
 
         XCTAssertEqual(
@@ -51,11 +51,11 @@ class TaskInterceptorManagerTests: XCTestCase {
     func testDiscardingExecutesNoHandles() {
         let count = 10
         let interceptor = InterceptorSpy()
-        interceptor.interceptBlock = { anyTask, currentBatchCount in
-            return .discard
+        interceptor.interceptBlock = { _, _ in
+            .discard
         }
 
-        let interceptorManager = TaskInterceptorManagerSpy(interceptors: [interceptor])
+        let interceptorManager = InterceptorManagerSpy(interceptors: [interceptor])
 
         for _ in 0..<count {
             interceptorManager.intercept(task: &kDummyTask, for: kHandle)
@@ -64,22 +64,22 @@ class TaskInterceptorManagerTests: XCTestCase {
 
         XCTAssertEqual(
             Array(interceptorManager.completionCallData.data),
-            Array(repeating: TaskInterceptorManager.InterceptionResult.ignore, count: count)
+            Array(repeating: InterceptorManager.InterceptionResult.ignore, count: count)
         )
     }
 
     func testForceExecuteShouldOverwiriteHold() {
         let holdInterceptor = InterceptorSpy()
         holdInterceptor.interceptBlock = { _, _ in
-            return .hold
+            .hold
         }
 
         let forceInterceptor = InterceptorSpy()
         forceInterceptor.interceptBlock = { _, _ in
-            return .forceExecute
+            .forceExecute
         }
 
-        let interceptorManager = TaskInterceptorManagerSpy(interceptors: [holdInterceptor, forceInterceptor])
+        let interceptorManager = InterceptorManagerSpy(interceptors: [holdInterceptor, forceInterceptor])
         interceptorManager.intercept(task: &kDummyTask, for: kHandle)
 
         ensure(interceptorManager.completionCallData.data.first).becomes(.execute([kHandle]))
@@ -88,15 +88,15 @@ class TaskInterceptorManagerTests: XCTestCase {
     func testHoldShouldTakePrecedenceOnExecute() {
         let holdInterceptor = InterceptorSpy()
         holdInterceptor.interceptBlock = { _, _ in
-            return .hold
+            .hold
         }
 
         let executeInterceptor = InterceptorSpy()
         executeInterceptor.interceptBlock = { _, _ in
-            return .execute
+            .execute
         }
 
-        let interceptorManager = TaskInterceptorManagerSpy(interceptors: [holdInterceptor, executeInterceptor])
+        let interceptorManager = InterceptorManagerSpy(interceptors: [holdInterceptor, executeInterceptor])
         interceptorManager.intercept(task: &kDummyTask, for: kHandle)
 
         ensure(interceptorManager.completionCallData.data.first).becomes(.ignore)
@@ -105,20 +105,20 @@ class TaskInterceptorManagerTests: XCTestCase {
     func testDiscardShouldTakePrecedenceOnExecuteAndHold() {
         let holdInterceptor = InterceptorSpy()
         holdInterceptor.interceptBlock = { _, _ in
-            return .hold
+            .hold
         }
 
         let executeInterceptor = InterceptorSpy()
         executeInterceptor.interceptBlock = { _, _ in
-            return .execute
+            .execute
         }
 
         let discardInterceptor = InterceptorSpy()
         discardInterceptor.interceptBlock = { _, _ in
-            return .discard
+            .discard
         }
 
-        let interceptorManager = TaskInterceptorManagerSpy(interceptors: [holdInterceptor, executeInterceptor, discardInterceptor])
+        let interceptorManager = InterceptorManagerSpy(interceptors: [holdInterceptor, executeInterceptor, discardInterceptor])
         interceptorManager.intercept(task: &kDummyTask, for: kHandle)
 
         ensure(interceptorManager.completionCallData.data.first).becomes(.ignore)

@@ -2,7 +2,7 @@ import Foundation
 
 extension TaskManager {
     // A concrete handle to the type of task that TaskManager keeps a track of
-    class Handle: TaskHandle {
+    class Handle: Tasker.Handle {
         private weak var owner: TaskManager?
 
         public let identifier: Int
@@ -10,10 +10,10 @@ extension TaskManager {
         static var counter = AtomicInt()
 
         #if DEBUG
-        init() {
-            self.identifier = type(of: self).counter.getAndIncrement()
-            self.owner = nil
-        }
+            init() {
+                self.identifier = type(of: self).counter.getAndIncrement()
+                self.owner = nil
+            }
         #endif
 
         init(owner: TaskManager) {

@@ -100,7 +100,7 @@ final class AsyncAwaitTests: XCTestCase {
 
         let value = Atomic<Int?>(nil)
 
-        async(5) { (r) in
+        async(5) { r in
             value.value = r.successValue
         }
 

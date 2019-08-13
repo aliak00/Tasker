@@ -1,12 +1,12 @@
 import Foundation
 
 /**
- A task manager can be given an arbitrary number of `Task`s and initialized with a set of `TaskInterceptor`s
- and `TaskReactor`s, after which it will take care of asynchonous task management for you.
+ A task manager can be given an arbitrary number of `Task`s and initialized with a set of `Interceptor`s
+ and `Reactor`s, after which it will take care of asynchonous task management for you.
  */
 public class TaskManager {
     /**
-     Shared TaskManager that is default constructed and has no `TaskInterceptor`s or `TaskReactor`s.
+     Shared TaskManager that is default constructed and has no `Interceptor`s or `Reactor`s.
      */
     public static let shared = TaskManager()
 
@@ -21,20 +21,20 @@ public class TaskManager {
 
     private let taskQueue = DispatchQueue(label: "Tasker.TaskManager.tasks")
 
-    private let interceptorManager: TaskInterceptorManager
-    private let reactorManager: TaskReactorManager
+    private let interceptorManager: InterceptorManager
+    private let reactorManager: ReactorManager
 
     /**
      List of reactors that this TaskManager was created with
      */
-    public var reactors: [TaskReactor] {
+    public var reactors: [Reactor] {
         return self.reactorManager.reactors
     }
 
     /**
      List of interceptors that this TaskManager was created with
      */
-    public var interceptors: [TaskInterceptor] {
+    public var interceptors: [Interceptor] {
         return self.interceptorManager.interceptors
     }
 
@@ -49,10 +49,10 @@ public class TaskManager {
      - parameter interceptors: an array of interceptors that will be applied to every task before being started
      - parameter reactors: an array of reactors that will be applied to every task after it's executed
      */
-    public init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
+    public init(interceptors: [Interceptor] = [], reactors: [Reactor] = []) {
         self.operationQueue.isSuspended = false
-        self.reactorManager = TaskReactorManager(reactors: reactors)
-        self.interceptorManager = TaskInterceptorManager(interceptors)
+        self.reactorManager = ReactorManager(reactors: reactors)
+        self.interceptorManager = InterceptorManager(interceptors)
         self.identifier = type(of: self).identifierCounter.getAndIncrement()
 
         self.reactorManager.delegate = self
@@ -63,12 +63,12 @@ public class TaskManager {
     }
 
     /**
-     Add a task to the manager. You may choose to start the task immediately or start it yourself via the `TaskHandle` that
+     Add a task to the manager. You may choose to start the task immediately or start it yourself via the `Handle` that
      is returned. Additionally, you can also set an interval on when to start the task but that is only valid if `startImmediately`
      is set to true
 
      - parameter task: the task to run
-     - parameter startImmediately: set this to false if you want to explicity call start on the `TaskHandle` that's returned
+     - parameter startImmediately: set this to false if you want to explicity call start on the `Handle` that's returned
      - parameter after: set this to some value if you want the task to start running after some interval
      - parameter timeout: after how long the task times out (overrides `Task.timeout`)
      - parameter completeOn: specifies which queue completion is called on
@@ -82,7 +82,7 @@ public class TaskManager {
         timeout: DispatchTimeInterval? = nil,
         completeOn completionQueue: DispatchQueue? = nil,
         completion: T.CompletionCallback? = nil
-    ) -> TaskHandle {
+    ) -> Tasker.Handle {
         // Create a handle to this task, and also setup an Operation object that will be associated with this Task
         let handle = Handle(owner: self)
         let operation = self.createAsyncOperationForHandle(handle, task: task, timeout: timeout, completion: completion)
@@ -99,7 +99,7 @@ public class TaskManager {
         // to pending tasks has to be thread safe.
         self.taskQueue.async {
             // Setup the intercept callback for this task. We just wrap it and pass it through to the interceptor manager
-            let intercept: Handle.Data.Interceptor = { [weak self, weak task, weak handle] completion in
+            let intercept: Handle.Data.InterceptionCallback = { [weak self, weak task, weak handle] completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
                     return
@@ -276,7 +276,6 @@ public class TaskManager {
             // And the task is officially done! Sanity check one more time for a cancelled task, and finish things off by
             // removing the handle form the list of pending tasks
             self?.taskQueue.async {
-
                 guard let strongSelf = self else {
                     log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kClrTags)
                     return
@@ -454,7 +453,7 @@ public class TaskManager {
     }
 
     //
-    // The following are internal because they are used by TaskHandle to proxy the handle
+    // The following are internal because they are used by TaskManager.Handle to proxy the handle
     // to the TaskManager and then dealt with
     //
 
@@ -508,9 +507,7 @@ public class TaskManager {
     }
 }
 
-
-extension TaskManager: TaskReactorManagerDelegate {
-
+extension TaskManager: ReactorManagerDelegate {
     func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>) {
         self.taskQueue.async {
             for handle in handlesToRequeue {
@@ -534,7 +531,6 @@ extension TaskManager: TaskReactorManagerDelegate {
                     data.operation.cancel()
                     data.taskDidCancelCallback(error)
                     allTheData.append(data)
-
                 }
             }
 

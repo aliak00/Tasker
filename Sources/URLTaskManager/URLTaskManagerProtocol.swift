@@ -35,7 +35,7 @@ class URLTaskManagerProtocol: URLProtocol {
         return normalizedRequest
     }
 
-    weak var handle: TaskHandle?
+    weak var handle: Handle?
 
     override func startLoading() {
         log(from: self, "starting \(self.request)")

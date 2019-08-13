@@ -1,9 +1,9 @@
 @testable import Tasker
 
-class ReactorSpy: TaskReactor {
-    let configuration: TaskReactorConfiguration
+class ReactorSpy: Reactor {
+    let configuration: ReactorConfiguration
 
-    init(configuration: TaskReactorConfiguration = .default) {
+    init(configuration: ReactorConfiguration = .default) {
         self.configuration = configuration
     }
 
@@ -18,15 +18,15 @@ class ReactorSpy: TaskReactor {
         return self.shouldExecuteCallData.count
     }
 
-    var shouldExecuteCallData: SynchronizedArray<(anyResult: AnyResult, weakAnyTask: Weak<AnyObject>, handle: TaskHandle)> = []
-    var shouldExecuteBlock: (AnyResult, AnyObject, TaskHandle) -> Bool = { _, _, _ in true }
+    var shouldExecuteCallData: SynchronizedArray<(anyResult: AnyResult, weakAnyTask: Weak<AnyObject>, handle: Handle)> = []
+    var shouldExecuteBlock: (AnyResult, AnyObject, Handle) -> Bool = { _, _, _ in true }
 
     func execute(done: @escaping (Error?) -> Void) {
         self.executeCallData.append(done)
         self.executeBlock(done)
     }
 
-    func shouldExecute<T>(after result: T.Result, from task: T, with handle: TaskHandle) -> Bool where T: Task {
+    func shouldExecute<T>(after result: T.Result, from task: T, with handle: Handle) -> Bool where T: Task {
         let anyResult = AnyResult(result)
         self.shouldExecuteCallData.append((anyResult, Weak(task), handle))
         return self.shouldExecuteBlock(anyResult, task, handle)

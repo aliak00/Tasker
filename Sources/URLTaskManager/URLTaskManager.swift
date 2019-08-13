@@ -58,7 +58,7 @@ import Foundation
      }
    }
 
-   func shouldExecute<T: Task>(after result: URLTask.Result, from task: URLTask, with _: TaskHandle) -> Bool {
+   func shouldExecute<T: Task>(after result: URLTask.Result, from task: URLTask, with _: Handle) -> Bool {
      if case let .success(value) = result {
        return value.(response as? HTTPURLResponse)?.statusCode == 401
      }

@@ -1,19 +1,19 @@
 import Foundation
 
-class TaskInterceptorManager {
+class InterceptorManager {
     private static let kTags = [LogTags.onInterceptorQueue]
 
-    enum InterceptionResult : Equatable {
+    enum InterceptionResult: Equatable {
         case ignore
         case execute([TaskManager.Handle])
     }
 
-    private let queue = DispatchQueue(label: "Tasker.TaskInterceptorManager")
+    private let queue = DispatchQueue(label: "Tasker.InterceptorManager")
     private var batchedHandles: [Int: [Weak<TaskManager.Handle>]] = [:]
 
-    let interceptors: [TaskInterceptor]
+    let interceptors: [Interceptor]
 
-    init(_ interceptors: [TaskInterceptor]) {
+    init(_ interceptors: [Interceptor]) {
         self.interceptors = interceptors
     }
 
@@ -56,7 +56,7 @@ class TaskInterceptorManager {
         var interceptorIndexHoldingTask: Int?
         var interceptorIndicesRequestingExecute: [Int] = []
         for (index, interceptor) in self.interceptors.enumerated() {
-            log(from: self, "intercepting \(handle) with \(interceptor)", tags: TaskInterceptorManager.kTags)
+            log(from: self, "intercepting \(handle) with \(interceptor)", tags: InterceptorManager.kTags)
 
             switch interceptor.intercept(task: &task, currentBatchCount: self.batchedHandles[index]?.count ?? 0) {
             case .forceExecute:
@@ -76,14 +76,14 @@ class TaskInterceptorManager {
 
         // If we are discarding this and we did not encounter a force execute
         if shouldBeDiscarded, !shouldBeForceExecuted {
-            log(from: self, "discarding task for \(handle)", tags: TaskInterceptorManager.kTags)
+            log(from: self, "discarding task for \(handle)", tags: InterceptorManager.kTags)
             handle.discard()
             return .ignore
         }
 
         // If we are holding this, and we did not encouter a force execute
         if let index = interceptorIndexHoldingTask, !shouldBeForceExecuted {
-            log(from: self, "holding task for \(handle)", tags: TaskInterceptorManager.kTags)
+            log(from: self, "holding task for \(handle)", tags: InterceptorManager.kTags)
             self.batchedHandles[index] = self.batchedHandles[index] ?? []
             self.batchedHandles[index]?.append(Weak(handle))
             return .ignore
@@ -103,10 +103,10 @@ class TaskInterceptorManager {
             self.batchedHandles[index] = nil
         }
 
-        log(from: self, "carrying on with task for \(handle)", tags: TaskInterceptorManager.kTags)
+        log(from: self, "carrying on with task for \(handle)", tags: InterceptorManager.kTags)
 
         if handlesToRelease.count > 0 {
-            log(from: self, "\(handle) releasing batched handles \(handlesToRelease)", tags: TaskInterceptorManager.kTags)
+            log(from: self, "\(handle) releasing batched handles \(handlesToRelease)", tags: InterceptorManager.kTags)
         }
 
         let handles = handlesToRelease + [handle]

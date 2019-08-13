@@ -1,7 +1,7 @@
 import Foundation
 
 /**
- A command that can be returned by a `TaskInterceptor` intercept call that tells a `TaskManager` what it should
+ A command that can be returned by a `Interceptor` intercept call that tells a `TaskManager` what it should
  do with a task before executing it.
  */
 public enum InterceptCommand {
@@ -39,7 +39,7 @@ public enum InterceptCommand {
 
  - SeeAlso: `InterceptCommand`
  */
-public protocol TaskInterceptor {
+public protocol Interceptor {
     /**
      This is called on every task and allows you to tell the task manager how to treat
      this task based on the `InterceptCommand` that you return

@@ -1,6 +1,6 @@
 @testable import Tasker
 
-class InterceptorSpy: TaskInterceptor {
+class InterceptorSpy: Interceptor {
     var interceptCallCount: Int {
         return self.interceptCallData.count
     }

@@ -1,7 +1,7 @@
 @testable import Tasker
 import XCTest
 
-class TaskHandleTests: XCTestCase {
+class TaskManagerHandleTests: XCTestCase {
     override func setUp() {
         TaskManager.Handle.counter.value = 0
         self.addTeardownBlock {
@@ -13,13 +13,13 @@ class TaskHandleTests: XCTestCase {
     func testCancelShouldCancelATask() {
         let numHandles = 100
 
-        let restartReactor = ReactorSpy(configuration: TaskReactorConfiguration(requeuesTask: true))
+        let restartReactor = ReactorSpy(configuration: ReactorConfiguration(requeuesTask: true))
         restartReactor.shouldExecuteBlock = { _, _, _ in true }
 
         // We use a reactor so that if handlers finish before being cancelled we just requeue them
         let manager = TaskManagerSpy(reactors: [restartReactor])
 
-        var handles: [TaskHandle] = []
+        var handles: [Handle] = []
         for _ in 0..<numHandles {
             let handle = manager.add(task: kDummyTask)
             handles.append(handle)

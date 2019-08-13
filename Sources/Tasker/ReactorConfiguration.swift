@@ -8,7 +8,7 @@ import Foundation
  A reactor has the power to pause this queue while it is being executed and can also tell a manager to requeue
  any task that causes this reaction
  */
-public struct TaskReactorConfiguration {
+public struct ReactorConfiguration {
     let timeout: DispatchTimeInterval?
     let requeuesTask: Bool
     let suspendsTaskQueue: Bool
@@ -34,5 +34,5 @@ public struct TaskReactorConfiguration {
     /**
      Default configuration has no timeout, doesn't requeue tasks and doesn't suspend the queue
      */
-    public static let `default` = TaskReactorConfiguration()
+    public static let `default` = ReactorConfiguration()
 }

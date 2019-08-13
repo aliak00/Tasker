@@ -14,7 +14,7 @@ private class Reactor: URLTaskReactor {
         done(nil)
     }
 
-    func shouldExecute(after result: URLTask.Result, from task: URLTask, with _: TaskHandle) -> Bool {
+    func shouldExecute(after result: URLTask.Result, from task: URLTask, with _: Handle) -> Bool {
         if case .success = result {
             let run = count == 0
             count -= 1
@@ -23,8 +23,8 @@ private class Reactor: URLTaskReactor {
         return false
     }
 
-    var configuration: TaskReactorConfiguration {
-        return TaskReactorConfiguration(
+    var configuration: ReactorConfiguration {
+        return ReactorConfiguration(
             timeout: nil,
             requeuesTask: true,
             suspendsTaskQueue: false
