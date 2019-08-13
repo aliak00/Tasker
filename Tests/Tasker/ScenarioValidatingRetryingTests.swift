@@ -105,7 +105,7 @@ private class ReviveTheHippoReactor: TaskReactor {
         return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
-    func shouldExecute<T>(after result: T.Result, from _: T, with _: TaskHandle) -> Bool where T: Task {
+    func shouldExecute<T>(after result: T.Result, from _: T, with _: Handle) -> Bool where T: Task {
         return result.failureValue is Dead
     }
 
@@ -127,7 +127,7 @@ private class RetryReactor: TaskReactor {
         return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
-    func shouldExecute<T>(after result: T.Result, from task: T, with handle: TaskHandle) -> Bool where T: Task {
+    func shouldExecute<T>(after result: T.Result, from task: T, with handle: Handle) -> Bool where T: Task {
         if result.failureValue is RandomFailure, let task = task as? Retriable {
             guard task.maxRetryCount > 0 else {
                 return false

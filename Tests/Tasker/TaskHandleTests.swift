@@ -19,7 +19,7 @@ class TaskHandleTests: XCTestCase {
         // We use a reactor so that if handlers finish before being cancelled we just requeue them
         let manager = TaskManagerSpy(reactors: [restartReactor])
 
-        var handles: [TaskHandle] = []
+        var handles: [Handle] = []
         for _ in 0..<numHandles {
             let handle = manager.add(task: kDummyTask)
             handles.append(handle)

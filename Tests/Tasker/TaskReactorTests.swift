@@ -78,7 +78,7 @@ class TaskReactorTests: XCTestCase {
         ensure(reactor.executeCallCount).becomes(1)
 
         // Add in a bunch more tasks
-        var handles: [(TaskHandle, TaskSpy<Void>)] = []
+        var handles: [(Handle, TaskSpy<Void>)] = []
         for _ in 0..<10 {
             let task = TaskSpy { $0(.success(())) }
             handles.append((manager.add(task: task), task))

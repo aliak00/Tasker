@@ -63,12 +63,12 @@ public class TaskManager {
     }
 
     /**
-     Add a task to the manager. You may choose to start the task immediately or start it yourself via the `TaskHandle` that
+     Add a task to the manager. You may choose to start the task immediately or start it yourself via the `Handle` that
      is returned. Additionally, you can also set an interval on when to start the task but that is only valid if `startImmediately`
      is set to true
 
      - parameter task: the task to run
-     - parameter startImmediately: set this to false if you want to explicity call start on the `TaskHandle` that's returned
+     - parameter startImmediately: set this to false if you want to explicity call start on the `Handle` that's returned
      - parameter after: set this to some value if you want the task to start running after some interval
      - parameter timeout: after how long the task times out (overrides `Task.timeout`)
      - parameter completeOn: specifies which queue completion is called on
@@ -82,7 +82,7 @@ public class TaskManager {
         timeout: DispatchTimeInterval? = nil,
         completeOn completionQueue: DispatchQueue? = nil,
         completion: T.CompletionCallback? = nil
-    ) -> TaskHandle {
+    ) -> Tasker.Handle {
         // Create a handle to this task, and also setup an Operation object that will be associated with this Task
         let handle = Handle(owner: self)
         let operation = self.createAsyncOperationForHandle(handle, task: task, timeout: timeout, completion: completion)
@@ -454,7 +454,7 @@ public class TaskManager {
     }
 
     //
-    // The following are internal because they are used by TaskHandle to proxy the handle
+    // The following are internal because they are used by TaskManager.Handle to proxy the handle
     // to the TaskManager and then dealt with
     //
 

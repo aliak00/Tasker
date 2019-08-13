@@ -18,7 +18,7 @@ public protocol TaskReactor {
      - parameter from: the actual task that was just executed
      - parameter with: the handle to the task that was just executed
      */
-    func shouldExecute<T: Task>(after: T.Result, from: T, with: TaskHandle) -> Bool
+    func shouldExecute<T: Task>(after: T.Result, from: T, with: Handle) -> Bool
 
     /**
      Does the interceptor work
@@ -36,7 +36,7 @@ extension TaskReactor {
         done(nil)
     }
 
-    func shouldExecute<T: Task>(after _: T.Result, from _: T, with _: TaskHandle) -> Bool {
+    func shouldExecute<T: Task>(after _: T.Result, from _: T, with _: Handle) -> Bool {
         return false
     }
 

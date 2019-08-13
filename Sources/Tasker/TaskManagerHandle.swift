@@ -2,7 +2,7 @@ import Foundation
 
 extension TaskManager {
     // A concrete handle to the type of task that TaskManager keeps a track of
-    class Handle: TaskHandle {
+    class Handle: Tasker.Handle {
         private weak var owner: TaskManager?
 
         public let identifier: Int

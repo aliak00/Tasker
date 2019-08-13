@@ -3,8 +3,8 @@ import XCTest
 
 private extension TaskManagerSpy {
     @discardableResult
-    func launch<T: Task>(task: @autoclosure () -> T, count: Int) -> (handles: [TaskHandle], tasks: [T]) {
-        var handles: [TaskHandle] = []
+    func launch<T: Task>(task: @autoclosure () -> T, count: Int) -> (handles: [Handle], tasks: [T]) {
+        var handles: [Handle] = []
         var tasks: [T] = []
         for _ in 0..<count {
             let task = task()

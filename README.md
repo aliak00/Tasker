@@ -162,7 +162,7 @@ Every reactor can have its own `TaskReactorConfiguration`, which can control how
 
 ### Cancelling a task
 
-Whenever you add a task to a task manager, you get back a handle that is unique to that task. The `TaskHandle` can be used to cancel a task.
+Whenever you add a task to a task manager, you get back a handle that is unique to that task. The `Handle` can be used to cancel a task.
 
 ```swift
 let handle = TaskManager.shared.add(task: DecodeImage(), startImmediately: false)
@@ -278,7 +278,7 @@ class Reactor: URLTaskReactor {
             }
         }
 
-        func shouldExecute(after result: URLT.Result, from task: URLTask, with _: TaskHandle) -> Bool {
+        func shouldExecute(after result: URLT.Result, from task: URLTask, with _: Handle) -> Bool {
             // One can return true if there's a 401 UNAUTHORIZED http response code.
             if case let .success(value) = result {
                 return value.(response as? HTTPURLResponse)?.statusCode == 401
