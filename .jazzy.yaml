@@ -36,6 +36,8 @@ custom_categories:
       - AnyResult
   - name: URL Session Interceptor
     children:
-      - URLInterceptor
-      - URLInterceptorTask
-      - URLInterceptorError
+      - URLTaskManager
+      - URLTask
+      - URLTaskInterceptor
+      - URLTaskReactor
+      - URLTaskManagerError

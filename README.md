@@ -1,4 +1,4 @@
-# Tasker - a task manager with async await
+# Tasker - a task manager with async await and url session management
 
 **Warning**: This is alpha software right now and is open to wiledly breaking suggestions
 
@@ -15,18 +15,22 @@
     + [Intercepting a task](#intercepting-a-task)
     + [Reacting to a task](#reacting-to-a-task)
     + [Cancelling a task](#cancelling-a-task)
+* [Async/Await](#asyncawait)
+    + [Async/await as free functions over closures.](#asyncawait-as-free-functions-over-closures)
+* [URLTaskManager](#urltaskmanager)
+    + [Intercepting and reacting.](#intercepting-and-reacting)
 * [Debugging and Logging](#debugging-and-logging)
-* [Add-ons](#add-ons)
-    + [Async/Await](#asyncawait)
-        - [Async/await as free functions over closures.](#asyncawait-as-free-functions-over-closures)
-    + [URLInterceptor](#urlinterceptor)
-        - [Intercepting and reacting.](#intercepting-and-reacting)
 
 Tasker is a task manager that's built on top of OperationQueue and GCD that has notions of *interception* and *reaction*. `Interceptors` allow you to modify a task before it's executed and also allow you to control the execution of a task (e.g. batch them, hold them, cancel them, etc.). `Reactors` allow you do something in reaction to the a task's completion _before_ the result is passed to the caller (e.g. run a job, requeue the task, cancel the task, etc).
 
-Tasker also comes with some added functionality on top:
-* Async and await
-* URLSession interception
+Tasker also provides task managerment of `URLSession` and async/await functionality
+
+Features
+    * Concurrent task management system
+    * Task interception and enrichment
+    * Task requeing and reaction functionnality
+    * Spcialized URLSession handling to intercept and reactor to URLRequests
+    * Async and await functionality
 
 ## Quick look
 
@@ -108,7 +112,10 @@ class DecodeImage: Task {
 
 ### Starting a task
 
-To start a task you can either create a `TaskManager` instance or use the default one provided:
+To start a task you can either
+1. create a `TaskManager` instance
+1. use the default one provided
+1. call `async(...)` or `await(...)` on it
 
 ```swift
 // Create a task
@@ -131,7 +138,7 @@ handle.start()
 TaskManager.shared.add(task: DecodeImage(), after: .seconds(30))
 ```
 
-Everytime you add a task you get back a handle that can start or cancel a task. You can also query the state of a task and each task is given an incremented identifier.
+Everytime you add a task you get back a handle that can start or cancel a task. You can also query the state of a task, each task is given an incremented identifier.
 
 ### Intercepting a task
 
@@ -165,21 +172,7 @@ handle.cancel()
 
 And then `Task.didCancel(...)`  is called in response to that with `TaskError.cancelled`. The `didCancel` method could also be called as a result of other errors.
 
-## Debugging and Logging
-
-Logging facilities are provided by the library for debugging purposes mainly. To enable them you need to add a transport to the shared logger:
-
-```swift
-Logger.shared.addTransport { print($0) }
-```
-
-The above will log all messages to stdout. There's also a number of filters that can be applied if you want to debug certain parts. The filters revolve around tags and there're a number of redefined tags that the shared logger uses. See `LogTags` in the docs
-
-## Add-ons
-
-A number of additions that are built on top of the shared task manager are also available
-
-### Async/Await
+## Async/Await
 
 Async await functionality comes out of the box with Tasker. You can execute a `Task` you create directly synchronously or asynchronously by calling the extension `async` or `await` functions on your task:
 
@@ -198,7 +191,7 @@ DecodeImage().async { result in
 }
 ```
 
-#### Async/await as free functions over closures.
+### Async/await as free functions over closures.
 
 `async` can be called on any expression as an `@autoclosure`:
 
@@ -232,37 +225,37 @@ let number = try? await { (done: @escaping (Int) -> Void) -> Void in
  XCTAssertEqual(number, 5)
  ```
 
-### URLInterceptor
+## URLTaskManager
 
-The idea behind the URLInterceptor is that it creates a URLSession object that is tied to a `TaskManager` so that you can call interceptors and reactors on `URLRequest`s. This is very useful for example if you need to add headers to all your requests that are going out. You simply then add an interceptor that inserts an authorization header. If for e.g. you need to refresh any tokens after a `URLRequest` fails, a reactor can come in handy - requeue the task, fetch a new auth token, and done.
+The idea behind the URLTaskManager is that it creates a URLSession object that is tied to a `TaskManager` so that you can call interceptors and reactors on `URLRequest`s. This is very useful for example if you need to add headers to all your requests that are going out. You simply add an interceptor that inserts an authorization header. If for e.g. you need to refresh any tokens after a `URLRequest` fails, a reactor can come in handy - requeue the task, fetch a new auth token, and done.
 
-To create a URLInterceor you can optionally pass in a `URLSessionConfiguration` (just as you would when creating a `URLSession` object), and an array of `TaskInterceptor`s and `TaskReactor`s:
+To create a URLTaskManager you can optionally pass in a `URLSessionConfiguration` (just as you would when creating a `URLSession` object), and an array of `URLTaskInterceptor`s and `URLTaskReactor`s:
 
 ```swift
-let urlInterceptor = URLInterceptor(interceptors: [MyInterceptor()], reactors: [Myreactors()])
+let urlTaskManager = URLTaskManager(interceptors: [MyInterceptor()], reactors: [Myreactors()])
 ```
 
 And then you use the internal `URLSession` object to make requests
 
 ```swift
-urlInterceptor.session.dataTask(with: URL(...)) { data, response, error in
-    // the URLInterceptorTask that's associated with this will be intercepted and reacted to
+urlTaskManager.session.dataTask(with: URL(...)) { data, response, error in
+    // the URLTask that's associated with this will be intercepted and reacted to
     // by MyInterceptor and MyReactor
 }
 ```
 
-#### Intercepting and reacting
+### Intercepting and reacting
 
-The `URLInterceptor` add-on has a type called `URLInterceptorTask` which encapsulates a `URLRequest` object. So this is the `Task` object that you can intercept with a `TaskInterceptor` or react to with a `TaskReactor`:
+The `URLTaskManager` works with a type `URLTask` which encapsulates a `URLRequest` object. The `URLTask` is  the `Task` object that you can intercept with a `URLTaskInterceptor` or react to with a `URLTaskReactor`:
 
 Here we create a task interceptor that contains a hypothetical user object and adds an authorization header for the user
 object whenever the request is going to go out:
 
 ```swift
-class Interceptor: TaskInterceptor {
+class Interceptor: URLTaskInterceptor {
     // ...
-    func intercept<T>(task: inout T, currentBatchCount _: Int) -> InterceptCommand where T: Task {
-        (task as? URLInterceptorTask)?
+    func intercept(task: inout URLTask, currentBatchCount _: Int) -> InterceptCommand {
+        task
             .request
             .addValue(self.user.authorization, forHTTPHeaderField: "Authorization")
         return .execute
@@ -273,7 +266,7 @@ class Interceptor: TaskInterceptor {
 And here we have a reactor that also contains a hypothetical user object and performs a OAuth2 token refresh operation when the result is a 401 failure:
 
 ```swift
-class Reactor: TaskReactor {
+class Reactor: URLTaskReactor {
     func execute(done: @escaping (Error?) -> Void) {
         // For example one could refresh the authorization tokens here
         user.refreshAuthorizationToken { result in
@@ -285,10 +278,7 @@ class Reactor: TaskReactor {
             }
         }
 
-        func shouldExecute<T: Task>(after result: T.Result, from task: T, with _: TaskHandle) -> Bool {
-            guard let result = result as? URLInterceptorTask.Result else {
-                return false
-            }
+        func shouldExecute(after result: URLT.Result, from task: URLTask, with _: TaskHandle) -> Bool {
             // One can return true if there's a 401 UNAUTHORIZED http response code.
             if case let .success(value) = result {
                 return value.(response as? HTTPURLResponse)?.statusCode == 401
@@ -297,3 +287,13 @@ class Reactor: TaskReactor {
         }
     }
 ```
+
+## Debugging and Logging
+
+Logging facilities are provided by the library for debugging purposes mainly. To enable them you need to add a transport to the shared logger:
+
+```swift
+Logger.shared.addTransport { print($0) }
+```
+
+The above will log all messages to stdout. There's also a number of filters that can be applied if you want to debug certain parts. The filters revolve around tags and there're a number of redefined tags that the shared logger uses. See `LogTags` in the docs

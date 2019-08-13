@@ -1,12 +1,12 @@
 import Foundation
 
 /**
- This is the `Task` object that is used by `URLInterceptor`. This is the type of the `Task` object
- that would be passed in to `TaskInterceptor.intercept(...)` and `TaskReactor.shouldExecute(...)`
- when using the `URLInterceptor`.
+ This is the `Task` object that is used by `URLTaskManager`. This is the type of the `Task` object
+ that would be passed in to `URLTaskInterceptor.intercept(...)` and `URLTaskReactor.shouldExecute(...)`
+ when using the `URLTaskManager`.
  */
-public class URLInterceptorTask: Task {
-    /// The URLRequest object that was used to make the original request with `URLInterceptor.session`
+public class URLTask: Task {
+    /// The URLRequest object that was used to make the original request with `URLTaskManager.session`
     public var request: URLRequest
 
     var task: URLSessionDataTask?

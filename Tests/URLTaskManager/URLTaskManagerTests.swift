@@ -1,26 +1,20 @@
 import Tasker
 import XCTest
 
-private class Interceptor: TaskInterceptor {
-    func intercept<T>(task: inout T, currentBatchCount _: Int) -> InterceptCommand where T: Task {
-        guard let task = task as? URLInterceptorTask else {
-            return .execute
-        }
+private class Interceptor: URLTaskInterceptor {
+    func intercept(task: inout URLTask, currentBatchCount _: Int) -> InterceptCommand {
         task.request.addValue("hahaha", forHTTPHeaderField: "hahaha")
         return .execute
     }
 }
 
-private class Reactor: TaskReactor {
+private class Reactor: URLTaskReactor {
     var count = 1
     func execute(done: @escaping (Error?) -> Void) {
         done(nil)
     }
 
-    func shouldExecute<T: Task>(after result: T.Result, from task: T, with _: TaskHandle) -> Bool {
-        guard let result = result as? URLInterceptorTask.Result else {
-            return false
-        }
+    func shouldExecute(after result: URLTask.Result, from task: URLTask, with _: TaskHandle) -> Bool {
         if case .success = result {
             let run = count == 0
             count -= 1
@@ -70,8 +64,8 @@ final class URLInterceptorTests: XCTestCase {
 //            http(400),
 //        ])
 
-        let urlInterceptor = URLInterceptor(interceptors: [Interceptor()], reactors: [Reactor()], configuration: .default)
-        let task = urlInterceptor.session.dataTask(with: URL(string: "http://www.msftncsi.com/ncsi.txt")!) { data, response, error in
+        let urlTaskManager = URLTaskManager(interceptors: [Interceptor()], reactors: [Reactor()], configuration: .default)
+        let task = urlTaskManager.session.dataTask(with: URL(string: "http://www.msftncsi.com/ncsi.txt")!) { data, response, error in
             XCTAssertEqual(data!.string()!, "Microsoft NCSI")
             XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 200)
             XCTAssertNil(error)
