@@ -5,7 +5,7 @@ import Foundation
 
  It also inherits from the `Reactor` protocol.
  */
-public protocol URLTaskReactor : Reactor {
+public protocol URLTaskReactor: Reactor {
     func shouldExecute(after: URLTask.Result, from: URLTask, with: Handle) -> Bool
 }
 
@@ -21,7 +21,7 @@ public extension URLTaskReactor {
         return self.shouldExecute(after: result, from: task, with: handle)
     }
 
-    func shouldExecute(after: URLTask.Result, from: URLTask, with: Handle) -> Bool {
+    func shouldExecute(after _: URLTask.Result, from _: URLTask, with _: Handle) -> Bool {
         return false
     }
 }

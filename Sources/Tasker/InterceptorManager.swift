@@ -3,7 +3,7 @@ import Foundation
 class InterceptorManager {
     private static let kTags = [LogTags.onInterceptorQueue]
 
-    enum InterceptionResult : Equatable {
+    enum InterceptionResult: Equatable {
         case ignore
         case execute([TaskManager.Handle])
     }

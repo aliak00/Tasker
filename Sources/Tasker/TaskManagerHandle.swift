@@ -10,10 +10,10 @@ extension TaskManager {
         static var counter = AtomicInt()
 
         #if DEBUG
-        init() {
-            self.identifier = type(of: self).counter.getAndIncrement()
-            self.owner = nil
-        }
+            init() {
+                self.identifier = type(of: self).counter.getAndIncrement()
+                self.owner = nil
+            }
         #endif
 
         init(owner: TaskManager) {

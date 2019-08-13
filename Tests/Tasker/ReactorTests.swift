@@ -1,7 +1,7 @@
 @testable import Tasker
 import XCTest
 
-class TaskReactorTests: XCTestCase {
+class ReactorTests: XCTestCase {
     override func tearDown() {
         ensure(kTaskSpyCounter.value).becomes(0)
     }
@@ -69,7 +69,7 @@ class TaskReactorTests: XCTestCase {
         reactor.executeBlock = { _ in } // do nothing, never call done
 
         // Only execute reactor on a task once
-        reactor.shouldExecuteBlock = { _, anyTask, _ in  (anyTask as! TaskSpy<Void>).executeCallCount == 1 }
+        reactor.shouldExecuteBlock = { _, anyTask, _ in (anyTask as! TaskSpy<Void>).executeCallCount == 1 }
 
         // Trigger a task execution pipeline and therefore a reactor execution
         let manager = TaskManagerSpy(reactors: [reactor])

@@ -1,7 +1,6 @@
 import Foundation
 
 class Atomic<T> {
-
     fileprivate var queue = DispatchQueue(label: "Tasker.Atomic<\(T.self)>")
     fileprivate var _value: T
 
@@ -49,7 +48,7 @@ extension Atomic: Equatable where T: Equatable {
     static func == (lhs: Atomic, rhs: Atomic) -> Bool {
         return lhs.queue.sync {
             rhs.queue.sync {
-                return lhs._value == rhs._value
+                lhs._value == rhs._value
             }
         }
     }

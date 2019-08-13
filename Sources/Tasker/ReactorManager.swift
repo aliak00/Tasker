@@ -1,10 +1,5 @@
 import Foundation
 
-protocol ReactorManagerDelegate: class {
-    func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>)
-    func reactorFailed(associatedHandles: Set<TaskManager.Handle>, error: TaskError)
-}
-
 class ReactorManager {
     private static let kTags = [LogTags.onReactorQueue]
     private let queue = DispatchQueue(label: "Tasker.ReactorManager")
@@ -15,7 +10,7 @@ class ReactorManager {
     private var executingReactors = Set<Int>()
     private var handlesToRequeue = Set<TaskManager.Handle>() // TODO: Can/should these handles be weak?
     private var assoiciatedHandles: [Int: Set<TaskManager.Handle>] = [:] // TODO: Can/should these handles be weak?
-    
+
     init(reactors: [Reactor]) {
         self.reactors = reactors
         for index in 0..<reactors.count {
@@ -23,7 +18,7 @@ class ReactorManager {
         }
     }
 
-    struct ReactionResult : Equatable {
+    struct ReactionResult: Equatable {
         let requeueTask: Bool
         let suspendQueue: Bool
     }
@@ -54,7 +49,7 @@ class ReactorManager {
                         suspendQueue = memo.suspendQueue || reactor.configuration.suspendsTaskQueue
                     }
                     return (indices, requeueTask, suspendQueue)
-            }
+                }
 
             log(level: .verbose, from: self, "\(handle) reaction result is \(reactionData)")
 
@@ -79,7 +74,7 @@ class ReactorManager {
     func launchReactors(indices reactorIndices: [Int]) {
         if #available(iOS 10.0, OSX 10.12, *) {
             #if !os(Linux)
-            __dispatch_assert_queue(self.queue)
+                __dispatch_assert_queue(self.queue)
             #endif
         }
 
@@ -152,7 +147,6 @@ class ReactorManager {
 
                     strongSelf.cancelAssociatedTasksForReactor(at: index, with: .reactorTimedOut(type: type(of: reactor)))
                     strongSelf.removeExecutingReactor(at: index)
-
                 }
                 self.queue.asyncAfter(deadline: .now() + timeout, execute: timeoutWorkItem!)
             }
@@ -162,7 +156,7 @@ class ReactorManager {
     private func removeExecutingReactor(at index: Int) {
         if #available(iOS 10.0, OSX 10.12, *) {
             #if !os(Linux)
-            __dispatch_assert_queue(self.queue)
+                __dispatch_assert_queue(self.queue)
             #endif
         }
         self.executingReactors.remove(index)
@@ -178,7 +172,7 @@ class ReactorManager {
     private func cancelAssociatedTasksForReactor(at index: Int, with error: TaskError) {
         if #available(iOS 10.0, OSX 10.12, *) {
             #if !os(Linux)
-            __dispatch_assert_queue(self.queue)
+                __dispatch_assert_queue(self.queue)
             #endif
         }
 

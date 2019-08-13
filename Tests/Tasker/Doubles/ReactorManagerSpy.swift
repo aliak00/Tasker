@@ -1,22 +1,7 @@
 import Foundation
 @testable import Tasker
 
-class TaskReactorDelegateSpy: ReactorManagerDelegate {
-
-    typealias ReactorsCompletedData = (Set<TaskManager.Handle>)
-    var reactorsCompletedData: SynchronizedArray<ReactorsCompletedData> = []
-    func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>) {
-        self.reactorsCompletedData.append(ReactorsCompletedData(handlesToRequeue))
-    }
-
-    typealias ReactorFailedData = (associatedHandles: Set<TaskManager.Handle>, error: TaskError)
-    var reactorFailedData: SynchronizedArray<ReactorFailedData> = []
-    func reactorFailed(associatedHandles: Set<TaskManager.Handle>, error: TaskError) {
-        self.reactorFailedData.append(ReactorFailedData(associatedHandles, error))
-    }
-}
-
-class TaskReactorManagerSpy {
+class ReactorManagerSpy {
     let reactorManager: ReactorManager
 
     var completionCallCount: Int {
@@ -29,7 +14,7 @@ class TaskReactorManagerSpy {
         self.reactorManager = ReactorManager(reactors: reactors)
     }
 
-    weak var delegate: TaskReactorDelegateSpy? {
+    weak var delegate: ReactorManagerDelegateSpy? {
         didSet {
             self.reactorManager.delegate = self.delegate
         }

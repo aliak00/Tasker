@@ -1,7 +1,7 @@
 @testable import Tasker
 import XCTest
 
-class TaskHandleTests: XCTestCase {
+class TaskManagerHandleTests: XCTestCase {
     override func setUp() {
         TaskManager.Handle.counter.value = 0
         self.addTeardownBlock {

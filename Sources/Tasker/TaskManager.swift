@@ -276,7 +276,6 @@ public class TaskManager {
             // And the task is officially done! Sanity check one more time for a cancelled task, and finish things off by
             // removing the handle form the list of pending tasks
             self?.taskQueue.async {
-
                 guard let strongSelf = self else {
                     log(level: .verbose, from: self, "\(T.self) manager dead", tags: TaskManager.kClrTags)
                     return
@@ -508,9 +507,7 @@ public class TaskManager {
     }
 }
 
-
 extension TaskManager: ReactorManagerDelegate {
-
     func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>) {
         self.taskQueue.async {
             for handle in handlesToRequeue {
@@ -534,7 +531,6 @@ extension TaskManager: ReactorManagerDelegate {
                     data.operation.cancel()
                     data.taskDidCancelCallback(error)
                     allTheData.append(data)
-
                 }
             }
 

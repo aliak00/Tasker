@@ -1,7 +1,7 @@
 import Foundation
 @testable import Tasker
 
-class TaskInterceptorManagerSpy {
+class InterceptorManagerSpy {
     let interceptorManager: InterceptorManager
 
     var completionCallCount: Int {

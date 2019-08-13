@@ -13,19 +13,19 @@ private class Hippo {
 
     var status: Status {
         get {
-            return _status.value
+            return self._status.value
         }
         set {
-            _status.value = newValue
+            self._status.value = newValue
         }
-
     }
+
     var name: String? {
         get {
-            return _name.value
+            return self._name.value
         }
         set {
-            _name.value = newValue
+            self._name.value = newValue
         }
     }
 }

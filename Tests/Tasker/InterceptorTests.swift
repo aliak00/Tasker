@@ -1,7 +1,7 @@
 @testable import Tasker
 import XCTest
 
-class TaskInterceptorTests: XCTestCase {
+class InterceptorTests: XCTestCase {
     override func setUp() {
         self.addTeardownBlock {
             ensure(kTaskSpyCounter.value).becomes(0)
