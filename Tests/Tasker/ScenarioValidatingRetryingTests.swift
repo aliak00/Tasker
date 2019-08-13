@@ -1,7 +1,7 @@
 @testable import Tasker
 import XCTest
 
-// Simulates a human being that may be alive or dead
+// Simulates a hippopotamus that may be alive or dead
 private class Hippo {
     enum Status {
         case alive
@@ -31,9 +31,11 @@ private class Hippo {
 }
 
 // These are the different errors that may be encountered in this simulation
-private struct Unrevivable: Error {}
-private struct Dead: Error {}
-private struct RandomFailure: Error {}
+private enum HippoError : Error {
+    case unrevivable
+    case dead
+    case random
+}
 
 // This simulates any task that can be retried
 private protocol Retriable {
@@ -41,12 +43,12 @@ private protocol Retriable {
 }
 
 // This simulates a protocol that must be implemented for any task that depends on an alive hippo
-private protocol HippoRequired {
+private protocol HasHippo {
     var weakHippo: Weak<Hippo> { get }
 }
 
 // Simulates a task that depends on a live hippo and can be retried if it fails.
-private class EatGobbledygook: Task, HippoRequired, Retriable {
+private class EatGook: Task, HasHippo, Retriable {
     typealias SuccessValue = Void
 
     var weakHippo: Weak<Hippo>
@@ -59,59 +61,60 @@ private class EatGobbledygook: Task, HippoRequired, Retriable {
     func execute(completion: @escaping CompletionCallback) {
         // Hippo must be alive
         guard self.weakHippo.value?.status == .alive else {
-            completion(.failure(Dead()))
+            completion(.failure(HippoError.dead))
             return
         }
-        // Simulate some random failure that could result from whatever
-        guard arc4random_uniform(2) != 0 else {
-            completion(.failure(RandomFailure()))
+        // Simulate some random failure that could result from whatever - 50/50 chance
+        guard arc4random_uniform(2) == 0 else {
+            completion(.failure(HippoError.random))
             return
         }
-        // Yay, success, the hippo gobbldygooked
+        // Yay, success, the hippo ate gook
         completion(.success(()))
     }
 }
 
 // This simulates doing something that just needs a hippo, but cannot be retried
-private class GetHippoNameTask: Task, HippoRequired {
+private class GetName: HasHippo, Task {
     typealias SuccessValue = String
     var weakHippo: Weak<Hippo>
-    let name: String
-    init(hippo: Hippo, name: String = "Abe") {
+    init(hippo: Hippo) {
         self.weakHippo = Weak(hippo)
-        self.name = name
     }
 
     func execute(completion: @escaping CompletionCallback) {
-        guard let hippo = self.weakHippo.value, hippo.status == .alive else {
-            completion(.failure(Dead()))
+        guard let hippo = self.weakHippo.value, hippo.status == .alive, let name = hippo.name else {
+            completion(.failure(HippoError.dead))
             return
         }
 
-        completion(.success(self.name))
+        completion(.success(name))
     }
 }
 
-// This reactor will take any task that is UserDependent and then if it's own
-// internal user is still present, will set set the user in the task to something
-// valid and re-execute
 private class ReviveTheHippoReactor: Reactor {
-    weak var hippo: Hippo?
-    init(hippo: Hippo) {
-        self.hippo = hippo
-    }
-
+    init() {}
     var configuration: ReactorConfiguration {
         return ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
-    func shouldExecute<T>(after result: T.Result, from _: T, with _: Handle) -> Bool where T: Task {
-        return result.failureValue is Dead
+    weak var hippo: Hippo?
+
+    func shouldExecute<T: Task>(after result: T.Result, from task: T, with: Handle) -> Bool {
+        guard let hippoTask = task as? HasHippo else {
+            return false
+        }
+        guard case HippoError.dead? = result.failureValue else {
+            return false
+        }
+        self.hippo = hippoTask.weakHippo.value
+        self.hippo?.status = .alive
+        return true
     }
 
     func execute(done: @escaping (Error?) -> Void) {
         guard let hippo = self.hippo else {
-            done(Unrevivable())
+            done(HippoError.unrevivable)
             return
         }
         hippo.status = .alive
@@ -121,62 +124,81 @@ private class ReviveTheHippoReactor: Reactor {
 
 // This interceptor will take any task that is retriable, and re-execute it
 private class RetryReactor: Reactor {
-    var counter: [Int: Int] = [:]
+    var counter = SynchronizedDictionary<Int, Int>()
 
     var configuration: ReactorConfiguration {
         return ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
     func shouldExecute<T>(after result: T.Result, from task: T, with handle: Handle) -> Bool where T: Task {
-        if result.failureValue is RandomFailure, let task = task as? Retriable {
-            guard task.maxRetryCount > 0 else {
-                return false
-            }
-            guard let count = self.counter[handle.identifier] else {
-                self.counter[handle.identifier] = 0
-                return true
-            }
-            guard count < task.maxRetryCount else {
-                self.counter.removeValue(forKey: handle.identifier)
-                return false
-            }
-            self.counter[handle.identifier] = count + 1
+        guard case HippoError.random? = result.failureValue, let task = task as? Retriable else {
+            return false
+        }
+        guard let count = self.counter[handle.identifier] else {
+            self.counter[handle.identifier] = 1 // first retry
             return true
         }
-        return false
+        guard count < task.maxRetryCount else {
+            return false
+        }
+        self.counter[handle.identifier] = count + 1
+        return true
     }
 }
 
 class ScenarioValidatingRetryingTests: XCTestCase {
-    func testShouldAllWork() {
+    func testDefaultHippoIsDead() {
         let hippo = Hippo()
         XCTAssertEqual(hippo.status, Hippo.Status.dead)
+    }
 
+    func testShouldAllWork() {
+        var hippos: [Hippo] = []
+
+        let retryReactor = RetryReactor()
+        let reviveTheHippoReactor = ReviveTheHippoReactor()
         // Create manager that validates and retries
-        let manager = TaskManagerSpy(reactors: [ReviveTheHippoReactor(hippo: hippo), RetryReactor()])
+        let manager = TaskManagerSpy(reactors: [reviveTheHippoReactor, retryReactor])
 
-        // Run tasks that should fail randomly
+        // Try and eat a bunch of times. The hippo will be dead first, the revive reactor will bring it back
+        // and then the hippo may or may not eat
         let numTasks = 20
         for _ in (0..<numTasks).yielded(by: .milliseconds(1)) {
-            manager.add(task: EatGobbledygook(hippo: hippo))
+            let hippo = Hippo()
+            hippos.append(hippo)
+            manager.add(task: EatGook(hippo: hippo))
         }
 
-        // All of them should have completed retries and all the hippo should be alive
+        // All of them should have completed retries and all the hippos should be alive
         ensure(manager.completionCallCount).becomes(numTasks)
-        XCTAssertEqual(hippo.status, Hippo.Status.alive)
-
-        // Kill hippo and try to get it's name
-        hippo.status = .dead
-        let name = "Jimbo"
-        let returnedResult = Atomic<GetHippoNameTask.Result?>(nil)
-        let handle = manager.add(task: GetHippoNameTask(hippo: hippo, name: name)) { result in
-            returnedResult.value = result
+        for hippo in hippos {
+            XCTAssertEqual(hippo.status, .alive)
         }
 
-        // Name result should be expected and hippo should be alive
+        // Kill all hippos, set a name, and get it, store handles
+        var handles = [Handle]()
+        let results = SynchronizedArray<GetName.Result>()
+        for hippo in hippos {
+            hippo.status = .dead
+            hippo.name = "Jimbo"
+            let handle = manager.add(task: GetName(hippo: hippo)) { result in
+                results.append(result)
+            }
+            handles.append(handle)
+        }
+
         manager.waitTillAllTasksFinished()
-        ensure(handle.state).becomes(TaskState.finished)
-        XCTAssertEqual(returnedResult.value?.successValue, name)
-        XCTAssertEqual(hippo.status, Hippo.Status.alive)
+
+        for handle in handles {
+            ensure(handle.state).becomes(.finished)
+        }
+
+        for hippo in hippos {
+            XCTAssertEqual(hippo.status, .alive)
+        }
+
+        for result in results.data {
+            XCTAssertEqual(result.successValue, "Jimbo")
+        }
     }
 }
