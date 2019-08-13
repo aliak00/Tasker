@@ -31,4 +31,6 @@ Example/Swooft.xcworkspace
 !/docs/abstracts/
 !/docs/abstracts/*
 
+*.xcodeproj
+
 .build
