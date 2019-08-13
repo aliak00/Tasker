@@ -415,6 +415,7 @@
 			children = (
 				E1058856219CB9270020976B /* Task.swift */,
 				E1058850219CB9270020976B /* TaskError.swift */,
+				E105884E219CB9270020976B /* TaskState.swift */,
 				E1058852219CB9270020976B /* Handle.swift */,
 				E105884F219CB9270020976B /* Interceptor.swift */,
 				E1058853219CB9270020976B /* InterceptorManager.swift */,
@@ -425,7 +426,6 @@
 				E1FAA2F222FF259B001703D4 /* ReactorManager.swift */,
 				E1058857219CB9270020976B /* ReactorConfiguration.swift */,
 				E178E6442303319400968761 /* ReactorManagerDelegate.swift */,
-				E105884E219CB9270020976B /* TaskState.swift */,
 			);
 			path = Tasker;
 			sourceTree = "<group>";

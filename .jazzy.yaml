@@ -13,14 +13,14 @@ custom_categories:
   - name: Task Management
     children:
       - Task
+      - TaskError
+      - TaskState
       - Handle
       - TaskManager
       - Interceptor
+      - InterceptCommand
       - Reactor
       - ReactorConfiguration
-      - TaskError
-      - TaskState
-      - InterceptCommand
       - Result
   - name: Logging
     children:
