@@ -13,6 +13,8 @@ matrix:
     - name: "iOS"
       script:
         - scripts/test-ios.sh
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
     - name: "MacOS"
       script:
         - swift test
