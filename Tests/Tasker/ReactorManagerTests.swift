@@ -26,7 +26,6 @@ class ReactorManagerTests: XCTestCase {
     }
 
     func testRequeingReactorsShouldReleaseAllHandlesAfterDone() {
-        Logger.shared.addTransport { print($0) }
         let reactor = ReactorSpy(configuration: .init(timeout: nil, requeuesTask: true, suspendsTaskQueue: false))
         reactor.executeBlock = { _ in } // do nothing
 
