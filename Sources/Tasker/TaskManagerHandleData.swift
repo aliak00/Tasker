@@ -3,7 +3,7 @@ import Foundation
 extension TaskManager.Handle {
     // TODO: make this a value type?
     class Data {
-        typealias InterceptionCallback = (@escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
+        typealias InterceptionCallback = (@escaping (InterceptorManager.InterceptionResult) -> Void) -> Void
 
         var operation: AsyncOperation
         let taskReference: AnyObject

@@ -39,7 +39,7 @@ class TaskInterceptorManagerTests: XCTestCase {
 
         XCTAssertEqual(
             Array(interceptorManager.completionCallData.data[0..<9]),
-            Array(repeating: TaskInterceptorManager.InterceptionResult.ignore, count: 9)
+            Array(repeating: InterceptorManager.InterceptionResult.ignore, count: 9)
         )
 
         XCTAssertEqual(
@@ -64,7 +64,7 @@ class TaskInterceptorManagerTests: XCTestCase {
 
         XCTAssertEqual(
             Array(interceptorManager.completionCallData.data),
-            Array(repeating: TaskInterceptorManager.InterceptionResult.ignore, count: count)
+            Array(repeating: InterceptorManager.InterceptionResult.ignore, count: count)
         )
     }
 

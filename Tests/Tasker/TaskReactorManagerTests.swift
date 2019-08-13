@@ -20,7 +20,7 @@ class TaskReactorManagerTests: XCTestCase {
 
         for i in 0..<count {
             let a = reactorManager.completionCallData.data[i]
-            let b = TaskReactorManager.ReactionResult(requeueTask: false, suspendQueue: false)
+            let b = ReactorManager.ReactionResult(requeueTask: false, suspendQueue: false)
             XCTAssertEqual(a, b)
         }
     }

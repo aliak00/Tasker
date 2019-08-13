@@ -21,8 +21,8 @@ public class TaskManager {
 
     private let taskQueue = DispatchQueue(label: "Tasker.TaskManager.tasks")
 
-    private let interceptorManager: TaskInterceptorManager
-    private let reactorManager: TaskReactorManager
+    private let interceptorManager: InterceptorManager
+    private let reactorManager: ReactorManager
 
     /**
      List of reactors that this TaskManager was created with
@@ -51,8 +51,8 @@ public class TaskManager {
      */
     public init(interceptors: [Interceptor] = [], reactors: [Reactor] = []) {
         self.operationQueue.isSuspended = false
-        self.reactorManager = TaskReactorManager(reactors: reactors)
-        self.interceptorManager = TaskInterceptorManager(interceptors)
+        self.reactorManager = ReactorManager(reactors: reactors)
+        self.interceptorManager = InterceptorManager(interceptors)
         self.identifier = type(of: self).identifierCounter.getAndIncrement()
 
         self.reactorManager.delegate = self
@@ -509,7 +509,7 @@ public class TaskManager {
 }
 
 
-extension TaskManager: TaskReactorManagerDelegate {
+extension TaskManager: ReactorManagerDelegate {
 
     func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>) {
         self.taskQueue.async {

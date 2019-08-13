@@ -1,15 +1,15 @@
 import Foundation
 
-protocol TaskReactorManagerDelegate: class {
+protocol ReactorManagerDelegate: class {
     func reactorsCompleted(handlesToRequeue: Set<TaskManager.Handle>)
     func reactorFailed(associatedHandles: Set<TaskManager.Handle>, error: TaskError)
 }
 
-class TaskReactorManager {
+class ReactorManager {
     private static let kTags = [LogTags.onReactorQueue]
-    private let queue = DispatchQueue(label: "Tasker.TaskReactorManager")
+    private let queue = DispatchQueue(label: "Tasker.ReactorManager")
 
-    weak var delegate: TaskReactorManagerDelegate?
+    weak var delegate: ReactorManagerDelegate?
     let reactors: [Reactor]
 
     private var executingReactors = Set<Int>()

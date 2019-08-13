@@ -1,7 +1,7 @@
 import Foundation
 @testable import Tasker
 
-class TaskReactorDelegateSpy: TaskReactorManagerDelegate {
+class TaskReactorDelegateSpy: ReactorManagerDelegate {
 
     typealias ReactorsCompletedData = (Set<TaskManager.Handle>)
     var reactorsCompletedData: SynchronizedArray<ReactorsCompletedData> = []
@@ -17,16 +17,16 @@ class TaskReactorDelegateSpy: TaskReactorManagerDelegate {
 }
 
 class TaskReactorManagerSpy {
-    let reactorManager: TaskReactorManager
+    let reactorManager: ReactorManager
 
     var completionCallCount: Int {
         return self.completionCallData.count
     }
 
-    var completionCallData: SynchronizedArray<TaskReactorManager.ReactionResult> = []
+    var completionCallData: SynchronizedArray<ReactorManager.ReactionResult> = []
 
     init(reactors: [Reactor] = []) {
-        self.reactorManager = TaskReactorManager(reactors: reactors)
+        self.reactorManager = ReactorManager(reactors: reactors)
     }
 
     weak var delegate: TaskReactorDelegateSpy? {
@@ -38,7 +38,7 @@ class TaskReactorManagerSpy {
     @discardableResult
     func react(
         result: Result<Void, Error> = Result<Void, Error>.success(()),
-        completion: @escaping (TaskReactorManager.ReactionResult) -> Void = { _ in }
+        completion: @escaping (ReactorManager.ReactionResult) -> Void = { _ in }
     ) -> TaskManager.Handle {
         let handle = TaskManager.Handle()
         let task = DummyTask()
@@ -50,7 +50,7 @@ class TaskReactorManagerSpy {
         task: T,
         result: T.Result,
         handle: TaskManager.Handle,
-        completion: @escaping (TaskReactorManager.ReactionResult) -> Void = { _ in }
+        completion: @escaping (ReactorManager.ReactionResult) -> Void = { _ in }
     ) {
         self.reactorManager.react(task: task, result: result, handle: handle) { [weak self] result in
             self?.completionCallData.append(result)
