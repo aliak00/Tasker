@@ -95,14 +95,14 @@ private class GetHippoNameTask: Task, HippoRequired {
 // This reactor will take any task that is UserDependent and then if it's own
 // internal user is still present, will set set the user in the task to something
 // valid and re-execute
-private class ReviveTheHippoReactor: TaskReactor {
+private class ReviveTheHippoReactor: Reactor {
     weak var hippo: Hippo?
     init(hippo: Hippo) {
         self.hippo = hippo
     }
 
-    var configuration: TaskReactorConfiguration {
-        return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
+    var configuration: ReactorConfiguration {
+        return ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
     func shouldExecute<T>(after result: T.Result, from _: T, with _: Handle) -> Bool where T: Task {
@@ -120,11 +120,11 @@ private class ReviveTheHippoReactor: TaskReactor {
 }
 
 // This interceptor will take any task that is retriable, and re-execute it
-private class RetryReactor: TaskReactor {
+private class RetryReactor: Reactor {
     var counter: [Int: Int] = [:]
 
-    var configuration: TaskReactorConfiguration {
-        return TaskReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
+    var configuration: ReactorConfiguration {
+        return ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
     func shouldExecute<T>(after result: T.Result, from task: T, with handle: Handle) -> Bool where T: Task {

@@ -5,19 +5,19 @@ import Foundation
  */
 public enum TaskError: Error {
     /**
-     A `TaskReactor`'s `execute` function failed.
+     A `Reactor`'s `execute` function failed.
 
-     - parameter type: the `Type` of the `TaskReactor`
+     - parameter type: the `Type` of the `Reactor`
      - parameter error: The `Error` that the reactor failed with
      */
-    case reactorFailed(type: TaskReactor.Type, error: Error)
+    case reactorFailed(type: Reactor.Type, error: Error)
 
     /**
-     A `TaskReactor`'s `execute` function timed out.
+     A `Reactor`'s `execute` function timed out.
 
-     - parameter type: the `Type` of the `TaskReactor`
+     - parameter type: the `Type` of the `Reactor`
      */
-    case reactorTimedOut(type: TaskReactor.Type)
+    case reactorTimedOut(type: Reactor.Type)
 
     /// A task was cancelled
     case cancelled

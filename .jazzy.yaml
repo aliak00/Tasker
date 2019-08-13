@@ -16,8 +16,8 @@ custom_categories:
       - Handle
       - TaskManager
       - Interceptor
-      - TaskReactor
-      - TaskReactorConfiguration
+      - Reactor
+      - ReactorConfiguration
       - TaskError
       - TaskState
       - InterceptCommand

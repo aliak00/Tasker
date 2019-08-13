@@ -23,8 +23,8 @@ private class Reactor: URLTaskReactor {
         return false
     }
 
-    var configuration: TaskReactorConfiguration {
-        return TaskReactorConfiguration(
+    var configuration: ReactorConfiguration {
+        return ReactorConfiguration(
             timeout: nil,
             requeuesTask: true,
             suspendsTaskQueue: false

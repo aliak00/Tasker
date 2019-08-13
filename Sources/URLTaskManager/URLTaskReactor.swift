@@ -3,15 +3,15 @@ import Foundation
 /**
  This protocol provides the means to react to a `URLTask` object.
 
- It also inherits from the `TaskReactor` protocol.
+ It also inherits from the `Reactor` protocol.
  */
-public protocol URLTaskReactor : TaskReactor {
+public protocol URLTaskReactor : Reactor {
     func shouldExecute(after: URLTask.Result, from: URLTask, with: Handle) -> Bool
 }
 
 public extension URLTaskReactor {
     /**
-     Default implementation of `TaskReactor.shouldExecute`. If the result type and task type are not
+     Default implementation of `Reactor.shouldExecute`. If the result type and task type are not
      the expected `URLTask` types then `shouldExecute` returns false.
      */
     func shouldExecute<T: Task>(after result: T.Result, from task: T, with handle: Handle) -> Bool {

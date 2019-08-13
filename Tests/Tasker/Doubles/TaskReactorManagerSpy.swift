@@ -25,7 +25,7 @@ class TaskReactorManagerSpy {
 
     var completionCallData: SynchronizedArray<TaskReactorManager.ReactionResult> = []
 
-    init(reactors: [TaskReactor] = []) {
+    init(reactors: [Reactor] = []) {
         self.reactorManager = TaskReactorManager(reactors: reactors)
     }
 

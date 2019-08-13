@@ -1,9 +1,9 @@
 @testable import Tasker
 
-class ReactorSpy: TaskReactor {
-    let configuration: TaskReactorConfiguration
+class ReactorSpy: Reactor {
+    let configuration: ReactorConfiguration
 
-    init(configuration: TaskReactorConfiguration = .default) {
+    init(configuration: ReactorConfiguration = .default) {
         self.configuration = configuration
     }
 

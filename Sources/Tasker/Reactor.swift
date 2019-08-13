@@ -7,10 +7,10 @@ import Foundation
  ## Multiple reactors
 
  If a there're multiple reactors that are supposed to be run for a task then the options set in the
- `TaskReactorConfiguration` are OR'ed together to determine what to do with the task. I.e. if one reactor
+ `ReactorConfiguration` are OR'ed together to determine what to do with the task. I.e. if one reactor
  of `n` reactors is configured to reqeue a task, then the task will be requeued.
  */
-public protocol TaskReactor {
+public protocol Reactor {
     /**
      Return true if you want this reactor to be executed
 
@@ -28,10 +28,10 @@ public protocol TaskReactor {
     /**
      The configuration that this interceptor has
      */
-    var configuration: TaskReactorConfiguration { get }
+    var configuration: ReactorConfiguration { get }
 }
 
-extension TaskReactor {
+extension Reactor {
     func execute(done: @escaping (Error?) -> Void) {
         done(nil)
     }
@@ -40,7 +40,7 @@ extension TaskReactor {
         return false
     }
 
-    var configuration: TaskReactorConfiguration {
+    var configuration: ReactorConfiguration {
         return .default
     }
 }

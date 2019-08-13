@@ -46,8 +46,8 @@
 		E1CC6C15219CC49A00B465A5 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058854219CB9270020976B /* TaskManager.swift */; };
 		E1CC6C16219CC49A00B465A5 /* TaskManagerHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058851219CB9270020976B /* TaskManagerHandle.swift */; };
 		E1CC6C17219CC49A00B465A5 /* TaskManagerHandleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058855219CB9270020976B /* TaskManagerHandleData.swift */; };
-		E1CC6C18219CC49A00B465A5 /* TaskReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058858219CB9270020976B /* TaskReactor.swift */; };
-		E1CC6C19219CC49A00B465A5 /* TaskReactorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058857219CB9270020976B /* TaskReactorConfiguration.swift */; };
+		E1CC6C18219CC49A00B465A5 /* Reactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058858219CB9270020976B /* Reactor.swift */; };
+		E1CC6C19219CC49A00B465A5 /* ReactorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058857219CB9270020976B /* ReactorConfiguration.swift */; };
 		E1CC6C1A219CC49A00B465A5 /* TaskState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105884E219CB9270020976B /* TaskState.swift */; };
 		E1CC6C1B219CC49A00B465A5 /* URLTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058834219CB9270020976B /* URLTaskManager.swift */; };
 		E1CC6C1C219CC49A00B465A5 /* URLTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058836219CB9270020976B /* URLTask.swift */; };
@@ -73,8 +73,8 @@
 		E1CC6C33219CC49B00B465A5 /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058854219CB9270020976B /* TaskManager.swift */; };
 		E1CC6C34219CC49B00B465A5 /* TaskManagerHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058851219CB9270020976B /* TaskManagerHandle.swift */; };
 		E1CC6C35219CC49B00B465A5 /* TaskManagerHandleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058855219CB9270020976B /* TaskManagerHandleData.swift */; };
-		E1CC6C36219CC49B00B465A5 /* TaskReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058858219CB9270020976B /* TaskReactor.swift */; };
-		E1CC6C37219CC49B00B465A5 /* TaskReactorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058857219CB9270020976B /* TaskReactorConfiguration.swift */; };
+		E1CC6C36219CC49B00B465A5 /* Reactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058858219CB9270020976B /* Reactor.swift */; };
+		E1CC6C37219CC49B00B465A5 /* ReactorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058857219CB9270020976B /* ReactorConfiguration.swift */; };
 		E1CC6C38219CC49B00B465A5 /* TaskState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105884E219CB9270020976B /* TaskState.swift */; };
 		E1CC6C39219CC49B00B465A5 /* URLTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058834219CB9270020976B /* URLTaskManager.swift */; };
 		E1CC6C3A219CC49B00B465A5 /* URLTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058836219CB9270020976B /* URLTask.swift */; };
@@ -178,8 +178,8 @@
 		E1058854219CB9270020976B /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		E1058855219CB9270020976B /* TaskManagerHandleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManagerHandleData.swift; sourceTree = "<group>"; };
 		E1058856219CB9270020976B /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
-		E1058857219CB9270020976B /* TaskReactorConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskReactorConfiguration.swift; sourceTree = "<group>"; };
-		E1058858219CB9270020976B /* TaskReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskReactor.swift; sourceTree = "<group>"; };
+		E1058857219CB9270020976B /* ReactorConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactorConfiguration.swift; sourceTree = "<group>"; };
+		E1058858219CB9270020976B /* Reactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reactor.swift; sourceTree = "<group>"; };
 		E1058879219CB93A0020976B /* LoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggerTests.swift; sourceTree = "<group>"; };
 		E105887B219CB93A0020976B /* URLTaskManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLTaskManagerTests.swift; sourceTree = "<group>"; };
 		E105887D219CB93A0020976B /* KitchenSink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KitchenSink.swift; sourceTree = "<group>"; };
@@ -416,8 +416,8 @@
 				E1058854219CB9270020976B /* TaskManager.swift */,
 				E1058851219CB9270020976B /* TaskManagerHandle.swift */,
 				E1058855219CB9270020976B /* TaskManagerHandleData.swift */,
-				E1058858219CB9270020976B /* TaskReactor.swift */,
-				E1058857219CB9270020976B /* TaskReactorConfiguration.swift */,
+				E1058858219CB9270020976B /* Reactor.swift */,
+				E1058857219CB9270020976B /* ReactorConfiguration.swift */,
 				E105884E219CB9270020976B /* TaskState.swift */,
 			);
 			path = Tasker;
@@ -774,7 +774,7 @@
 				E1CC6C13219CC49A00B465A5 /* Interceptor.swift in Sources */,
 				E1CC6C14219CC49A00B465A5 /* TaskInterceptorManager.swift in Sources */,
 				E1CC6C1D219CC49A00B465A5 /* URLTaskManagerProtocol.swift in Sources */,
-				E1CC6C19219CC49A00B465A5 /* TaskReactorConfiguration.swift in Sources */,
+				E1CC6C19219CC49A00B465A5 /* ReactorConfiguration.swift in Sources */,
 				E1CC6C17219CC49A00B465A5 /* TaskManagerHandleData.swift in Sources */,
 				E1CC6C1B219CC49A00B465A5 /* URLTaskManager.swift in Sources */,
 				E154FC742258C77F00C0A145 /* URLTaskManagerError.swift in Sources */,
@@ -797,7 +797,7 @@
 				E127EAA9230310850059B13F /* URLTaskInterceptor.swift in Sources */,
 				E1CC6C0E219CC49A00B465A5 /* AnyResult.swift in Sources */,
 				E1CC6C0D219CC49A00B465A5 /* AsyncOperation.swift in Sources */,
-				E1CC6C18219CC49A00B465A5 /* TaskReactor.swift in Sources */,
+				E1CC6C18219CC49A00B465A5 /* Reactor.swift in Sources */,
 				E1CB507221CD0FF100823D6C /* LogTags.swift in Sources */,
 				E1CC6C0B219CC49A00B465A5 /* Logger.swift in Sources */,
 			);
@@ -849,7 +849,7 @@
 				E1CC6C31219CC49B00B465A5 /* Interceptor.swift in Sources */,
 				E1CC6C32219CC49B00B465A5 /* TaskInterceptorManager.swift in Sources */,
 				E1CC6C3B219CC49B00B465A5 /* URLTaskManagerProtocol.swift in Sources */,
-				E1CC6C37219CC49B00B465A5 /* TaskReactorConfiguration.swift in Sources */,
+				E1CC6C37219CC49B00B465A5 /* ReactorConfiguration.swift in Sources */,
 				E1CC6C35219CC49B00B465A5 /* TaskManagerHandleData.swift in Sources */,
 				E1CC6C39219CC49B00B465A5 /* URLTaskManager.swift in Sources */,
 				E154FC752258C77F00C0A145 /* URLTaskManagerError.swift in Sources */,
@@ -872,7 +872,7 @@
 				E127EAAA230310850059B13F /* URLTaskInterceptor.swift in Sources */,
 				E1CC6C2C219CC49B00B465A5 /* AnyResult.swift in Sources */,
 				E1CC6C2B219CC49B00B465A5 /* AsyncOperation.swift in Sources */,
-				E1CC6C36219CC49B00B465A5 /* TaskReactor.swift in Sources */,
+				E1CC6C36219CC49B00B465A5 /* Reactor.swift in Sources */,
 				E1CB507321CD0FF100823D6C /* LogTags.swift in Sources */,
 				E1CC6C29219CC49B00B465A5 /* Logger.swift in Sources */,
 			);

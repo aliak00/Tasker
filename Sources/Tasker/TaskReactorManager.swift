@@ -10,13 +10,13 @@ class TaskReactorManager {
     private let queue = DispatchQueue(label: "Tasker.TaskReactorManager")
 
     weak var delegate: TaskReactorManagerDelegate?
-    let reactors: [TaskReactor]
+    let reactors: [Reactor]
 
     private var executingReactors = Set<Int>()
     private var handlesToRequeue = Set<TaskManager.Handle>() // TODO: Can/should these handles be weak?
     private var assoiciatedHandles: [Int: Set<TaskManager.Handle>] = [:] // TODO: Can/should these handles be weak?
     
-    init(reactors: [TaskReactor]) {
+    init(reactors: [Reactor]) {
         self.reactors = reactors
         for index in 0..<reactors.count {
             self.assoiciatedHandles[index] = Set<TaskManager.Handle>()
