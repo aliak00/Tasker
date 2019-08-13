@@ -3,13 +3,13 @@ import Foundation
 extension TaskManager.Handle {
     // TODO: make this a value type?
     class Data {
-        typealias Interceptor = (@escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
+        typealias InterceptionCallback = (@escaping (TaskInterceptorManager.InterceptionResult) -> Void) -> Void
 
         var operation: AsyncOperation
         let taskReference: AnyObject
         let completionErrorCallback: (TaskError) -> Void
         let taskDidCancelCallback: (TaskError) -> Void
-        let intercept: Interceptor
+        let intercept: InterceptionCallback
         let completionQueue: DispatchQueue?
         var state: TaskState = .pending
 
@@ -18,7 +18,7 @@ extension TaskManager.Handle {
             taskReference: AnyObject,
             completionErrorCallback: @escaping (TaskError) -> Void,
             taskDidCancelCallback: @escaping (TaskError) -> Void,
-            intercept: @escaping Interceptor,
+            intercept: @escaping InterceptionCallback,
             completionQueue: DispatchQueue?
         ) {
             self.operation = operation

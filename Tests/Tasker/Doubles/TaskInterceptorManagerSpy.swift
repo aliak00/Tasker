@@ -10,7 +10,7 @@ class TaskInterceptorManagerSpy {
 
     var completionCallData: SynchronizedArray<TaskInterceptorManager.InterceptionResult> = []
 
-    init(interceptors: [TaskInterceptor] = []) {
+    init(interceptors: [Interceptor] = []) {
         self.interceptorManager = TaskInterceptorManager(interceptors)
     }
 

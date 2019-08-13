@@ -10,7 +10,7 @@ class TaskManagerSpy {
 
     var completionCallData: SynchronizedArray<AnyResult> = []
 
-    init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
+    init(interceptors: [Interceptor] = [], reactors: [TaskReactor] = []) {
         self.taskManager = TaskManager(interceptors: interceptors, reactors: reactors)
     }
 

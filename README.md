@@ -142,7 +142,7 @@ Everytime you add a task you get back a handle that can start or cancel a task. 
 
 ### Intercepting a task
 
-Every task is _intercepted_ before it is executed by the `TaskManager` that owns it. You can control how a task is intercepted by implementing a `TaskInterceptor`, which has one method:
+Every task is _intercepted_ before it is executed by the `TaskManager` that owns it. You can control how a task is intercepted by implementing a `Interceptor`, which has one method:
 
 ```swift
 func intercept<T: Task>(task: inout T, currentBatchCount: Int) -> InterceptCommand

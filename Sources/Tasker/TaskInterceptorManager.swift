@@ -11,9 +11,9 @@ class TaskInterceptorManager {
     private let queue = DispatchQueue(label: "Tasker.TaskInterceptorManager")
     private var batchedHandles: [Int: [Weak<TaskManager.Handle>]] = [:]
 
-    let interceptors: [TaskInterceptor]
+    let interceptors: [Interceptor]
 
-    init(_ interceptors: [TaskInterceptor]) {
+    init(_ interceptors: [Interceptor]) {
         self.interceptors = interceptors
     }
 

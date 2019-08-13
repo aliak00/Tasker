@@ -1,12 +1,12 @@
 import Foundation
 
 /**
- A task manager can be given an arbitrary number of `Task`s and initialized with a set of `TaskInterceptor`s
+ A task manager can be given an arbitrary number of `Task`s and initialized with a set of `Interceptor`s
  and `TaskReactor`s, after which it will take care of asynchonous task management for you.
  */
 public class TaskManager {
     /**
-     Shared TaskManager that is default constructed and has no `TaskInterceptor`s or `TaskReactor`s.
+     Shared TaskManager that is default constructed and has no `Interceptor`s or `TaskReactor`s.
      */
     public static let shared = TaskManager()
 
@@ -34,7 +34,7 @@ public class TaskManager {
     /**
      List of interceptors that this TaskManager was created with
      */
-    public var interceptors: [TaskInterceptor] {
+    public var interceptors: [Interceptor] {
         return self.interceptorManager.interceptors
     }
 
@@ -49,7 +49,7 @@ public class TaskManager {
      - parameter interceptors: an array of interceptors that will be applied to every task before being started
      - parameter reactors: an array of reactors that will be applied to every task after it's executed
      */
-    public init(interceptors: [TaskInterceptor] = [], reactors: [TaskReactor] = []) {
+    public init(interceptors: [Interceptor] = [], reactors: [TaskReactor] = []) {
         self.operationQueue.isSuspended = false
         self.reactorManager = TaskReactorManager(reactors: reactors)
         self.interceptorManager = TaskInterceptorManager(interceptors)
@@ -99,7 +99,7 @@ public class TaskManager {
         // to pending tasks has to be thread safe.
         self.taskQueue.async {
             // Setup the intercept callback for this task. We just wrap it and pass it through to the interceptor manager
-            let intercept: Handle.Data.Interceptor = { [weak self, weak task, weak handle] completion in
+            let intercept: Handle.Data.InterceptionCallback = { [weak self, weak task, weak handle] completion in
                 guard let strongSelf = self, var task = task, let handle = handle else {
                     completion(.ignore)
                     return
