@@ -13,6 +13,10 @@ matrix:
     - name: "iOS"
       script:
         - scripts/test-ios.sh
+    - name: "MacOS codecov"
+      script:
+        - swift package generate-xcodeproj
+        - xcodebuild -scheme Tasker-Package -enableCodeCoverage YES test | xcpretty
       after_success:
         - bash <(curl -s https://codecov.io/bash)
     - name: "MacOS"
