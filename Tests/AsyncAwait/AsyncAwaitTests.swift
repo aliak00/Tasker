@@ -134,13 +134,14 @@ final class AsyncAwaitTests: XCTestCase {
         XCTAssertThrowsError(try await(timeout: .milliseconds(10), block: f))
     }
 
-    // func testAwaitShouldCallCompletionOnSpecifiedQueue() {
-    //     let queue = DispatchQueue(label: "Tasker.Tests.AsyncTask")
-    //     let key = DispatchSpecificKey<Void>()
-    //     queue.setSpecific(key: key, value: ())
-    //     let task = AsyncTaskSpy {
-    //         expect(DispatchQueue.getSpecific(key: key)).toNot(beNil())
-    //     }
-    //     _ = try! task.await(queue: queue)
-    // }
+//    func testAwaitShouldCallCompletionOnSpecifiedQueue() {
+//        let queue = DispatchQueue(label: "Tasker.Tests.AsyncTask")
+//        let key = DispatchSpecificKey<Void>()
+//        queue.setSpecific(key: key, value: ())
+//        let task = AsyncAwaitSpy {
+//            print(OperationQueue.current?.underlyingQueue?.label)
+//            print(DispatchQueue.getSpecific(key: key))
+//        }
+//        try! task.await()
+//    }
 }
