@@ -15,8 +15,15 @@ class SynchronizedArray<Element>: ExpressibleByArrayLiteral {
     init() {}
 
     var data: [Element] {
-        return self.queue.sync {
-            self.array
+        get {
+            return self.queue.sync {
+                self.array
+            }
+        }
+        set {
+            self.queue.async {
+                self.array = newValue
+            }
         }
     }
 

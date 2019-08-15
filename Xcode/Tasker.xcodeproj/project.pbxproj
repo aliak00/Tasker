@@ -21,6 +21,8 @@
 		E127EAAD2303167F0059B13F /* URLTaskReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127EAAB2303167F0059B13F /* URLTaskReactor.swift */; };
 		E154FC742258C77F00C0A145 /* URLTaskManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E154FC732258C77F00C0A145 /* URLTaskManagerError.swift */; };
 		E154FC752258C77F00C0A145 /* URLTaskManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E154FC732258C77F00C0A145 /* URLTaskManagerError.swift */; };
+		E16E4A972305CEDE00A1C297 /* AnyTask+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A962305CEDE00A1C297 /* AnyTask+Array.swift */; };
+		E16E4A982305CEDE00A1C297 /* AnyTask+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A962305CEDE00A1C297 /* AnyTask+Array.swift */; };
 		E178E6422303302A00968761 /* ReactorManagerDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E178E6412303302A00968761 /* ReactorManagerDelegateSpy.swift */; };
 		E178E6432303302A00968761 /* ReactorManagerDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E178E6412303302A00968761 /* ReactorManagerDelegateSpy.swift */; };
 		E178E6452303319400968761 /* ReactorManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E178E6442303319400968761 /* ReactorManagerDelegate.swift */; };
@@ -216,6 +218,7 @@
 		E127EAA8230310850059B13F /* URLTaskInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTaskInterceptor.swift; sourceTree = "<group>"; };
 		E127EAAB2303167F0059B13F /* URLTaskReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTaskReactor.swift; sourceTree = "<group>"; };
 		E154FC732258C77F00C0A145 /* URLTaskManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTaskManagerError.swift; sourceTree = "<group>"; };
+		E16E4A962305CEDE00A1C297 /* AnyTask+Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyTask+Array.swift"; sourceTree = "<group>"; };
 		E178E6412303302A00968761 /* ReactorManagerDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorManagerDelegateSpy.swift; sourceTree = "<group>"; };
 		E178E6442303319400968761 /* ReactorManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorManagerDelegate.swift; sourceTree = "<group>"; };
 		E1CB507121CD0FF100823D6C /* LogTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTags.swift; sourceTree = "<group>"; };
@@ -293,6 +296,7 @@
 		E105882B219CB9270020976B /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E16E4A952305CDB300A1C297 /* AnyTask */,
 				E1058844219CB9270020976B /* AsyncAwait */,
 				E105882F219CB9270020976B /* Logger */,
 				E1058842219CB9270020976B /* Operations */,
@@ -375,11 +379,9 @@
 		E1058844219CB9270020976B /* AsyncAwait */ = {
 			isa = PBXGroup;
 			children = (
-				E1058845219CB9270020976B /* AnyTask.swift */,
 				E1D8BAE921ADE18E00A9BD07 /* AsyncAwait.swift */,
 				E1058846219CB9270020976B /* Task+async.swift */,
 				E1058847219CB9270020976B /* Task+await.swift */,
-				E105882E219CB9270020976B /* AnyResult.swift */,
 			);
 			path = AsyncAwait;
 			sourceTree = "<group>";
@@ -433,6 +435,7 @@
 		E1058877219CB93A0020976B /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E16E4A992305D3AB00A1C297 /* AnyTaskTests */,
 				E1058878219CB93A0020976B /* Logger */,
 				E105887A219CB93A0020976B /* URLTaskManager */,
 				E105887C219CB93A0020976B /* Utils */,
@@ -493,7 +496,6 @@
 			children = (
 				E1058886219CB93A0020976B /* Doubles */,
 				E1058888219CB93A0020976B /* AsyncAwaitTests.swift */,
-				E1D8BAEC21ADF30C00A9BD07 /* AnyTaskTests.swift */,
 			);
 			path = AsyncAwait;
 			sourceTree = "<group>";
@@ -568,6 +570,24 @@
 				E10588CE219CBF6D0020976B /* Info.plist */,
 			);
 			path = "Tasker-macOSTests";
+			sourceTree = "<group>";
+		};
+		E16E4A952305CDB300A1C297 /* AnyTask */ = {
+			isa = PBXGroup;
+			children = (
+				E1058845219CB9270020976B /* AnyTask.swift */,
+				E105882E219CB9270020976B /* AnyResult.swift */,
+				E16E4A962305CEDE00A1C297 /* AnyTask+Array.swift */,
+			);
+			path = AnyTask;
+			sourceTree = "<group>";
+		};
+		E16E4A992305D3AB00A1C297 /* AnyTaskTests */ = {
+			isa = PBXGroup;
+			children = (
+				E1D8BAEC21ADF30C00A9BD07 /* AnyTaskTests.swift */,
+			);
+			path = AnyTaskTests;
 			sourceTree = "<group>";
 		};
 		E1CC6BEA219CC3ED00B465A5 /* Tasker-iOS */ = {
@@ -790,6 +810,7 @@
 				E1CC6C20219CC49A00B465A5 /* NSLocking+withScope.swift in Sources */,
 				E1CC6C08219CC49A00B465A5 /* RingBuffer.swift in Sources */,
 				E1D8BAEA21ADE18E00A9BD07 /* AsyncAwait.swift in Sources */,
+				E16E4A972305CEDE00A1C297 /* AnyTask+Array.swift in Sources */,
 				E178E6452303319400968761 /* ReactorManagerDelegate.swift in Sources */,
 				E1CC6C11219CC49A00B465A5 /* TaskError.swift in Sources */,
 				E1CC6C04219CC49A00B465A5 /* AnyTask.swift in Sources */,
@@ -867,6 +888,7 @@
 				E1CC6C3E219CC49B00B465A5 /* NSLocking+withScope.swift in Sources */,
 				E1CC6C26219CC49B00B465A5 /* RingBuffer.swift in Sources */,
 				E1D8BAEB21ADE18E00A9BD07 /* AsyncAwait.swift in Sources */,
+				E16E4A982305CEDE00A1C297 /* AnyTask+Array.swift in Sources */,
 				E178E6462303319400968761 /* ReactorManagerDelegate.swift in Sources */,
 				E1CC6C2F219CC49B00B465A5 /* TaskError.swift in Sources */,
 				E1CC6C22219CC49B00B465A5 /* AnyTask.swift in Sources */,

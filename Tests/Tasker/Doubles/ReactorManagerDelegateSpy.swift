@@ -1,7 +1,6 @@
 @testable import Tasker
 
 class ReactorManagerDelegateSpy: ReactorManagerDelegate {
-
     var reactorsCompletedData: SynchronizedArray<[TaskManager.Handle: ReactorManager.RequeueData]> = []
 
     func reactorsCompleted(handlesToRequeue: [TaskManager.Handle: ReactorManager.RequeueData]) {

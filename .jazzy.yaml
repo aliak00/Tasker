@@ -27,13 +27,16 @@ custom_categories:
      - Logger
      - LogTags
      - LogLevel
-  - name: "Async Await"
+  - name: AnyTask
+    children:
+      - AnyTask
+      - AnyResult
+      - AnyTaskConvertible
+  - name: Async Await
     children:
       - async(_:completion:)
       - await(timeout:block:)
       - task(_:)
-      - AnyTask
-      - AnyResult
   - name: URL Session Interceptor
     children:
       - URLTaskManager

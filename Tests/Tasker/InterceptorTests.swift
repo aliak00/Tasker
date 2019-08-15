@@ -37,7 +37,7 @@ class InterceptorTests: XCTestCase {
             var counter = AtomicInt(0)
             typealias SuccessValue = Int
             func execute(completion: @escaping (Result<Int, Error>) -> Void) {
-                completion(.success(value))
+                completion(.success(self.value))
             }
         }
 
@@ -49,7 +49,7 @@ class InterceptorTests: XCTestCase {
         }
 
         let reactor = ReactorSpy(configuration: ReactorConfiguration(requeuesTask: true, reinterceptOnRequeue: reintercept))
-        reactor.shouldExecuteBlock = { anyResult, anyTask, handle in
+        reactor.shouldExecuteBlock = { _, anyTask, _ in
             let task = anyTask as! MyTask
             return task.value == 1 && task.counter.getAndIncrement() < 1
         }

@@ -35,7 +35,7 @@ class ReactorManagerTests: XCTestCase {
 
         // let handles queue
         let count = 10
-        let handles = (0..<count).reduce(into: [TaskManager.Handle: ReactorManager.RequeueData]()) { (dict, i) in
+        let handles = (0..<count).reduce(into: [TaskManager.Handle: ReactorManager.RequeueData]()) { dict, _ in
             dict[manager.react()] = ReactorManager.RequeueData(reintercept: false)
         }
 
