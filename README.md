@@ -124,16 +124,17 @@ class DecodeImage: Task {
 There're a number of ways you can create a task. One is by implementing the `Task` protocol, as we've seen above. And then there're a number of other ways:
 
 1. `AnyTask`: This type can be used to create a task out of a block
-    ```
+    ```swift
     AnyTask { 5 } // Task that returns 5, no failure value
     AnyTask { Result<Int, Error>.success(5) } // Task that returns Result<T, Error>
     AnyTask { cb in cb(.success(5)) } // Task that calls the done callback
     ```
 1. `task(closingOver:)`: This creates a task closing over it's value
-    ```
+    ```swift
     let t = task(closingOver: someLongOperation())
     ```
 1. `task(executing:)`: Creates a task out of functions that have a compatable `done` callback:
+    ```swift
     let f1: (() -> T) -> Void = //...
     let t1 = task(executing: f1)
     let f2: (() -> Result<T, Error>) -> Void = //...
