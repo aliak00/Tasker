@@ -31,7 +31,8 @@ custom_categories:
     children:
       - AnyTask
       - AnyResult
-      - task(_:)
+      - task(closingOver:)
+      - task(executing:)
   - name: Async Await
     children:
       - async(_:completion:)

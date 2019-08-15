@@ -12,7 +12,7 @@ extension Task {
      */
     @discardableResult
     public func async(
-        with taskManager: TaskManager? = nil,
+        using taskManager: TaskManager? = nil,
         after interval: DispatchTimeInterval? = nil,
         queue: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,

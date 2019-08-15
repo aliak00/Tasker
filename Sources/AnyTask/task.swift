@@ -7,7 +7,7 @@ import Foundation
  let x = task(someLongOperation())
 
  x.async { result in
- // stuff
+    // stuff
  }
 
  // or
@@ -23,6 +23,22 @@ public func task<R>(closingOver closure: @escaping @autoclosure () -> R) -> AnyT
     }
 }
 
+/**
+ Creates a task out of a function that has a `done` callback. I.e.
+
+ ```
+ let f = { (done: @escaping () -> Void) -> Void in
+    DispatchQueue.global(qos: .unspecified).async {
+        // Do some long running calculation
+        done()
+    }
+ }
+ let t = task(executing: f)
+ ```
+
+ - parameter executing: an asynchronous function that has a `done` callback as it's only parameter. The `done` callback
+ must be called when the asynchronous operation completes.
+ */
 public func task(executing block: @escaping (@escaping () -> Void) -> Void) -> AnyTask<Void> {
     return AnyTask<Void> { callback in
         block {
@@ -31,6 +47,12 @@ public func task(executing block: @escaping (@escaping () -> Void) -> Void) -> A
     }
 }
 
+/**
+ Creates a task out of a function that has a `done` callback with a specific signature
+
+ - parameter executing: an asynchronous function that has a `done` callback as it's only parameter. The done callback
+ must take the expected value of the asynchronous operation as its only parameter
+ */
 public func task<T>(executing block: @escaping (@escaping (T) -> Void) -> Void) -> AnyTask<T> {
     return AnyTask<T> { callback in
         block { result in
@@ -39,6 +61,12 @@ public func task<T>(executing block: @escaping (@escaping (T) -> Void) -> Void) 
     }
 }
 
+/**
+ Creates a task out of a function that has a `done` callback with a specific signature
+
+ - parameter executing: an asynchronous function that has a `done` callback as it's only parameter. The done callback
+ must take the expected `Result<T, Error>` of the asynchronous operation as its only parameter
+ */
 public func task<T>(executing block: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) -> AnyTask<T> {
     return AnyTask<T> { callback in
         block { result in

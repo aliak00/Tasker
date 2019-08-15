@@ -5,11 +5,11 @@ import Foundation
 
  ```
  async(loadVideoFile()) { result in
- switch result {
- case let .success(videoFil):
- break
- case let .failure(error):
- break
+    switch result {
+    case let .success(videoFil):
+        break
+    case let .failure(error):
+        break
  }
  ```
 
@@ -19,7 +19,7 @@ import Foundation
 public func async<R>(_ closure: @escaping @autoclosure () -> R, completion: ((Result<R, Error>) -> Void)? = nil) {
     AnyTask<R> { callback in
         callback(.success(closure()))
-        }.async { result in
-            completion?(result)
+    }.async { result in
+        completion?(result)
     }
 }

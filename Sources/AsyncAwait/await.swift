@@ -41,7 +41,7 @@ public func await(timeout: DispatchTimeInterval? = nil, block: @escaping (() -> 
  callback, and this is assumed to be the callback that is called when the asynchronous function is done
  computing the result
 
- - parameter function: an asynchronous function that has a `done` callback as it's only parameter. The done callback
+ - parameter block: an asynchronous function that has a `done` callback as it's only parameter. The done callback
     must take the expected `Result<T, Error>` of the asynchronous operation as its only parameter
  - parameter timeout: how long to wait or this function to finish
  */

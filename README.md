@@ -270,10 +270,9 @@ for i in 0..<10 {
     tasks.append(AnyTask { i })
 }
 let results = try! tasks.await()
-
-// results is an arrya of Result<Int, Error> objects that have an out-of-order
-// execution of the tasks in the array.
 ```
+
+You can choose to execute the tasks in order or not.
 
 ## URLTaskManager
 

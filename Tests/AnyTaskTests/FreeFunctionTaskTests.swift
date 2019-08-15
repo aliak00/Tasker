@@ -1,7 +1,6 @@
 @testable import Tasker
 import XCTest
 
-
 final class FreeFunctionTaskTests: XCTestCase {
     func testShouldCreateTaskFromAutoClosure() {
         XCTAssertEqual(try! task(closingOver: 3).await(), 3)
@@ -10,7 +9,7 @@ final class FreeFunctionTaskTests: XCTestCase {
     func testShouldCreateTaskFromVoidDone() {
         let val = AtomicInt(0)
         let f: (() -> Void) -> Void = { done in
-            val.value = 7;
+            val.value = 7
             done()
         }
         task(executing: f).async()
@@ -30,5 +29,4 @@ final class FreeFunctionTaskTests: XCTestCase {
         }
         XCTAssertEqual(try! task(executing: f).await(), 15)
     }
-
 }

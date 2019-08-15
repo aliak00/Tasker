@@ -8,7 +8,7 @@ extension Task {
      - parameter timeout: after how long should the task timeout. This overwrites `Task.timeout` if there is one
      */
     public func await(
-        with taskManager: TaskManager? = nil,
+        using taskManager: TaskManager? = nil,
         timeout: DispatchTimeInterval? = nil
     ) throws -> SuccessValue {
         let semaphore = DispatchSemaphore(value: 0)

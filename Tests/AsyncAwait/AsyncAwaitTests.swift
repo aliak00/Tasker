@@ -137,7 +137,7 @@ final class AsyncAwaitTests: XCTestCase {
     func testFreeFunctionShouldAwaitVoidFunction() {
         let val = AtomicInt(0)
         let f: (() -> Void) -> Void = { done in
-            val.value = 7;
+            val.value = 7
             done()
         }
         try! await(block: f)
