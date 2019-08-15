@@ -1,7 +1,6 @@
 import Foundation
 
-private class ArrayOfTasks<T: AnyTaskConvertible>: Task {
-    typealias SuccessValue = [Result<T.SuccessValue, Error>]
+private class ArrayOfTasks<T: Task>: Task {
     let array: [T]
     init(_ array: [T]) {
         self.array = array
@@ -10,7 +9,7 @@ private class ArrayOfTasks<T: AnyTaskConvertible>: Task {
     func execute(completion: @escaping (Result<[Result<T.SuccessValue, Error>], Error>) -> Void) {
         let results = SynchronizedArray<Result<T.SuccessValue, Error>>()
         for task in self.array {
-            task.anyTask.async {
+            task.async {
                 results.append($0)
                 if results.count == self.array.count {
                     completion(.success(results.data))
@@ -18,9 +17,11 @@ private class ArrayOfTasks<T: AnyTaskConvertible>: Task {
             }
         }
     }
+
+    typealias SuccessValue = [Result<T.SuccessValue, Error>]
 }
 
-extension Array where Element: AnyTaskConvertible {
+extension Array where Element: Task {
     /**
      Executes each task in this array and returns an array of `Result`s in the completion block
 
@@ -35,7 +36,7 @@ extension Array where Element: AnyTaskConvertible {
         queue: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,
         completion: ((Result<[Result<Element.SuccessValue, Error>], Error>) -> Void)? = nil
-    ) -> Handle {
+        ) -> Handle {
         return ArrayOfTasks(self)
             .async(
                 with: taskManager,
@@ -43,9 +44,8 @@ extension Array where Element: AnyTaskConvertible {
                 queue: queue,
                 timeout: timeout,
                 completion: completion
-            )
+        )
     }
-
     /**
      Executes each task in line and awaits an array of each tasks' result
 

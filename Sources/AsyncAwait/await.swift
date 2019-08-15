@@ -1,53 +1,6 @@
 import Foundation
 
 /**
- Calls an expression asynchronously and returns the result of the expressin in a the completion callback
-
- ```
- async(loadVideoFile()) { result in
-    switch result {
-    case let .success(videoFil):
-        break
-    case let .failure(error):
-        break
- }
- ```
-
- - parameter closure: the expression to call asynchronously
- - parameter completion: the callback with the result of the closure
- */
-public func async<R>(_ closure: @escaping @autoclosure () -> R, completion: ((Result<R, Error>) -> Void)? = nil) {
-    AnyTask<R> { callback in
-        callback(.success(closure()))
-    }.async { result in
-        completion?(result)
-    }
-}
-
-/**
- Creates a task out of an expression and returns it as an `AnyTask`
-
- ```
- let x = task(someLongOperation())
-
- x.async { result in
-    // stuff
- }
-
- // or
-
- let result = x.await()
- ```
-
- - parameter closure: the expression to create a task out of
- */
-public func task<R>(_ closure: @escaping @autoclosure () -> R) -> AnyTask<R> {
-    return AnyTask<R> { callback in
-        callback(.success(closure()))
-    }
-}
-
-/**
  Calls an asynchronous function and waits for the result. The function that is passed in must have a completion
  callback, and this is assumed to be the callback that is called when the asynchronous function is done
  computing the result, e.g.:
@@ -68,11 +21,7 @@ public func task<R>(_ closure: @escaping @autoclosure () -> R) -> AnyTask<R> {
     must take the expected value of the asynchronous operation as its only parameter
  */
 public func await<T>(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping (T) -> Void) -> Void) throws -> T {
-    return try AnyTask<T> { callback in
-        block { result in
-            callback(.success(result))
-        }
-    }.await(timeout: timeout)
+    return try task(executing: block).await(timeout: timeout)
 }
 
 /**
@@ -83,12 +32,8 @@ public func await<T>(timeout: DispatchTimeInterval? = nil, block: @escaping (@es
     must be called when the asynchronous operation completes.
  - parameter timeout: how long to wait or this function to finish
  */
-public func await(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping () -> Void) -> Void) throws {
-    try AnyTask<Void> { callback in
-        block {
-            callback(.success(()))
-        }
-    }.await(timeout: timeout)
+public func await(timeout: DispatchTimeInterval? = nil, block: @escaping (() -> Void) -> Void) throws {
+    try task(executing: block).await(timeout: timeout)
 }
 
 /**
@@ -101,14 +46,5 @@ public func await(timeout: DispatchTimeInterval? = nil, block: @escaping (@escap
  - parameter timeout: how long to wait or this function to finish
  */
 public func await<T>(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) throws -> T {
-    return try AnyTask<T> { callback in
-        block { result in
-            do {
-                let value = try result.get()
-                callback(.success(value))
-            } catch {
-                callback(.failure(error))
-            }
-        }
-    }.await(timeout: timeout)
+    return try task(executing: block).await(timeout: timeout)
 }

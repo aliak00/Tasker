@@ -31,12 +31,11 @@ custom_categories:
     children:
       - AnyTask
       - AnyResult
-      - AnyTaskConvertible
+      - task(_:)
   - name: Async Await
     children:
       - async(_:completion:)
       - await(timeout:block:)
-      - task(_:)
   - name: URL Session Interceptor
     children:
       - URLTaskManager

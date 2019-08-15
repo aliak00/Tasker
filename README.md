@@ -12,13 +12,15 @@
 
 * [Quick look](#quick-look)
 * [Tasks](#tasks)
+    + [Creating a task](#creating-a-task)
     + [Starting a task](#starting-a-task)
     + [Intercepting a task](#intercepting-a-task)
     + [Reacting to a task](#reacting-to-a-task)
     + [Cancelling a task](#cancelling-a-task)
-* [Reintercepting tasks](#reintercepting-tasks)
+    + [Reintercepting tasks after a reaction](#reintercepting-tasks-after-a-reaction)
 * [Async/Await](#asyncawait)
-    + [Async/await as free functions over closures.](#asyncawait-as-free-functions-over-closures)
+    + [As free functions over closures](#as-free-functions-over-closures)
+    + [On an array of tasks](#on-an-array-of-tasks)
 * [URLTaskManager](#urltaskmanager)
     + [Intercepting and reacting.](#intercepting-and-reacting)
 * [Debugging and Logging](#debugging-and-logging)
@@ -27,12 +29,13 @@ Tasker is a task manager that's built on top of OperationQueue and GCD that has 
 
 Tasker also provides task managerment of `URLSession` and async/await functionality
 
-Features
-    * Concurrent task management system
-    * Task interception and enrichment
-    * Task requeing and reaction functionnality
-    * Spcialized URLSession handling to intercept and reactor to URLRequests
-    * Async and await functionality
+Features:
+* Concurrent task management system
+* Task interception and enrichment
+* Task requeing and reaction functionnality
+* Spcialized URLSession handling to intercept and reactor to URLRequests
+* Async and await functionality
+* Async/await on an arrays of tasks
 
 ## Quick look
 
@@ -51,11 +54,15 @@ class MyTask: Task {
     }
 }
 
+// Or create a task out of anything else
+let t = task(someLongRunningFunction())
+
 // Run it in one of three ways:
 
 // Await
 do {
-    let data: MyTask.SuccessValue = try MyTask().await()
+    let a: MyTask.SuccessValue = try MyTask().await()
+    let b = t.await()
 } catch {
     // error
 }
@@ -111,6 +118,27 @@ class DecodeImage: Task {
     ...
 }
 ```
+
+### Creating a task
+
+There're a number of ways you can create a task. One is by implementing the `Task` protocol, as we've seen above. And then there're a number of other ways:
+
+1. `AnyTask`: This type can be used to create a task out of a block
+    ```
+    AnyTask { 5 } // Task that returns 5, no failure value
+    AnyTask { Result<Int, Error>.success(5) } // Task that returns Result<T, Error>
+    AnyTask { cb in cb(.success(5)) } // Task that calls the done callback
+    ```
+1. `task(closingOver:)`: This creates a task closing over it's value
+    ```
+    let t = task(closingOver: someLongOperation())
+    ```
+1. `task(executing:)`: Creates a task out of functions that have a compatable `done` callback:
+    let f1: (() -> T) -> Void = //...
+    let t1 = task(executing: f1)
+    let f2: (() -> Result<T, Error>) -> Void = //...
+    let t2 = task(executing: f2)
+    ```
 
 ### Starting a task
 
@@ -174,7 +202,7 @@ handle.cancel()
 
 And then `Task.didCancel(...)`  is called in response to that with `TaskError.cancelled`. The `didCancel` method could also be called as a result of other errors.
 
-## Reintercepting tasks
+### Reintercepting tasks after a reaction
 
 An interceptor is only run once on a task by default. The case where you would want to re-reun an interceptor would be if a reaction caused a requeuing of the task. In that case, whether or not a task is reintercepted depends on the reactor configuration. You can set `ReactorConfiguration.reinterceptOnRequeue` to control this behavior.
 
@@ -197,7 +225,7 @@ DecodeImage().async { result in
 }
 ```
 
-### Async/await as free functions over closures.
+### As free functions over closures.
 
 `async` can be called on any expression as an `@autoclosure`:
 
@@ -230,6 +258,22 @@ let number = try? await { (done: @escaping (Int) -> Void) -> Void in
 
  XCTAssertEqual(number, 5)
  ```
+
+### On an array of tasks
+
+There are extensions available on the `Array` type that you can use to call `async` or `await` on an array of tasks of the same type.
+
+E.g:
+```swift
+var tasks: [Task] = []
+for i in 0..<10 {
+    tasks.append(AnyTask { i })
+}
+let results = try! tasks.await()
+
+// results is an arrya of Result<Int, Error> objects that have an out-of-order
+// execution of the tasks in the array.
+```
 
 ## URLTaskManager
 
