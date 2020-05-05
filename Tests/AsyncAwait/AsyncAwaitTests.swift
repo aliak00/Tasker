@@ -89,22 +89,22 @@ final class AsyncAwaitTests: XCTestCase {
     }
 
     func testAsyncAwaitFreeFunctionsShouldSucceeedWithValue() {
-        let f = { (done: @escaping (Int) -> Void) -> Void in
+        let awaitValue = try? await { (done: @escaping (Int) -> Void) -> Void in
             DispatchQueue.global(qos: .unspecified).async {
                 sleep(for: .milliseconds(10))
                 done(5)
             }
         }
 
-        XCTAssertEqual(try await(block: f), 5)
+        XCTAssertEqual(awaitValue, 5)
 
-        let value = Atomic<Int?>(nil)
+        let asyncValue = Atomic<Int?>(nil)
 
         async(5) { r in
-            value.value = r.successValue
+            asyncValue.value = r.successValue
         }
 
-        ensure(value.value).becomes(5)
+        ensure(asyncValue.value).becomes(5)
     }
 
     func testAwaitFreeFunctionsShouldSucceeedWithResult() {
