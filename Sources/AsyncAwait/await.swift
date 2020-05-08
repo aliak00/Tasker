@@ -21,7 +21,7 @@ import Foundation
     must take the expected value of the asynchronous operation as its only parameter
  */
 public func await<T>(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping (T) -> Void) -> Void) throws -> T {
-    return try task(executing: block).await(timeout: timeout)
+    try task(executing: block).await(timeout: timeout)
 }
 
 /**
@@ -46,5 +46,5 @@ public func await(timeout: DispatchTimeInterval? = nil, block: @escaping (() -> 
  - parameter timeout: how long to wait or this function to finish
  */
 public func await<T>(timeout: DispatchTimeInterval? = nil, block: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) throws -> T {
-    return try task(executing: block).await(timeout: timeout)
+    try task(executing: block).await(timeout: timeout)
 }

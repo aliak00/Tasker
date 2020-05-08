@@ -44,7 +44,7 @@ class ReactorTests: XCTestCase {
         // Run tasks that ask to be reacted to, and then not
         let numTasks = 10
         var tasks: [TaskSpy<Int>] = []
-        for i in (0..<numTasks).yielded(by: .milliseconds(1)) {
+        for i in (0 ..< numTasks).yielded(by: .milliseconds(1)) {
             let task = TaskSpy { $0(.success(i)) }
             tasks.append(task)
             manager.add(task: task)
@@ -79,7 +79,7 @@ class ReactorTests: XCTestCase {
 
         // Add in a bunch more tasks
         var handles: [(Handle, TaskSpy<Void>)] = []
-        for _ in 0..<10 {
+        for _ in 0 ..< 10 {
             let task = TaskSpy { $0(.success(())) }
             handles.append((manager.add(task: task), task))
         }

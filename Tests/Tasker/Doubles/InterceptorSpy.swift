@@ -2,7 +2,7 @@
 
 class InterceptorSpy: Interceptor {
     var interceptCallCount: Int {
-        return self.interceptCallData.count
+        self.interceptCallData.count
     }
 
     // TODO: these thwo should be merged since they are always set together

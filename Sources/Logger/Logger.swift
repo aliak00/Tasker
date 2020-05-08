@@ -65,7 +65,7 @@ public class Logger {
     /// Set to true if you want the tags to be printed as well
     public var outputTags: Bool {
         get {
-            return self.queue.sync {
+            self.queue.sync {
                 self._outputTags
             }
         }
@@ -79,7 +79,7 @@ public class Logger {
     /// If this is false then it ignores all logs
     public var enabled: Bool {
         get {
-            return self.queue.sync {
+            self.queue.sync {
                 self._enabled
             }
         }

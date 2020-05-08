@@ -3,7 +3,7 @@ import XCTest
 
 extension Array where Element == Result<Int, Error> {
     func sorted() -> [Result<Int, Error>] {
-        return self.sorted { (a, b) -> Bool in
+        self.sorted { (a, b) -> Bool in
             let ai = a.successValue ?? (a.failureValue as NSError?)!.code
             let bi = b.successValue ?? (b.failureValue as NSError?)!.code
             return ai < bi

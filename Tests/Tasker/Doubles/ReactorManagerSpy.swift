@@ -5,7 +5,7 @@ class ReactorManagerSpy {
     let reactorManager: ReactorManager
 
     var completionCallCount: Int {
-        return self.completionCallData.count
+        self.completionCallData.count
     }
 
     var completionCallData: SynchronizedArray<ReactorManager.ReactionResult> = []

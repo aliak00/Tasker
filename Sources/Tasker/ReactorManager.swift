@@ -17,7 +17,7 @@ class ReactorManager {
 
     init(reactors: [Reactor]) {
         self.reactors = reactors
-        for index in 0..<reactors.count {
+        for index in 0 ..< reactors.count {
             self.assoiciatedHandles[index] = Set<TaskManager.Handle>()
         }
     }

@@ -37,10 +37,10 @@ extension Reactor {
     }
 
     func shouldExecute<T: Task>(after _: T.Result, from _: T, with _: Handle) -> Bool {
-        return false
+        false
     }
 
     var configuration: ReactorConfiguration {
-        return .default
+        .default
     }
 }

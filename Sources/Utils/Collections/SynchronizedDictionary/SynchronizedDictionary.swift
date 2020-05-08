@@ -7,14 +7,14 @@ class SynchronizedDictionary<Key: Hashable, Value> {
     init() {}
 
     var data: [Key: Value] {
-        return self.queue.sync {
+        self.queue.sync {
             self.dictionary
         }
     }
 
     subscript(key: Key) -> Value? {
         get {
-            return self.queue.sync {
+            self.queue.sync {
                 self.dictionary[key]
             }
         }

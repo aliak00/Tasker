@@ -18,7 +18,7 @@ import Foundation
  - parameter closingOver: the expression to create a task out of
  */
 public func task<R>(closingOver closure: @escaping @autoclosure () -> R) -> AnyTask<R> {
-    return AnyTask<R> { callback in
+    AnyTask<R> { callback in
         callback(.success(closure()))
     }
 }
@@ -40,7 +40,7 @@ public func task<R>(closingOver closure: @escaping @autoclosure () -> R) -> AnyT
  must be called when the asynchronous operation completes.
  */
 public func task(executing block: @escaping (@escaping () -> Void) -> Void) -> AnyTask<Void> {
-    return AnyTask<Void> { callback in
+    AnyTask<Void> { callback in
         block {
             callback(.success(()))
         }
@@ -54,7 +54,7 @@ public func task(executing block: @escaping (@escaping () -> Void) -> Void) -> A
  must take the expected value of the asynchronous operation as its only parameter
  */
 public func task<T>(executing block: @escaping (@escaping (T) -> Void) -> Void) -> AnyTask<T> {
-    return AnyTask<T> { callback in
+    AnyTask<T> { callback in
         block { result in
             callback(.success(result))
         }
@@ -68,7 +68,7 @@ public func task<T>(executing block: @escaping (@escaping (T) -> Void) -> Void) 
  must take the expected `Result<T, Error>` of the asynchronous operation as its only parameter
  */
 public func task<T>(executing block: @escaping (@escaping (Result<T, Error>) -> Void) -> Void) -> AnyTask<T> {
-    return AnyTask<T> { callback in
+    AnyTask<T> { callback in
         block { result in
             do {
                 let value = try result.get()

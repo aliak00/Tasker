@@ -53,7 +53,7 @@ extension Array where Element: Task {
         timeout: DispatchTimeInterval? = nil,
         completion: ((Result<[Result<Element.SuccessValue, Error>], Error>) -> Void)? = nil
     ) -> Handle {
-        return ArrayOfTasks(self, inOrder: inOrder)
+        ArrayOfTasks(self, inOrder: inOrder)
             .async(
                 using: taskManager,
                 after: interval,
@@ -75,7 +75,7 @@ extension Array where Element: Task {
         inOrder: Bool = false,
         timeout: DispatchTimeInterval? = nil
     ) throws -> [Result<Element.SuccessValue, Error>] {
-        return try ArrayOfTasks(self, inOrder: inOrder)
+        try ArrayOfTasks(self, inOrder: inOrder)
             .await(using: taskManager, timeout: timeout)
     }
 }

@@ -13,12 +13,12 @@ class ReactorManagerTests: XCTestCase {
     func testNoReactorsShouldCallCompletionWithNoReactors() {
         let count = 10
         let reactorManager = ReactorManagerSpy()
-        for _ in 0..<count {
+        for _ in 0 ..< count {
             reactorManager.react()
         }
         ensure(reactorManager.completionCallCount).becomes(count)
 
-        for i in 0..<count {
+        for i in 0 ..< count {
             let a = reactorManager.completionCallData.data[i]
             let b = ReactorManager.ReactionResult(requeueTask: false, suspendQueue: false)
             XCTAssertEqual(a, b)
@@ -35,7 +35,7 @@ class ReactorManagerTests: XCTestCase {
 
         // let handles queue
         let count = 10
-        let handles = (0..<count).reduce(into: [TaskManager.Handle: ReactorManager.RequeueData]()) { dict, _ in
+        let handles = (0 ..< count).reduce(into: [TaskManager.Handle: ReactorManager.RequeueData]()) { dict, _ in
             dict[manager.react()] = ReactorManager.RequeueData(reintercept: false)
         }
 

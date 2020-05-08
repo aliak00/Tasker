@@ -16,7 +16,7 @@ class AtomicInt: ExpressibleByIntegerLiteral {
 
     var value: Int {
         get {
-            return self.queue.sync {
+            self.queue.sync {
                 self._value
             }
         }
@@ -30,7 +30,7 @@ class AtomicInt: ExpressibleByIntegerLiteral {
 
     @discardableResult
     func getAndIncrement() -> Int {
-        return self.queue.sync {
+        self.queue.sync {
             let previousValue = self._value
             self._value += 1
             return previousValue
@@ -39,7 +39,7 @@ class AtomicInt: ExpressibleByIntegerLiteral {
 
     @discardableResult
     func getAndDecrement() -> Int {
-        return self.queue.sync {
+        self.queue.sync {
             let previousValue = self._value
             self._value -= 1
             return previousValue
@@ -59,7 +59,7 @@ class AtomicInt: ExpressibleByIntegerLiteral {
 
 extension AtomicInt: Equatable {
     static func == (lhs: AtomicInt, rhs: AtomicInt) -> Bool {
-        return lhs.queue.sync {
+        lhs.queue.sync {
             lhs._value == rhs.value
         }
     }
@@ -67,6 +67,6 @@ extension AtomicInt: Equatable {
 
 extension AtomicInt: CustomStringConvertible {
     var description: String {
-        return "\(self.value)"
+        "\(self.value)"
     }
 }

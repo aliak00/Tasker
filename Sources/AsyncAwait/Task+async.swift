@@ -18,7 +18,7 @@ extension Task {
         timeout: DispatchTimeInterval? = nil,
         completion: CompletionCallback? = nil
     ) -> Handle {
-        return (taskManager ?? TaskManager.shared).add(
+        (taskManager ?? TaskManager.shared).add(
             task: self,
             after: interval,
             timeout: timeout,

@@ -18,7 +18,7 @@ class InterceptorManager {
     }
 
     var count: Int {
-        return self.queue.sync {
+        self.queue.sync {
             self.interceptors.count
         }
     }

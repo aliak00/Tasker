@@ -6,7 +6,7 @@ private extension TaskManagerSpy {
     func launch<T: Task>(task: @autoclosure () -> T, count: Int) -> (handles: [Handle], tasks: [T]) {
         var handles: [Handle] = []
         var tasks: [T] = []
-        for _ in 0..<count {
+        for _ in 0 ..< count {
             let task = task()
             handles.append(self.add(task: task))
             tasks.append(task)

@@ -57,7 +57,7 @@ class InterceptorTests: XCTestCase {
         let manager = TaskManagerSpy(interceptors: [interceptor], reactors: [reactor])
 
         let count = 100
-        for _ in 0..<count {
+        for _ in 0 ..< count {
             manager.add(task: MyTask())
         }
 

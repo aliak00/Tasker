@@ -28,14 +28,14 @@ public class TaskManager {
      List of reactors that this TaskManager was created with
      */
     public var reactors: [Reactor] {
-        return self.reactorManager.reactors
+        self.reactorManager.reactors
     }
 
     /**
      List of interceptors that this TaskManager was created with
      */
     public var interceptors: [Interceptor] {
-        return self.interceptorManager.interceptors
+        self.interceptorManager.interceptors
     }
 
     /**

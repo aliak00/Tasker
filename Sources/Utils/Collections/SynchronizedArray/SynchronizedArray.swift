@@ -16,7 +16,7 @@ class SynchronizedArray<Element>: ExpressibleByArrayLiteral {
 
     var data: [Element] {
         get {
-            return self.queue.sync {
+            self.queue.sync {
                 self.array
             }
         }
@@ -29,7 +29,7 @@ class SynchronizedArray<Element>: ExpressibleByArrayLiteral {
 
     subscript(index: Int) -> Element {
         get {
-            return self.queue.sync {
+            self.queue.sync {
                 self.array[index]
             }
         }
@@ -41,7 +41,7 @@ class SynchronizedArray<Element>: ExpressibleByArrayLiteral {
     }
 
     var count: Int {
-        return self.queue.sync {
+        self.queue.sync {
             self.array.count
         }
     }

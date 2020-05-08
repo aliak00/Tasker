@@ -19,6 +19,6 @@ struct YieldingIterator<Base>: IteratorProtocol, Sequence where Base: IteratorPr
 
 extension Sequence {
     func yielded(by yieldInterval: DispatchTimeInterval) -> YieldingIterator<Self.Iterator> {
-        return YieldingIterator(yieldInterval: yieldInterval, base: self.makeIterator())
+        YieldingIterator(yieldInterval: yieldInterval, base: self.makeIterator())
     }
 }

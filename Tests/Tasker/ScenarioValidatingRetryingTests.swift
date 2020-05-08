@@ -13,7 +13,7 @@ private class Hippo {
 
     var status: Status {
         get {
-            return self._status.value
+            self._status.value
         }
         set {
             self._status.value = newValue
@@ -22,7 +22,7 @@ private class Hippo {
 
     var name: String? {
         get {
-            return self._name.value
+            self._name.value
         }
         set {
             self._name.value = newValue
@@ -95,7 +95,7 @@ private class GetName: HasHippo, Task {
 private class ReviveTheHippoReactor: Reactor {
     init() {}
     var configuration: ReactorConfiguration {
-        return ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
+        ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
     weak var hippo: Hippo?
@@ -127,7 +127,7 @@ private class RetryReactor: Reactor {
     var counter = SynchronizedDictionary<Int, Int>()
 
     var configuration: ReactorConfiguration {
-        return ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
+        ReactorConfiguration(requeuesTask: true, suspendsTaskQueue: true)
     }
 
     func shouldExecute<T>(after result: T.Result, from task: T, with handle: Handle) -> Bool where T: Task {
@@ -163,7 +163,7 @@ class ScenarioValidatingRetryingTests: XCTestCase {
         // Try and eat a bunch of times. The hippo will be dead first, the revive reactor will bring it back
         // and then the hippo may or may not eat
         let numTasks = 20
-        for _ in (0..<numTasks).yielded(by: .milliseconds(1)) {
+        for _ in (0 ..< numTasks).yielded(by: .milliseconds(1)) {
             let hippo = Hippo()
             hippos.append(hippo)
             manager.add(task: EatGook(hippo: hippo))

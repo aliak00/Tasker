@@ -5,7 +5,7 @@ class TaskManagerSpy {
     let taskManager: TaskManager
 
     var completionCallCount: Int {
-        return self.completionCallData.count
+        self.completionCallData.count
     }
 
     var completionCallData: SynchronizedArray<AnyResult> = []
@@ -21,13 +21,13 @@ class TaskManagerSpy {
         after interval: DispatchTimeInterval? = nil,
         completion: (@escaping (T.Result) -> Void) = { _ in }
     ) -> Handle {
-        return self.taskManager.add(task: task, startImmediately: startImmediately, after: interval) { [weak self] result in
+        self.taskManager.add(task: task, startImmediately: startImmediately, after: interval) { [weak self] result in
             self?.completionCallData.append(AnyResult(result))
             completion(result)
         }
     }
 
     func waitTillAllTasksFinished() {
-        return self.taskManager.waitTillAllTasksFinished()
+        self.taskManager.waitTillAllTasksFinished()
     }
 }

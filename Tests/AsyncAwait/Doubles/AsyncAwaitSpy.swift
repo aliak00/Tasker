@@ -3,7 +3,7 @@ import Foundation
 
 class AsyncAwaitSpy<T>: TaskSpy<T> {
     var completionCallCount: Int {
-        return self.completionCallData.count
+        self.completionCallData.count
     }
 
     var completionCallData: SynchronizedArray<AsyncAwaitSpy.Result> = []
@@ -27,7 +27,7 @@ class AsyncAwaitSpy<T>: TaskSpy<T> {
         timeout: DispatchTimeInterval? = nil,
         completion: CompletionCallback? = nil
     ) -> Handle {
-        return super.async(using: nil, after: interval, queue: queue, timeout: timeout) { [weak self] result in
+        super.async(using: nil, after: interval, queue: queue, timeout: timeout) { [weak self] result in
             defer {
                 self?.completionCallData.append(result)
             }

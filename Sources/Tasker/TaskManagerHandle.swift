@@ -30,7 +30,7 @@ extension TaskManager {
         }
 
         public var state: TaskState {
-            return self.owner?.taskState(for: self) ?? .finished
+            self.owner?.taskState(for: self) ?? .finished
         }
 
         func discard() {
@@ -58,6 +58,6 @@ extension TaskManager.Handle: Hashable {
     }
 
     static func == (lhs: TaskManager.Handle, rhs: TaskManager.Handle) -> Bool {
-        return lhs.identifier == rhs.identifier
+        lhs.identifier == rhs.identifier
     }
 }

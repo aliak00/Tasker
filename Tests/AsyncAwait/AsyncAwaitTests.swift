@@ -109,7 +109,7 @@ final class AsyncAwaitTests: XCTestCase {
 
     func testAsyncFreeFunction() {
         let asyncValue = Atomic<Int?>(nil)
-        async(5) { r in
+        async(5) { _ in
             asyncValue.value = 7
         }
         ensure(asyncValue.value).becomes(7)
@@ -154,7 +154,7 @@ final class AsyncAwaitTests: XCTestCase {
 
     func testArrayOfTasksCanBeAwaited() {
         var tasks: [AnyTask<Int>] = []
-        for i in 0..<10 {
+        for i in 0 ..< 10 {
             tasks.append(AnyTask { i })
         }
         for (i, result) in (try! tasks.await()).sorted().enumerated() {
@@ -164,7 +164,7 @@ final class AsyncAwaitTests: XCTestCase {
 
     func testArrayOfTasksCanBeAsynced() {
         var tasks: [AnyTask<Int>] = []
-        for i in 0..<10 {
+        for i in 0 ..< 10 {
             tasks.append(AnyTask {
                 if i.isMultiple(of: 2) {
                     $0(.success(i))

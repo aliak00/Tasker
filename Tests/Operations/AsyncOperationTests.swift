@@ -45,7 +45,7 @@ final class AsyncOperationTests: XCTestCase {
     func testAddingOperationsToAQueueShouldAllGoToFinished() {
         let queue = OperationQueue()
         var operations: [AsyncOperation] = []
-        for _ in 0..<100 {
+        for _ in 0 ..< 100 {
             let operation = AsyncOperation()
             operation.execute = { .done }
             operations.append(operation)
@@ -76,7 +76,7 @@ final class AsyncOperationTests: XCTestCase {
         let queue = OperationQueue()
         var operations: [AsyncOperation] = []
         let numTasks = 100
-        for _ in 0..<numTasks {
+        for _ in 0 ..< numTasks {
             let operation = AsyncOperationSpy { _ in .done }
             operations.append(operation)
             queue.addOperation(operation)

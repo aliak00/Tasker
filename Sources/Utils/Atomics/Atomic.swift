@@ -10,7 +10,7 @@ class Atomic<T> {
 
     var value: T {
         get {
-            return self.queue.sync {
+            self.queue.sync {
                 self._value
             }
         }
@@ -23,7 +23,7 @@ class Atomic<T> {
     }
 
     func transform<R>(tranformer: (inout T) -> R) -> R {
-        return self.queue.sync {
+        self.queue.sync {
             tranformer(&_value)
         }
     }
@@ -36,7 +36,7 @@ class Atomic<T> {
 
     @discardableResult
     func getAnd(set: (inout T) -> Void) -> T {
-        return self.queue.sync {
+        self.queue.sync {
             let previousValue = self._value
             set(&self._value)
             return previousValue
@@ -46,7 +46,7 @@ class Atomic<T> {
 
 extension Atomic: Equatable where T: Equatable {
     static func == (lhs: Atomic, rhs: Atomic) -> Bool {
-        return lhs.queue.sync {
+        lhs.queue.sync {
             rhs.queue.sync {
                 lhs._value == rhs._value
             }
@@ -56,6 +56,6 @@ extension Atomic: Equatable where T: Equatable {
 
 extension Atomic: CustomStringConvertible {
     var description: String {
-        return "\(self.value)"
+        "\(self.value)"
     }
 }

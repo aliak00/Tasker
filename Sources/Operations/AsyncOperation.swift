@@ -24,7 +24,7 @@ class AsyncOperation: Operation {
 
     private(set) var state: State {
         get {
-            return self.lock.scope {
+            self.lock.scope {
                 self._state
             }
         }
@@ -56,19 +56,19 @@ class AsyncOperation: Operation {
     #endif
 
     override var isAsynchronous: Bool {
-        return true
+        true
     }
 
     override var isReady: Bool {
-        return self.state == .ready
+        self.state == .ready
     }
 
     override var isExecuting: Bool {
-        return self.state == .executing
+        self.state == .executing
     }
 
     override var isFinished: Bool {
-        return self.state == .finished
+        self.state == .finished
     }
 
     override func start() {

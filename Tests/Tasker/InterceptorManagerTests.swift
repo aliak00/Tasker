@@ -13,11 +13,11 @@ class InterceptorManagerTests: XCTestCase {
     func testNoInterceptorShouldDefaultToExecute() {
         let count = 10
         let interceptorManager = InterceptorManagerSpy()
-        for _ in 0..<count {
+        for _ in 0 ..< count {
             interceptorManager.intercept(task: &kDummyTask, for: kHandle)
         }
         ensure(interceptorManager.completionCallCount).becomes(count)
-        for i in 0..<count {
+        for i in 0 ..< count {
             ensure(interceptorManager.completionCallData.data[i]).becomes(.execute([kHandle]))
         }
     }
@@ -31,14 +31,14 @@ class InterceptorManagerTests: XCTestCase {
 
         let interceptorManager = InterceptorManagerSpy(interceptors: [interceptor])
 
-        for _ in 0..<maxBatchCount {
+        for _ in 0 ..< maxBatchCount {
             interceptorManager.intercept(task: &kDummyTask, for: kHandle)
         }
 
         ensure(interceptorManager.completionCallCount).becomes(maxBatchCount)
 
         XCTAssertEqual(
-            Array(interceptorManager.completionCallData.data[0..<9]),
+            Array(interceptorManager.completionCallData.data[0 ..< 9]),
             Array(repeating: InterceptorManager.InterceptionResult.ignore, count: 9)
         )
 
@@ -57,7 +57,7 @@ class InterceptorManagerTests: XCTestCase {
 
         let interceptorManager = InterceptorManagerSpy(interceptors: [interceptor])
 
-        for _ in 0..<count {
+        for _ in 0 ..< count {
             interceptorManager.intercept(task: &kDummyTask, for: kHandle)
         }
         ensure(interceptorManager.completionCallCount).becomes(count)

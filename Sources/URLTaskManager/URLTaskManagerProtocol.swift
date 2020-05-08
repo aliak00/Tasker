@@ -24,7 +24,7 @@ class URLTaskManagerProtocol: URLProtocol {
     }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
+        request
     }
 
     private func normalizeRequest(_ request: URLRequest) -> URLRequest {

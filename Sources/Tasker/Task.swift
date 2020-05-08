@@ -50,7 +50,7 @@ public protocol Task: AnyObject {
 
 public extension Task {
     var timeout: DispatchTimeInterval? {
-        return nil
+        nil
     }
 
     func didCancel(with _: TaskError) {}

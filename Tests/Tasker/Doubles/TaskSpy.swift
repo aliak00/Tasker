@@ -5,7 +5,7 @@ var kTaskSpyCounter = AtomicInt()
 
 class TaskSpy<T>: AnyTask<T> {
     var executeCallCount: Int {
-        return self.executeCallBackData.count
+        self.executeCallBackData.count
     }
 
     var executeCallBackData: SynchronizedArray<AnyResult> = []

@@ -8,14 +8,14 @@ class ReactorSpy: Reactor {
     }
 
     var executeCallCount: Int {
-        return self.executeCallData.count
+        self.executeCallData.count
     }
 
     var executeCallData: SynchronizedArray<(Error?) -> Void> = []
     var executeBlock: (@escaping (Error?) -> Void) -> Void = { done in done(nil) }
 
     var shouldExecuteCallCount: Int {
-        return self.shouldExecuteCallData.count
+        self.shouldExecuteCallData.count
     }
 
     var shouldExecuteCallData: SynchronizedArray<(anyResult: AnyResult, weakAnyTask: Weak<AnyObject>, handle: Handle)> = []

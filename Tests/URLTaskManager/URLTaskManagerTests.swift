@@ -24,7 +24,7 @@ private class Reactor: URLTaskReactor {
     }
 
     var configuration: ReactorConfiguration {
-        return ReactorConfiguration(
+        ReactorConfiguration(
             timeout: nil,
             requeuesTask: true,
             suspendsTaskQueue: false
@@ -34,7 +34,7 @@ private class Reactor: URLTaskReactor {
 
 extension Data {
     func string() -> String? {
-        return String(data: self, encoding: .utf8)
+        String(data: self, encoding: .utf8)
     }
 }
 

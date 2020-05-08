@@ -80,5 +80,5 @@ struct Ensure<T: Equatable> {
 }
 
 func ensure<T: Equatable>(_ block: @escaping @autoclosure () -> T?, _ line: UInt = #line, _ file: StaticString = #file) -> Ensure<T> {
-    return Ensure(line: line, file: file, block: block)
+    Ensure(line: line, file: file, block: block)
 }

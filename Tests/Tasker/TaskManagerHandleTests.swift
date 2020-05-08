@@ -20,12 +20,12 @@ class TaskManagerHandleTests: XCTestCase {
         let manager = TaskManagerSpy(reactors: [restartReactor])
 
         var handles: [Handle] = []
-        for _ in 0..<numHandles {
+        for _ in 0 ..< numHandles {
             let handle = manager.add(task: kDummyTask)
             handles.append(handle)
         }
 
-        for i in 0..<numHandles {
+        for i in 0 ..< numHandles {
             handles[i].cancel()
         }
 
@@ -35,7 +35,7 @@ class TaskManagerHandleTests: XCTestCase {
             XCTAssertEqual(handle.state, TaskState.finished)
         }
 
-        for i in 0..<numHandles {
+        for i in 0 ..< numHandles {
             XCTAssertErrorEqual(TaskError.cancelled, manager.completionCallData[i].failureValue)
         }
     }

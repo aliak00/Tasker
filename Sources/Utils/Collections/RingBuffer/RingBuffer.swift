@@ -32,26 +32,26 @@ struct RingBuffer<Element> {
 
 extension RingBuffer: Equatable where Element: Equatable {
     static func == (lhs: RingBuffer<Element>, rhs: RingBuffer<Element>) -> Bool {
-        return lhs.array == rhs.array
+        lhs.array == rhs.array
     }
 }
 
 extension RingBuffer: MutableCollection, RandomAccessCollection {
     func index(after i: Int) -> Int {
-        return i + 1
+        i + 1
     }
 
     var startIndex: Int {
-        return 0
+        0
     }
 
     var endIndex: Int {
-        return self.array.count
+        self.array.count
     }
 
     subscript(index: Int) -> Element {
         get {
-            return self.array[(self.currentIndex + index) % self.array.count]
+            self.array[(self.currentIndex + index) % self.array.count]
         }
         set(element) {
             self.array[(self.currentIndex + index) % self.array.count] = element
@@ -61,6 +61,6 @@ extension RingBuffer: MutableCollection, RandomAccessCollection {
 
 extension RingBuffer: CustomStringConvertible {
     var description: String {
-        return self.array.description
+        self.array.description
     }
 }

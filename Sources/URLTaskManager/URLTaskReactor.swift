@@ -22,6 +22,6 @@ public extension URLTaskReactor {
     }
 
     func shouldExecute(after _: URLTask.Result, from _: URLTask, with _: Handle) -> Bool {
-        return false
+        false
     }
 }

@@ -109,7 +109,7 @@ public class URLTaskManager {
 
 private extension TaskManager {
     var refKey: String {
-        return String(describing: ObjectIdentifier(self).hashValue)
+        String(describing: ObjectIdentifier(self).hashValue)
     }
 }
 

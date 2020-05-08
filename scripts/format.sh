@@ -3,8 +3,8 @@
 if [[ -z "${TRAVIS}" ]]; then
     swiftformat \
         Sources/ Tests/  \
-        --comments ignore \
-        --ranges nospace \
+        --swiftversion 5.2 \
+        --nospaceoperators \
         --self insert \
         --indent 4 \
         --allman false \
