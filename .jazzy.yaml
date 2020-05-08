@@ -36,6 +36,7 @@ custom_categories:
   - name: Async Await
     children:
       - async(_:completion:)
+      - async(closure:)
       - await(timeout:block:)
       - curry(_:)
   - name: URL Session Interceptor
