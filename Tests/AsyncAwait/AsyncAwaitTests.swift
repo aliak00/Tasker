@@ -107,6 +107,14 @@ final class AsyncAwaitTests: XCTestCase {
         ensure(asyncValue.value).becomes(5)
     }
 
+    func testAsyncFreeFunction() {
+        let asyncValue = Atomic<Int?>(nil)
+        async(5) { r in
+            asyncValue.value = 7
+        }
+        ensure(asyncValue.value).becomes(7)
+    }
+
     func testAwaitFreeFunctionsShouldSucceeedWithResult() {
         let f = { (done: @escaping (Result<Int, Error>) -> Void) -> Void in
             done(.success(5))

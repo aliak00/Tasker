@@ -23,3 +23,12 @@ public func async<R>(_ closure: @escaping @autoclosure () -> R, completion: ((Re
         completion?(result)
     }
 }
+
+/**
+Calls a block of code asynchronously
+ 
+- parameter closure: the block of code that should be called asynchronously
+*/
+public func async(closure: @escaping () -> Void) {
+    AnyTask {}.async { _ in closure() }
+}
