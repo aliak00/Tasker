@@ -19,7 +19,7 @@ A task management framework with async and await and url session functionality
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Ali Akhtarzada' => 'ali.akhtarzada@gmail.com' }
   s.source           = { :git => 'https://github.com/aliak00/Tasker.git', :tag => s.version.to_s }
-  s.swift_version    = '5.0'
+  s.swift_version    = '5.2'
 
   s.ios.deployment_target = '9.0'
 
