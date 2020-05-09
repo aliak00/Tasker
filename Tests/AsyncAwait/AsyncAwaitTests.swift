@@ -109,10 +109,10 @@ final class AsyncAwaitTests: XCTestCase {
 
     func testAsyncFreeFunction() {
         let asyncValue = Atomic<Int?>(nil)
-        async(5) { _ in
-            asyncValue.value = 7
+        async(5) { result in
+            asyncValue.value = result.successValue
         }
-        ensure(asyncValue.value).becomes(7)
+        ensure(asyncValue.value).becomes(5)
     }
 
     func testAwaitFreeFunctionsShouldSucceeedWithResult() {
@@ -189,6 +189,14 @@ final class AsyncAwaitTests: XCTestCase {
                 XCTAssertEqual(i, (result.failureValue as NSError?)?.code)
             }
         }
+    }
+
+    func testAwaitInAsync() {
+        var x = 0
+        async {
+            x = try! AnyTask { 5 }.await()
+        }
+        ensure(x).becomes(5)
     }
 
 //    func testAwaitShouldCallCompletionOnSpecifiedQueue() {
