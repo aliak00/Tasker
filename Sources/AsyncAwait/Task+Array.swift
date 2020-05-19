@@ -1,7 +1,6 @@
 import Foundation
 
 private class ArrayOfTasks<T: Task>: Task {
-
     let array: [T]
     let inOrder: Bool
 
