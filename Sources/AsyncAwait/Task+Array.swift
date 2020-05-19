@@ -1,12 +1,16 @@
 import Foundation
 
 private class ArrayOfTasks<T: Task>: Task {
+
     let array: [T]
     let inOrder: Bool
+
     init(_ array: [T], inOrder: Bool) {
         self.array = array
         self.inOrder = inOrder
     }
+
+    typealias SuccessValue = [Result<T.SuccessValue, Error>]
 
     func execute(completion: @escaping (Result<[Result<T.SuccessValue, Error>], Error>) -> Void) {
         if self.inOrder {
@@ -21,6 +25,9 @@ private class ArrayOfTasks<T: Task>: Task {
             }
             completion(.success(results))
         } else {
+            if self.array.count == 0 {
+                completion(.success([]))
+            }
             let results = SynchronizedArray<Result<T.SuccessValue, Error>>()
             for task in self.array {
                 task.async {
@@ -32,8 +39,6 @@ private class ArrayOfTasks<T: Task>: Task {
             }
         }
     }
-
-    typealias SuccessValue = [Result<T.SuccessValue, Error>]
 }
 
 extension Array where Element: Task {

@@ -199,6 +199,11 @@ final class AsyncAwaitTests: XCTestCase {
         ensure(x).becomes(5)
     }
 
+    func testEmptyArrayOfTasksCanBeAwaited() {
+        let tasks: [AnyTask<Int>] = []
+        let results = try? tasks.await()
+        XCTAssertEqual(results?.count, 0)
+    }
 //    func testAwaitShouldCallCompletionOnSpecifiedQueue() {
 //        let queue = DispatchQueue(label: "Tasker.Tests.AsyncTask")
 //        let key = DispatchSpecificKey<Void>()
