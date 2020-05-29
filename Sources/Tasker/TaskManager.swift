@@ -20,6 +20,7 @@ public class TaskManager {
     private let operationQueue = OperationQueue()
 
     private let taskQueue = DispatchQueue(label: "Tasker.TaskManager.tasks")
+    private let completionQueue = DispatchQueue(label: "Tasker.TaskManager.completions", attributes: [.concurrent])
 
     private let interceptorManager: InterceptorManager
     private let reactorManager: ReactorManager
@@ -291,7 +292,7 @@ public class TaskManager {
                     assert(data.operation === operation)
                     data.state = .finished
                     log(level: .verbose, from: self, "did finish \(handle)", tags: TaskManager.kTkQTags)
-                    (data.completionQueue ?? strongSelf.taskQueue).async {
+                    (data.completionQueue ?? strongSelf.completionQueue).async {
                         completion?(taskResult)
                     }
                 } else {

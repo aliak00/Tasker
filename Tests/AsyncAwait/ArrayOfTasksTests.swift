@@ -67,4 +67,17 @@ final class ArrayOfTasksTests: XCTestCase {
         }
         XCTAssertEqual(tasks.awaitSuccess(), [0, 2, 4, 6, 8])
     }
+
+    func testAwaitSuccessInsideAsync() {
+        let task = AnyTask<Int> { done in
+            AnyTask<Int> {
+                5
+            }.async { _ in
+                self.testAwaitSuccess()
+                done(.success(5))
+            }
+        }
+
+        XCTAssertEqual(try! task.await(), 5)
+    }
 }
