@@ -82,4 +82,33 @@ extension Array where Element: Task {
         try ArrayOfTasks(self, inOrder: inOrder)
             .await(using: taskManager, timeout: timeout)
     }
+
+    /**
+     Executes each task in line and awaits an array of each tasks suceess result
+     If none of the tasks succeed or there're no tasks anyway then an empty array will be returned
+
+     - parameter inOrder: true if you want the tasks executed strictly one after the other
+
+     SeeAlso: `Task.await(...)` for the rest of the parameters
+     */
+    public func awaitSuccess(
+        using taskManager: TaskManager? = nil,
+        inOrder: Bool = false,
+        timeout: DispatchTimeInterval? = nil
+    ) -> [Element.SuccessValue] {
+        if let taskResults = try? ArrayOfTasks(self, inOrder: inOrder)
+            .await(using: taskManager, timeout: timeout) {
+            return taskResults
+                .compactMap { (result) -> Element.SuccessValue? in
+                    switch result {
+                    case let .success(value):
+                        return value
+                    case .failure:
+                        return nil
+                    }
+                }
+        } else {
+            return []
+        }
+    }
 }
