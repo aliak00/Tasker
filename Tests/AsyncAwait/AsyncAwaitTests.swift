@@ -153,11 +153,11 @@ final class AsyncAwaitTests: XCTestCase {
     }
 
     func testAwaitInAsync() {
-        var x = 0
+        let x = AtomicInt(0)
         async {
-            x = try! AnyTask { 5 }.await()
+            x.value = try! AnyTask { 5 }.await()
         }
-        ensure(x).becomes(5)
+        ensure(x.value).becomes(5)
     }
 
 //    func testAwaitShouldCallCompletionOnSpecifiedQueue() {
