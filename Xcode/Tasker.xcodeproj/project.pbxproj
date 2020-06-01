@@ -318,7 +318,7 @@
 				E1058844219CB9270020976B /* AsyncAwait */,
 				E105882F219CB9270020976B /* Logger */,
 				E1058842219CB9270020976B /* Operations */,
-				E105884D219CB9270020976B /* Tasker */,
+				E105884D219CB9270020976B /* TaskManager */,
 				E1058833219CB9270020976B /* URLTaskManager */,
 				E1058839219CB9270020976B /* Utils */,
 			);
@@ -433,7 +433,7 @@
 			path = SynchronizedDictionary;
 			sourceTree = "<group>";
 		};
-		E105884D219CB9270020976B /* Tasker */ = {
+		E105884D219CB9270020976B /* TaskManager */ = {
 			isa = PBXGroup;
 			children = (
 				E1058856219CB9270020976B /* Task.swift */,
@@ -450,7 +450,7 @@
 				E1058857219CB9270020976B /* ReactorConfiguration.swift */,
 				E178E6442303319400968761 /* ReactorManagerDelegate.swift */,
 			);
-			path = Tasker;
+			path = TaskManager;
 			sourceTree = "<group>";
 		};
 		E1058877219CB93A0020976B /* Tests */ = {
@@ -463,7 +463,7 @@
 				E1058880219CB93A0020976B /* Operations */,
 				E1058885219CB93A0020976B /* AsyncAwait */,
 				E1058889219CB93A0020976B /* Collections */,
-				E105888E219CB93A0020976B /* Tasker */,
+				E105888E219CB93A0020976B /* TaskManager */,
 			);
 			name = Tests;
 			path = ../Tests;
@@ -547,7 +547,7 @@
 			path = RingBuffer;
 			sourceTree = "<group>";
 		};
-		E105888E219CB93A0020976B /* Tasker */ = {
+		E105888E219CB93A0020976B /* TaskManager */ = {
 			isa = PBXGroup;
 			children = (
 				E105888F219CB93A0020976B /* Doubles */,
@@ -560,7 +560,7 @@
 				E1058896219CB93A0020976B /* ScenarioValidatingRetryingTests.swift */,
 				E105889A219CB93A0020976B /* ScenarioBatchingTests.swift */,
 			);
-			path = Tasker;
+			path = TaskManager;
 			sourceTree = "<group>";
 		};
 		E105888F219CB93A0020976B /* Doubles */ = {

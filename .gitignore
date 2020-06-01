@@ -34,3 +34,5 @@ Example/Swooft.xcworkspace
 *.xcodeproj
 
 .build
+.swiftpm
+vendor/

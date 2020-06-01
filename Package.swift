@@ -21,10 +21,10 @@ let package = Package(
         .target(
             name: "Tasker",
             dependencies: [],
-            path: "./Sources"),
+            path: "Sources"),
         .testTarget(
             name: "TaskerTests",
             dependencies: ["Tasker"],
-            path: "./Tests"),
+            path: "Tests"),
     ]
 )
