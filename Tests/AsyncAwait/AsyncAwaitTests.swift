@@ -88,6 +88,12 @@ final class AsyncAwaitTests: XCTestCase {
         ensure(task.completionCallCount).stays(1)
     }
 
+    func testAwaitShouldFinishBeforeDeadline() {
+        let task = AsyncAwaitSpy { sleep(for: .milliseconds(5)) }
+        try! task.await(timeout: .milliseconds(25))
+        ensure(task.completionCallCount).becomes(1)
+    }
+
     func testAsyncAwaitFreeFunctionsShouldSucceeedWithValue() {
         let awaitValue = try? await { (done: @escaping (Int) -> Void) -> Void in
             DispatchQueue.global(qos: .unspecified).async {
