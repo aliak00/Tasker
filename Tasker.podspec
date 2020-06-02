@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Tasker'
-  s.version          = '0.8.2'
+  s.version          = '0.8.3'
   s.summary          = 'Task management framework with async await and url session management'
 
   s.description      = <<-DESC
