@@ -20,9 +20,11 @@ extension Task {
             maybeResult = result
             semaphore.signal()
         }
-        if let timeout = timeout, semaphore.wait(timeout: .now() + timeout) == .timedOut {
-            handle.cancel()
-            throw TaskError.timedOut
+        if let timeout = timeout {
+            if semaphore.wait(timeout: .now() + timeout) == .timedOut {
+                handle.cancel()
+                throw TaskError.timedOut
+            }
         } else {
             semaphore.wait()
         }
