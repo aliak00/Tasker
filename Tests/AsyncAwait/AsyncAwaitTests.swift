@@ -48,6 +48,13 @@ final class AsyncAwaitTests: XCTestCase {
         ensure(handle.state).becomes(.finished)
     }
 
+    func testAsyncShouldCompleteBeforeTimeout() {
+        let task = AsyncAwaitSpy { sleep(for: .milliseconds(1)) }
+        let handle = task.async(timeout: .milliseconds(5))
+        ensure(task.completionCallCount).becomes(1)
+        ensure(handle.state).becomes(.finished)
+    }
+
     func testAsyncShouldCallCompletionOnSpecifiedQueue() {
         let queue = DispatchQueue(label: "Tasker.Tests.AsyncTask")
         let key = DispatchSpecificKey<Void>()
