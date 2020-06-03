@@ -8,11 +8,11 @@ class AsyncAwaitSpy<T>: TaskSpy<T> {
 
     var completionCallData: SynchronizedArray<AsyncAwaitSpy.Result> = []
 
-    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> AsyncAwaitSpy.Result) {
-        self.init(timeout: timeout) { completion in
-            completion(execute())
-        }
-    }
+//    convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> AsyncAwaitSpy.Result) {
+//        self.init(timeout: timeout) { completion in
+//            completion(execute())
+//        }
+//    }
 
     convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> T) {
         self.init(timeout: timeout) { completion in

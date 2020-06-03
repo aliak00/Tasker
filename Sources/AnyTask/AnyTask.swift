@@ -36,11 +36,12 @@ public class AnyTask<T>: Task {
      - parameter timeout: after how long the task timeout
      - parameter execute: the execution block.
      */
-    public convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> AnyTask.Result) {
-        self.init(timeout: timeout) { completion in
-            completion(execute())
-        }
-    }
+    // TODO: Can this be made to work?
+//    public convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> AnyTask.Result) {
+//        self.init(timeout: timeout) { completion in
+//            completion(execute())
+//        }
+//    }
 
     /**
      Initialize the AnyTask with an execution block that just returns a type T
