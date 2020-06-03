@@ -37,4 +37,19 @@ final class AnyTaskTests: XCTestCase {
             }
         }
     }
+
+    func testAnyTaskAsyncHandles() {
+        let semaphore = DispatchSemaphore(value: 0)
+        let stateInside = Atomic<TaskState>(.pending)
+        let handle = Atomic<Handle?>(nil)
+        handle.value = AnyTask {
+            if let state = handle.value?.state {
+                stateInside.value = state
+            }
+            semaphore.signal()
+        }.async()
+        semaphore.wait()
+        XCTAssertEqual(stateInside.value, .executing)
+        ensure(handle.value?.state).becomes(.finished)
+    }
 }
