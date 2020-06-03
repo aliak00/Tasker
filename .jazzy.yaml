@@ -5,7 +5,7 @@ hide_documentation_coverage: true
 exclude:
   - Tests/**
 github_url: https://www.github.com/aliak00/Tasker
-copyright: © 2018-2019 Ali Akhtarzada
+copyright: © 2018-2020 Ali Akhtarzada
 xcodebuild_arguments: ["-scheme", "Tasker-macOS", "-project", "Xcode/Tasker.xcodeproj", "-derivedDataPath", ".build/DerivedData"]
 abstract: docs/abstracts/*.md
 
