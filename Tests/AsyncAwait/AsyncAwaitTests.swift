@@ -113,7 +113,7 @@ final class AsyncAwaitTests: XCTestCase {
 
         let asyncValue = Atomic<Int?>(nil)
 
-        async(5) { r in
+        async(closingOver: 5) { r in
             asyncValue.value = r.successValue
         }
 
@@ -122,7 +122,7 @@ final class AsyncAwaitTests: XCTestCase {
 
     func testAsyncFreeFunction() {
         let asyncValue = Atomic<Int?>(nil)
-        async(5) { result in
+        async(closingOver: 5) { result in
             asyncValue.value = result.successValue
         }
         ensure(asyncValue.value).becomes(5)
