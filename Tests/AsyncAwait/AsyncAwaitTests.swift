@@ -96,8 +96,8 @@ final class AsyncAwaitTests: XCTestCase {
     }
 
     func testAwaitShouldFinishBeforeDeadline() {
-        let task = AsyncAwaitSpy { sleep(for: .milliseconds(5)) }
-        try! task.await(timeout: .milliseconds(25))
+        let task = AsyncAwaitSpy { sleep(for: .milliseconds(1)) }
+        try! task.await(timeout: .milliseconds(5))
         ensure(task.completionCallCount).becomes(1)
     }
 
