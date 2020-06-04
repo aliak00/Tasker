@@ -29,8 +29,8 @@
 		E16E4A982305CEDE00A1C297 /* Task+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A962305CEDE00A1C297 /* Task+Array.swift */; };
 		E16E4A9C2305E7CD00A1C297 /* async.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A9B2305E7CD00A1C297 /* async.swift */; };
 		E16E4A9D2305E7CD00A1C297 /* async.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A9B2305E7CD00A1C297 /* async.swift */; };
-		E16E4A9F2305E80900A1C297 /* task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A9E2305E80900A1C297 /* task.swift */; };
-		E16E4AA02305E80900A1C297 /* task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A9E2305E80900A1C297 /* task.swift */; };
+		E16E4A9F2305E80900A1C297 /* TaskFreeFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A9E2305E80900A1C297 /* TaskFreeFunction.swift */; };
+		E16E4AA02305E80900A1C297 /* TaskFreeFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4A9E2305E80900A1C297 /* TaskFreeFunction.swift */; };
 		E16E4AA22305EA2500A1C297 /* FreeFunctionTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4AA12305EA2500A1C297 /* FreeFunctionTaskTests.swift */; };
 		E16E4AA32305EA2500A1C297 /* FreeFunctionTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E4AA12305EA2500A1C297 /* FreeFunctionTaskTests.swift */; };
 		E178E6422303302A00968761 /* ReactorManagerDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E178E6412303302A00968761 /* ReactorManagerDelegateSpy.swift */; };
@@ -234,7 +234,7 @@
 		E165E40E231E9F62006CFF66 /* CurryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurryTests.swift; sourceTree = "<group>"; };
 		E16E4A962305CEDE00A1C297 /* Task+Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Array.swift"; sourceTree = "<group>"; };
 		E16E4A9B2305E7CD00A1C297 /* async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = async.swift; sourceTree = "<group>"; };
-		E16E4A9E2305E80900A1C297 /* task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = task.swift; sourceTree = "<group>"; };
+		E16E4A9E2305E80900A1C297 /* TaskFreeFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskFreeFunction.swift; sourceTree = "<group>"; };
 		E16E4AA12305EA2500A1C297 /* FreeFunctionTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeFunctionTaskTests.swift; sourceTree = "<group>"; };
 		E178E6412303302A00968761 /* ReactorManagerDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorManagerDelegateSpy.swift; sourceTree = "<group>"; };
 		E178E6442303319400968761 /* ReactorManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorManagerDelegate.swift; sourceTree = "<group>"; };
@@ -600,7 +600,7 @@
 			children = (
 				E1058845219CB9270020976B /* AnyTask.swift */,
 				E105882E219CB9270020976B /* AnyResult.swift */,
-				E16E4A9E2305E80900A1C297 /* task.swift */,
+				E16E4A9E2305E80900A1C297 /* TaskFreeFunction.swift */,
 			);
 			path = AnyTask;
 			sourceTree = "<group>";
@@ -852,7 +852,7 @@
 				E1CC6C0C219CC49A00B465A5 /* LogLevel.swift in Sources */,
 				E127EAA9230310850059B13F /* URLTaskInterceptor.swift in Sources */,
 				E1CC6C0E219CC49A00B465A5 /* AnyResult.swift in Sources */,
-				E16E4A9F2305E80900A1C297 /* task.swift in Sources */,
+				E16E4A9F2305E80900A1C297 /* TaskFreeFunction.swift in Sources */,
 				E1CC6C0D219CC49A00B465A5 /* AsyncOperation.swift in Sources */,
 				E1CC6C18219CC49A00B465A5 /* Reactor.swift in Sources */,
 				E1CB507221CD0FF100823D6C /* LogTags.swift in Sources */,
@@ -936,7 +936,7 @@
 				E1CC6C2A219CC49B00B465A5 /* LogLevel.swift in Sources */,
 				E127EAAA230310850059B13F /* URLTaskInterceptor.swift in Sources */,
 				E1CC6C2C219CC49B00B465A5 /* AnyResult.swift in Sources */,
-				E16E4AA02305E80900A1C297 /* task.swift in Sources */,
+				E16E4AA02305E80900A1C297 /* TaskFreeFunction.swift in Sources */,
 				E1CC6C2B219CC49B00B465A5 /* AsyncOperation.swift in Sources */,
 				E1CC6C36219CC49B00B465A5 /* Reactor.swift in Sources */,
 				E1CB507321CD0FF100823D6C /* LogTags.swift in Sources */,
