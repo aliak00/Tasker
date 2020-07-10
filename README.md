@@ -4,6 +4,7 @@
 
 [![CocoaPods Version](https://img.shields.io/cocoapods/v/Tasker.svg?style=flat)](http://cocoadocs.org/docsets/Tasker)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+![Swift](https://github.com/aliak00/Tasker/workflows/Swift/badge.svg)
 [![Build Status](https://travis-ci.org/aliak00/Tasker.svg?branch=master)](https://travis-ci.org/aliak00/Tasker)
 [![codecov](https://codecov.io/gh/aliak00/Tasker/branch/master/graph/badge.svg)](https://codecov.io/gh/aliak00/Tasker)
 [![license](https://img.shields.io/github/license/aliak00/Tasker.svg)](https://github.com/aliak00/Tasker/blob/master/LICENSE)
