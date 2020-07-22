@@ -39,6 +39,8 @@
 		E178E6462303319400968761 /* ReactorManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E178E6442303319400968761 /* ReactorManagerDelegate.swift */; };
 		E1A653A3248121E000A2955C /* ArrayOfTasksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A653A2248121E000A2955C /* ArrayOfTasksTests.swift */; };
 		E1A653A4248121E000A2955C /* ArrayOfTasksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A653A2248121E000A2955C /* ArrayOfTasksTests.swift */; };
+		E1AE990524C8CC5D00F5BD9E /* AnyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE990424C8CC5D00F5BD9E /* AnyResult.swift */; };
+		E1AE990624C8CC5D00F5BD9E /* AnyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AE990424C8CC5D00F5BD9E /* AnyResult.swift */; };
 		E1CB507221CD0FF100823D6C /* LogTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CB507121CD0FF100823D6C /* LogTags.swift */; };
 		E1CB507321CD0FF100823D6C /* LogTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CB507121CD0FF100823D6C /* LogTags.swift */; };
 		E1CC6BF2219CC3EE00B465A5 /* Tasker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1CC6BE9219CC3ED00B465A5 /* Tasker.framework */; };
@@ -55,7 +57,6 @@
 		E1CC6C0B219CC49A00B465A5 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058831219CB9270020976B /* Logger.swift */; };
 		E1CC6C0C219CC49A00B465A5 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058832219CB9270020976B /* LogLevel.swift */; };
 		E1CC6C0D219CC49A00B465A5 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058843219CB9270020976B /* AsyncOperation.swift */; };
-		E1CC6C0E219CC49A00B465A5 /* AnyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105882E219CB9270020976B /* AnyResult.swift */; };
 		E1CC6C10219CC49A00B465A5 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058856219CB9270020976B /* Task.swift */; };
 		E1CC6C11219CC49A00B465A5 /* TaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058850219CB9270020976B /* TaskError.swift */; };
 		E1CC6C12219CC49A00B465A5 /* Handle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058852219CB9270020976B /* Handle.swift */; };
@@ -82,7 +83,6 @@
 		E1CC6C29219CC49B00B465A5 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058831219CB9270020976B /* Logger.swift */; };
 		E1CC6C2A219CC49B00B465A5 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058832219CB9270020976B /* LogLevel.swift */; };
 		E1CC6C2B219CC49B00B465A5 /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058843219CB9270020976B /* AsyncOperation.swift */; };
-		E1CC6C2C219CC49B00B465A5 /* AnyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E105882E219CB9270020976B /* AnyResult.swift */; };
 		E1CC6C2E219CC49B00B465A5 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058856219CB9270020976B /* Task.swift */; };
 		E1CC6C2F219CC49B00B465A5 /* TaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058850219CB9270020976B /* TaskError.swift */; };
 		E1CC6C30219CC49B00B465A5 /* Handle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1058852219CB9270020976B /* Handle.swift */; };
@@ -171,7 +171,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E105882E219CB9270020976B /* AnyResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyResult.swift; sourceTree = "<group>"; };
 		E1058830219CB9270020976B /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		E1058831219CB9270020976B /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E1058832219CB9270020976B /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
@@ -239,6 +238,7 @@
 		E178E6412303302A00968761 /* ReactorManagerDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorManagerDelegateSpy.swift; sourceTree = "<group>"; };
 		E178E6442303319400968761 /* ReactorManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorManagerDelegate.swift; sourceTree = "<group>"; };
 		E1A653A2248121E000A2955C /* ArrayOfTasksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayOfTasksTests.swift; sourceTree = "<group>"; };
+		E1AE990424C8CC5D00F5BD9E /* AnyResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnyResult.swift; path = ../../Tests/Utils/AnyResult.swift; sourceTree = "<group>"; };
 		E1CB507121CD0FF100823D6C /* LogTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTags.swift; sourceTree = "<group>"; };
 		E1CC6BE9219CC3ED00B465A5 /* Tasker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tasker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1CC6BEB219CC3ED00B465A5 /* Tasker_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tasker_iOS.h; sourceTree = "<group>"; };
@@ -362,6 +362,7 @@
 		E1058839219CB9270020976B /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E1AE990424C8CC5D00F5BD9E /* AnyResult.swift */,
 				E1058848219CB9270020976B /* Collections */,
 				E1058837219CB9270020976B /* Atomics */,
 				E105883C219CB9270020976B /* Locking */,
@@ -599,7 +600,6 @@
 			isa = PBXGroup;
 			children = (
 				E1058845219CB9270020976B /* AnyTask.swift */,
-				E105882E219CB9270020976B /* AnyResult.swift */,
 				E16E4A9E2305E80900A1C297 /* TaskFreeFunction.swift */,
 			);
 			path = AnyTask;
@@ -851,7 +851,6 @@
 				E1CC6C10219CC49A00B465A5 /* Task.swift in Sources */,
 				E1CC6C0C219CC49A00B465A5 /* LogLevel.swift in Sources */,
 				E127EAA9230310850059B13F /* URLTaskInterceptor.swift in Sources */,
-				E1CC6C0E219CC49A00B465A5 /* AnyResult.swift in Sources */,
 				E16E4A9F2305E80900A1C297 /* TaskFreeFunction.swift in Sources */,
 				E1CC6C0D219CC49A00B465A5 /* AsyncOperation.swift in Sources */,
 				E1CC6C18219CC49A00B465A5 /* Reactor.swift in Sources */,
@@ -894,6 +893,7 @@
 				E1CC6C48219CC52500B465A5 /* RingBufferTests.swift in Sources */,
 				E1FAA2F923001C54001703D4 /* ReactorManagerTests.swift in Sources */,
 				E1CC6C51219CC52500B465A5 /* InterceptorTests.swift in Sources */,
+				E1AE990524C8CC5D00F5BD9E /* AnyResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,7 +935,6 @@
 				E1CC6C2E219CC49B00B465A5 /* Task.swift in Sources */,
 				E1CC6C2A219CC49B00B465A5 /* LogLevel.swift in Sources */,
 				E127EAAA230310850059B13F /* URLTaskInterceptor.swift in Sources */,
-				E1CC6C2C219CC49B00B465A5 /* AnyResult.swift in Sources */,
 				E16E4AA02305E80900A1C297 /* TaskFreeFunction.swift in Sources */,
 				E1CC6C2B219CC49B00B465A5 /* AsyncOperation.swift in Sources */,
 				E1CC6C36219CC49B00B465A5 /* Reactor.swift in Sources */,
@@ -978,6 +977,7 @@
 				E1CC6C5D219CC52600B465A5 /* RingBufferTests.swift in Sources */,
 				E1FAA2FA23001C54001703D4 /* ReactorManagerTests.swift in Sources */,
 				E1CC6C66219CC52600B465A5 /* InterceptorTests.swift in Sources */,
+				E1AE990624C8CC5D00F5BD9E /* AnyResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
