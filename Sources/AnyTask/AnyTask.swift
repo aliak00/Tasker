@@ -100,14 +100,3 @@ public class AnyTask<T>: Task {
         self.executeThunk(completion)
     }
 }
-
-extension AnyTask where T == Any {
-    ///
-    public convenience init<U: Task>(_ task: U) {
-        self.init(timeout: task.timeout) { completion in
-            task.execute { result in
-                completion(AnyResult(result))
-            }
-        }
-    }
-}
