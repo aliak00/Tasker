@@ -21,6 +21,7 @@ public class AnyTask<T>: Task {
      - parameter timeout: after how long the task timeout
      - parameter execute: the execution block.
      */
+    @discardableResult
     public init(timeout: DispatchTimeInterval? = nil, execute: @escaping (@escaping AnyTask.CompletionCallback) -> Void) {
         self.executeThunk = { completion in
             execute { result in
@@ -49,6 +50,7 @@ public class AnyTask<T>: Task {
      - parameter timeout: after how long the task timeout
      - parameter execute: the execution block.
      */
+    @discardableResult
     public convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () -> T) {
         self.init(timeout: timeout) { completion in
             completion(.success(execute()))
@@ -62,6 +64,7 @@ public class AnyTask<T>: Task {
      - parameter task: The `Task` object that this will wrap
      - parameter timeout: Specify if you wan to overwrites `Task.timeout`.
      */
+    @discardableResult
     public convenience init<U: Task>(fromTask task: U, timeout: DispatchTimeInterval? = nil) where U.SuccessValue == SuccessValue {
         self.init(timeout: timeout ?? task.timeout) { completion in
             task.execute(completion: completion)
