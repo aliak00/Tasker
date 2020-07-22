@@ -32,6 +32,23 @@ public class AnyTask<T>: Task {
     }
 
     /**
+     Initialize the AnyTask with an execution block that just returns a type T and may throw
+
+     - parameter timeout: after how long the task timeout
+     - parameter execute: the execution block.
+     */
+    @discardableResult
+    public convenience init(timeout: DispatchTimeInterval? = nil, execute: @escaping () throws -> T) {
+        self.init(timeout: timeout) { completion in
+            do {
+                completion(.success(try execute()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+
+    /**
      Initialize the AnyTask with an execution block that must return a `Task.Result`
 
      - parameter timeout: after how long the task timeout

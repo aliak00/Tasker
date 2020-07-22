@@ -2,6 +2,15 @@
 import XCTest
 
 final class AnyTaskTests: XCTestCase {
+    
+    func testThrowingFromAnyTaskWorks() {
+        struct SomeError: Error {}
+        let error: Void? = try? AnyTask { throw SomeError() }.await()
+        XCTAssertTrue(error == nil)
+        let value = try? AnyTask { 3 }.await()
+        XCTAssertEqual(value, 3)
+    }
+
     func testShouldExecutePassedInTask() {
         let numTasks = 20
         let task = TaskSpy { $0(.success(())) }
