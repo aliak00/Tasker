@@ -24,4 +24,8 @@ A task management framework with async and await and url session functionality
   s.ios.deployment_target = '9.0'
 
   s.source_files = ['Sources/**/*.swift']
+  
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'Tests/**/*.swift'
+  end
 end

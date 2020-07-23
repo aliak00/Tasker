@@ -10,16 +10,7 @@ bundler_args: --without documentation --without development --deployment --jobs=
 
 matrix:
   include:
-    - name: "iOS"
-      script:
-        - scripts/test-ios.sh
-    - name: "MacOS codecov"
-      script:
-        - swift package generate-xcodeproj
-        - xcodebuild -scheme Tasker-Package -enableCodeCoverage YES test | xcpretty
-      after_success:
-        - bash <(curl -s https://codecov.io/bash)
-    - name: "MacOS"
+    - name: "Swift test"
       script:
         - swift test
     - name: "Pod lint"
@@ -28,8 +19,15 @@ matrix:
     - name: "Build carthage"
       script:
         - scripts/carthage-build.sh
+    - name: "MacOS codecov"
+      script:
+        - swift package generate-xcodeproj
+        - xcodebuild -scheme Tasker-Package -enableCodeCoverage YES test | xcpretty
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
     - name: "Docs"
       script:
+        - swift package generate-xcodeproj
         - bundle exec jazzy
       deploy:
         local_dir: docs

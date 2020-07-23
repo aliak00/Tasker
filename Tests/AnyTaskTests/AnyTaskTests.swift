@@ -2,15 +2,6 @@
 import XCTest
 
 final class AnyTaskTests: XCTestCase {
-    func test() {
-        struct SomeError: Error {}
-        AnyTask<Any> {
-            guard false else {
-                throw SomeError()
-            }
-            return 4
-        }
-    }
 
     func testThrowingFromAnyTaskWorks() {
         struct SomeError: Error {}
