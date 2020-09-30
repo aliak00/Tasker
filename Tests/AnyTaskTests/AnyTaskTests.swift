@@ -2,7 +2,6 @@
 import XCTest
 
 final class AnyTaskTests: XCTestCase {
-
     func testThrowingFromAnyTaskWorks() {
         struct SomeError: Error {}
         let error: Void? = try? AnyTask { throw SomeError() }.await()

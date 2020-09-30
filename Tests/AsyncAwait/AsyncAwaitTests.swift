@@ -173,6 +173,15 @@ final class AsyncAwaitTests: XCTestCase {
         ensure(x.value).becomes(5)
     }
 
+    func testAsyncAwaitStartLater() {
+        let task = AsyncAwaitSpy { 7 }
+        let handle = task.async(startImmediately: false)
+        ensure(task.completionCallCount).stays(0)
+        handle.start()
+        ensure(task.completionCallCount).becomes(1)
+        XCTAssertTrue(task.completionCallData.data.first?.successValue == 7)
+    }
+
 //    func testAwaitShouldCallCompletionOnSpecifiedQueue() {
 //        let queue = DispatchQueue(label: "Tasker.Tests.AsyncTask")
 //        let key = DispatchSpecificKey<Void>()

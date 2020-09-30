@@ -23,11 +23,12 @@ class AsyncAwaitSpy<T>: TaskSpy<T> {
     @discardableResult
     func async(
         after interval: DispatchTimeInterval? = nil,
+        startImmediately: Bool = true,
         queue: DispatchQueue? = nil,
         timeout: DispatchTimeInterval? = nil,
         completion: CompletionCallback? = nil
     ) -> Handle {
-        super.async(using: nil, after: interval, queue: queue, timeout: timeout) { [weak self] result in
+        super.async(using: nil, startImmediately: startImmediately, after: interval, queue: queue, timeout: timeout) { [weak self] result in
             defer {
                 self?.completionCallData.append(result)
             }

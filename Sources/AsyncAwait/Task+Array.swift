@@ -97,7 +97,8 @@ extension Array where Element: Task {
         timeout: DispatchTimeInterval? = nil
     ) -> [Element.SuccessValue] {
         if let taskResults = try? ArrayOfTasks(self, inOrder: inOrder)
-            .await(using: taskManager, timeout: timeout) {
+            .await(using: taskManager, timeout: timeout)
+        {
             return taskResults
                 .compactMap { (result) -> Element.SuccessValue? in
                     switch result {
