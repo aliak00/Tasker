@@ -110,7 +110,7 @@ public class Logger {
 
     /// Filters log messages unless they are tagged with `tag`
     public func filterUnless(tag: String) {
-        _ = self.queue.async { [weak self] in
+        self.queue.async { [weak self] in
             self?.allowedTags.insert(tag)
         }
     }
@@ -126,7 +126,7 @@ public class Logger {
 
     /// Filters log messages if they are tagged with `tag`
     public func filterIf(tag: String) {
-        _ = self.queue.async { [weak self] in
+        self.queue.async { [weak self] in
             self?.ignoredTags.insert(tag)
         }
     }
