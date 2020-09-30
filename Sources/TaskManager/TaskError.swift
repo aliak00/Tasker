@@ -27,4 +27,7 @@ public enum TaskError: Error {
 
     /// An unknown error occured
     case unknown
+
+    /// A completion block that handles a different result type than what was expected was set
+    case runtimeTypeError(got: String, expected: String)
 }

@@ -12,6 +12,7 @@ extension TaskManager.Handle {
         let interceptionCallback: InterceptionCallback
         let completionQueue: DispatchQueue?
         var state: TaskState = .pending
+        var completionCallback: (Any) -> Void
 
         init(
             operation: AsyncOperation,
@@ -19,7 +20,8 @@ extension TaskManager.Handle {
             completionErrorCallback: @escaping (TaskError) -> Void,
             taskDidCancelCallback: @escaping (TaskError) -> Void,
             interceptionCallback: @escaping InterceptionCallback,
-            completionQueue: DispatchQueue?
+            completionQueue: DispatchQueue?,
+            completionCallback: @escaping (Any) -> Void
         ) {
             self.operation = operation
             self.taskReference = taskReference
@@ -27,6 +29,7 @@ extension TaskManager.Handle {
             self.taskDidCancelCallback = taskDidCancelCallback
             self.interceptionCallback = interceptionCallback
             self.completionQueue = completionQueue
+            self.completionCallback = completionCallback
         }
     }
 }

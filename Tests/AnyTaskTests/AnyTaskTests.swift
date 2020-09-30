@@ -60,4 +60,17 @@ final class AnyTaskTests: XCTestCase {
         XCTAssertEqual(stateInside.value, .executing)
         ensure(handle.value?.state).becomes(.finished)
     }
+
+    func testAnyTaskSetCompletion() {
+        let task = TaskSpy {}
+        let handle = task.async(startImmediately: false)
+        ensure(task.executeCallCount).stays(0)
+        let int = AtomicInt(0)
+        task.setCompletion { _ in
+            int.value = 9
+        }
+        handle.start()
+        ensure(task.executeCallCount).becomes(1)
+        XCTAssertEqual(int.value, 9)
+    }
 }

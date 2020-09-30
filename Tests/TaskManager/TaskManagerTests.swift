@@ -3,12 +3,17 @@ import XCTest
 
 private extension TaskManagerSpy {
     @discardableResult
-    func launch<T: Task>(task: @autoclosure () -> T, count: Int) -> (handles: [Handle], tasks: [T]) {
+    func launch<T: Task>(
+        task: @autoclosure () -> T,
+        count: Int,
+        startImmediately: Bool = true,
+        completion: T.CompletionCallback? = nil
+    ) -> (handles: [Handle], tasks: [T]) {
         var handles: [Handle] = []
         var tasks: [T] = []
         for _ in 0 ..< count {
             let task = task()
-            handles.append(self.add(task: task))
+            handles.append(self.add(task: task, startImmediately: startImmediately, completion: completion))
             tasks.append(task)
         }
         return (handles, tasks)
@@ -88,5 +93,31 @@ class TaskManagerTests: XCTestCase {
         }, count: 100)
         manager.waitTillAllTasksFinished()
         XCTAssertEqual(count.value, 100)
+    }
+
+    func testCompletionCallbackCalled() {
+        let manager = TaskManagerSpy()
+        let count = AtomicInt()
+        manager.launch(task: kDummyTask, count: 100) { _ in
+            count.getAndIncrement()
+        }
+        ensure(manager.completionCallCount).becomes(100)
+        XCTAssertEqual(count, 100)
+    }
+
+    func testChangingCompletionHandlerCalled() {
+        let manager = TaskManagerSpy()
+        let count = AtomicInt()
+        let (handles, _) = manager.launch(task: kDummyTask, count: 100, startImmediately: false) { _ in
+            count.getAndIncrement()
+        }
+        for handle in handles {
+            manager.setCompletion(task: kDummyTask, handle: handle) { _ in
+                count.getAndDecrement()
+            }
+            handle.start()
+        }
+        ensure(manager.completionCallCount).becomes(100)
+        XCTAssertEqual(count, -100)
     }
 }

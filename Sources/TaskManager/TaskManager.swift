@@ -86,7 +86,11 @@ public class TaskManager {
     ) -> Tasker.Handle {
         // Create a handle to this task, and also setup an Operation object that will be associated with this Task
         let handle = Handle(owner: self)
-        let operation = self.createAsyncOperationForHandle(handle, task: task, timeout: timeout, completion: completion)
+        let operation = self.createAsyncOperationForHandle(handle, task: task, timeout: timeout)
+
+        if var me = task as? HasTaskContext {
+            me.taskContext = TaskContext(handle: handle, manager: self)
+        }
 
         log(from: self,
             "will add \(handle) - "
@@ -114,7 +118,8 @@ public class TaskManager {
                 completionErrorCallback: { completion?(.failure($0)) },
                 taskDidCancelCallback: { [weak task] in task?.didCancel(with: $0) },
                 interceptionCallback: interceptionCallback,
-                completionQueue: completionQueue
+                completionQueue: completionQueue,
+                completionCallback: { completion?($0 as! T.Result) }
             )
 
             // This should be the only place in this file (other than in the data function) where this collection
@@ -139,8 +144,7 @@ public class TaskManager {
     private func createAsyncOperationForHandle<T: Task>(
         _ handle: TaskManager.Handle,
         task: T,
-        timeout: DispatchTimeInterval?,
-        completion: T.CompletionCallback?
+        timeout: DispatchTimeInterval?
     ) -> AsyncOperation {
         let operation = AsyncOperation()
         operation.execute = { [weak self, weak task, weak handle] in
@@ -178,8 +182,7 @@ public class TaskManager {
                 operation,
                 task: task,
                 handle: handle,
-                timeout: timeout ?? task.timeout,
-                completion: completion
+                timeout: timeout ?? task.timeout
             )
 
             return .running
@@ -191,8 +194,7 @@ public class TaskManager {
         _ operation: AsyncOperation,
         task: T,
         handle: Handle,
-        timeout: DispatchTimeInterval?,
-        completion: T.CompletionCallback?
+        timeout: DispatchTimeInterval?
     ) {
         let timeoutWorkItem: DispatchWorkItem?
         if let timeout = timeout {
@@ -248,8 +250,7 @@ public class TaskManager {
                 task,
                 handle: handle,
                 operation: operation,
-                result: result,
-                completion: completion
+                result: result
             )
         }
     }
@@ -258,8 +259,7 @@ public class TaskManager {
         _ task: T,
         handle: Handle,
         operation: AsyncOperation,
-        result taskResult: T.Result,
-        completion: T.CompletionCallback?
+        result taskResult: T.Result
     ) {
         // Now we are really finished no matter what. This Operation should be removed from the OperationQueue
         operation.finish()
@@ -293,7 +293,7 @@ public class TaskManager {
                     data.state = .finished
                     log(level: .verbose, from: self, "did finish \(handle)", tags: TaskManager.kTkQTags)
                     (data.completionQueue ?? strongSelf.completionQueue).async {
-                        completion?(taskResult)
+                        data.completionCallback(taskResult)
                     }
                 } else {
                     // Even though operation.isCancelled returned false, in theory, the task could've already been cancelled
@@ -505,6 +505,61 @@ public class TaskManager {
         } else {
             return result.state
         }
+    }
+
+    /**
+     If you want to set the completion handler later, or change it, you can use this function
+
+     - parameter task: the task to set the completion handler on
+     - parameter handle: the handle that belongs to this task
+     - parameter completion: the completion handler to set
+     */
+    public func setCompletion<T: Task>(
+        task _: T,
+        handle: Tasker.Handle,
+        completion: @escaping T.CompletionCallback
+    ) {
+        self.taskQueue.async { [weak self] in
+            guard let strongSelf = self else {
+                log(level: .verbose, from: self, "manager dead", tags: TaskManager.kTkQTags)
+                return
+            }
+            guard let data = strongSelf.data(for: handle as! Handle) else {
+                log(level: .verbose, from: self, "\(handle) not found", tags: TaskManager.kTkQTags)
+                return
+            }
+            guard let internalHandle = handle as? Handle else {
+                log(level: .error, from: self, "\(handle) is not the correct type", tags: TaskManager.kTkQTags)
+                return
+            }
+            data.completionCallback = { [weak self] any in
+                guard let result = any as? T.Result else {
+                    self?.removeAndCancel(
+                        handle: internalHandle,
+                        with: TaskError.runtimeTypeError(got: "\(T.self)", expected: "\(type(of: any))")
+                    )
+                    return
+                }
+
+                completion(result)
+            }
+        }
+    }
+
+    func setCompletion<T: Task & HasTaskContext>(task: T, completion: @escaping T.CompletionCallback) {
+        guard let context = task.taskContext else {
+            log(level: .error, from: self, "task does not have context set", tags: TaskManager.kClrTags)
+            return
+        }
+        guard let manager = context.manager, manager === self else {
+            log(level: .error, from: self, "task context manager mismatch", tags: TaskManager.kClrTags)
+            return
+        }
+        guard let handle = context.handle else {
+            log(level: .error, from: self, "task handle is gone", tags: TaskManager.kClrTags)
+            return
+        }
+        self.setCompletion(task: task, handle: handle, completion: completion)
     }
 }
 

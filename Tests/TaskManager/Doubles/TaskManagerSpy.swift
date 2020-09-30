@@ -19,15 +19,26 @@ class TaskManagerSpy {
         task: T,
         startImmediately: Bool = true,
         after interval: DispatchTimeInterval? = nil,
-        completion: (@escaping (T.Result) -> Void) = { _ in }
+        completion: T.CompletionCallback? = { _ in }
     ) -> Handle {
         self.taskManager.add(task: task, startImmediately: startImmediately, after: interval) { [weak self] result in
             self?.completionCallData.append(AnyResult(result))
-            completion(result)
+            completion?(result)
         }
     }
 
     func waitTillAllTasksFinished() {
         self.taskManager.waitTillAllTasksFinished()
+    }
+
+    func setCompletion<T: Task>(
+        task: T,
+        handle: Tasker.Handle,
+        completion: @escaping T.CompletionCallback
+    ) {
+        self.taskManager.setCompletion(task: task, handle: handle) { [weak self] result in
+            self?.completionCallData.append(AnyResult(result))
+            completion(result)
+        }
     }
 }

@@ -6,13 +6,14 @@ import Foundation
 
  `AnyTask`s schedules execution blocks on `TaskManager.shared`.
  */
-public class AnyTask<T>: Task {
+public class AnyTask<T>: Task, HasTaskContext {
     /**
      Alias of the "successful" return value of your execution block
      */
     public typealias SuccessValue = T
 
     var executeThunk: (@escaping CompletionCallback) -> Void
+    var taskContext: TaskContext?
 
     /**
      Initialize the AnyTask with an execution block that is given a "done" callback that must
@@ -98,5 +99,23 @@ public class AnyTask<T>: Task {
      */
     public func execute(completion: @escaping CompletionCallback) {
         self.executeThunk(completion)
+    }
+
+    /**
+     Allows you to change/set the completion handler for when this task is finished.
+
+     This is useful if you add a task or call async on it, and you can't specify the completion handler at that moment.
+     */
+    public func setCompletion(completion: @escaping CompletionCallback) {
+        guard let context = self.taskContext else {
+            return
+        }
+        guard let handle = context.handle else {
+            return
+        }
+        guard let manager = context.manager else {
+            return
+        }
+        manager.setCompletion(task: self, handle: handle, completion: completion)
     }
 }

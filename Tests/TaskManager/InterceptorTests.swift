@@ -9,6 +9,7 @@ class InterceptorTests: XCTestCase {
     }
 
     func testInterceptShouldBeCalledWithTask() {
+        Logger.shared.addTransport { print($0) }
         let interceptor = InterceptorSpy()
         let manager = TaskManagerSpy(interceptors: [interceptor])
         let task = TaskSpy { $0(.success(())) }
