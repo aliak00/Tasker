@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Reactor Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/Reactor" class="dashAnchor"></a>
+    <a title="Reactor Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Tasker 0.12.0 Docs</a></p>
+        <p class="header-right"><a href="https://www.github.com/aliak00/Tasker"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Tasker Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Reactor Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Task%20Management.html">Task Management</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Task.html">Task</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TaskError.html">TaskError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TaskState.html">TaskState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Handle.html">Handle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TaskManager.html">TaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Interceptor.html">Interceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/InterceptCommand.html">InterceptCommand</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Reactor.html">Reactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ReactorConfiguration.html">ReactorConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Logging.html">Logging</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LogTags.html">LogTags</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LogLevel.html">LogLevel</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../AnyTask.html">AnyTask</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AnyTask.html">AnyTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task11closingOverAA7AnyTaskCyxGxyXA_tlF">task(closingOver:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyytGyyycc_tF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyyxcc_tlF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyys6ResultOyxs5Error_pGcc_tlF">task(executing:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Async%20Await.html">Async Await</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yyxcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blocky8Dispatch0E12TimeIntervalOSg_yyyXEctKF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yys6ResultOyxs5Error_pGcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5curryyq0_q_cxcq0_x_q_tcr1_lF">curry(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5curryyq1_q0_cx_q_tcq1_x_q_q0_tcr2_lF">curry(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../URL%20Session%20Interceptor.html">URL Session Interceptor</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/URLTaskManager.html">URLTaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/URLTask.html">URLTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/URLTaskInterceptor.html">URLTaskInterceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/URLTaskReactor.html">URLTaskReactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/URLTaskManagerError.html">URLTaskManagerError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Functions.html">Other Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Other%20Functions.html#/s:6Tasker5async11closingOver10completionyxyXA_ys6ResultOyxs5Error_pGcSgtlF">async(closingOver:completion:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Other%20Functions.html#/s:6Tasker5async9executingyyyc_tF">async(executing:)</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Reactor</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Reactor</span></code></pre>
+
+                </div>
+              </div>
+            <p>A task reactor allows you to control what the task manager should do after a task is completed,
+and before the completion callback is called.</p>
+<h2 id='multiple-reactors' class='heading'>Multiple reactors</h2>
+
+<p>If a there&rsquo;re multiple reactors that are supposed to be run for a task then the options set in the
+<code><a href="../Structs/ReactorConfiguration.html">ReactorConfiguration</a></code> are OR&#39;ed together to determine what to do with the task. I.e. if one reactor
+of <code>n</code> reactors is configured to reqeue a task, then the task will be requeued.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker7ReactorP13shouldExecute5after4from4withSbs6ResultOy12SuccessValueQyd__s5Error_pG_qd__AA6Handle_ptAA4TaskRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/shouldExecute(after:from:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker7ReactorP13shouldExecute5after4from4withSbs6ResultOy12SuccessValueQyd__s5Error_pG_qd__AA6Handle_ptAA4TaskRd__lF">shouldExecute(after:<wbr>from:<wbr>with:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Return true if you want this reactor to be executed</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">shouldExecute</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">after</span><span class="p">:</span> <span class="kt">T</span><span class="o">.</span><span class="kt">Result</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Handle.html">Handle</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="k">where</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Task.html">Task</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>after</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the result of the task that was just executed</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the actual task that was just executed</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the handle to the task that was just executed</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker7ReactorP7execute4doneyys5Error_pSgc_tF"></a>
+                    <a name="//apple_ref/swift/Method/execute(done:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker7ReactorP7execute4doneyys5Error_pSgc_tF">execute(done:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Does the interceptor work</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">execute</span><span class="p">(</span><span class="nv">done</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker7ReactorP13configurationAA0B13ConfigurationVvp"></a>
+                    <a name="//apple_ref/swift/Property/configuration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker7ReactorP13configurationAA0B13ConfigurationVvp">configuration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The configuration that this interceptor has</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">configuration</span><span class="p">:</span> <span class="kt"><a href="../Structs/ReactorConfiguration.html">ReactorConfiguration</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018-2020 Ali Akhtarzada</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

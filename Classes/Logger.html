@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Logger Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Logger" class="dashAnchor"></a>
+    <a title="Logger Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Tasker 0.12.0 Docs</a></p>
+        <p class="header-right"><a href="https://www.github.com/aliak00/Tasker"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Tasker Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Logger Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Task%20Management.html">Task Management</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Task.html">Task</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TaskError.html">TaskError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TaskState.html">TaskState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Handle.html">Handle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TaskManager.html">TaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Interceptor.html">Interceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/InterceptCommand.html">InterceptCommand</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Reactor.html">Reactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ReactorConfiguration.html">ReactorConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Logging.html">Logging</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LogTags.html">LogTags</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LogLevel.html">LogLevel</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../AnyTask.html">AnyTask</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AnyTask.html">AnyTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task11closingOverAA7AnyTaskCyxGxyXA_tlF">task(closingOver:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyytGyyycc_tF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyyxcc_tlF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyys6ResultOyxs5Error_pGcc_tlF">task(executing:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Async%20Await.html">Async Await</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yyxcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blocky8Dispatch0E12TimeIntervalOSg_yyyXEctKF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yys6ResultOyxs5Error_pGcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5curryyq0_q_cxcq0_x_q_tcr1_lF">curry(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5curryyq1_q0_cx_q_tcq1_x_q_q0_tcr2_lF">curry(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../URL%20Session%20Interceptor.html">URL Session Interceptor</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/URLTaskManager.html">URLTaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/URLTask.html">URLTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/URLTaskInterceptor.html">URLTaskInterceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/URLTaskReactor.html">URLTaskReactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/URLTaskManagerError.html">URLTaskManagerError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Functions.html">Other Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Other%20Functions.html#/s:6Tasker5async11closingOver10completionyxyXA_ys6ResultOyxs5Error_pGcSgtlF">async(closingOver:completion:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Other%20Functions.html#/s:6Tasker5async9executingyyyc_tF">async(executing:)</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Logger</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Logger</span></code></pre>
+
+                </div>
+              </div>
+            <p>The logger class is used within the library to output logs of what is going on. Multi-threading and task management is very
+complicated and having logs can help immensely when it comes to debugging purposes</p>
+
+<p>Everytime the log function is called, a number of tags are automatically produced that are attached to the message. These are:</p>
+
+<ul>
+<li>the function name that the log is called from</li>
+<li>The thread that the log is called from (UI or BG - for background)</li>
+<li>The filename</li>
+<li>The log level (see <code><a href="../Enums/LogLevel.html">LogLevel</a></code>)</li>
+</ul>
+
+<p>This class is also made public so the API is meant to be stable</p>
+
+<p>There&rsquo;re also a number of predefined tags that the logs from within the library use. See <code><a href="../Structs/LogTags.html">LogTags</a></code> for a list.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC6sharedACvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/shared" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC6sharedACvpZ">shared</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Shared logger object</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">shared</span><span class="p">:</span> <span class="kt">Logger</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC14logHistorySize17synchronousOutputACSiSg_Sbtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(logHistorySize:synchronousOutput:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC14logHistorySize17synchronousOutputACSiSg_Sbtcfc">init(logHistorySize:<wbr>synchronousOutput:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a Logger object</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">logHistorySize</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">synchronousOutput</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>logHistorySize</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>How many entried to keep in the history</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC26waitTillAllLogsTransportedyyF"></a>
+                    <a name="//apple_ref/swift/Method/waitTillAllLogsTransported()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC26waitTillAllLogsTransportedyyF">waitTillAllLogsTransported()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Transports are called asynchronously, if you need to wait till all logging output has been sent to
+all transports then this function blocks until that happens</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">waitTillAllLogsTransported</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC10outputTagsSbvp"></a>
+                    <a name="//apple_ref/swift/Property/outputTags" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC10outputTagsSbvp">outputTags</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set to true if you want the tags to be printed as well</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">outputTags</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC7enabledSbvp"></a>
+                    <a name="//apple_ref/swift/Property/enabled" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC7enabledSbvp">enabled</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If this is false then it ignores all logs</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">enabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC12addTransportyyySScF"></a>
+                    <a name="//apple_ref/swift/Method/addTransport(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC12addTransportyyySScF">addTransport(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adding a transport allows you to tell the logger where the output goes to. You may add as
+many as you like.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addTransport</span><span class="p">(</span><span class="n">_</span> <span class="nv">transport</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>transport</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>function that is called with each log invocaton</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC12filterUnless3tagySS_tF"></a>
+                    <a name="//apple_ref/swift/Method/filterUnless(tag:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC12filterUnless3tagySS_tF">filterUnless(tag:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Filters log messages unless they are tagged with <code>tag</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">filterUnless</span><span class="p">(</span><span class="nv">tag</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC12filterUnless4tagsySaySSG_tF"></a>
+                    <a name="//apple_ref/swift/Method/filterUnless(tags:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC12filterUnless4tagsySaySSG_tF">filterUnless(tags:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Filters log messages unless they are tagged with any of <code>tags</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">filterUnless</span><span class="p">(</span><span class="nv">tags</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC8filterIf3tagySS_tF"></a>
+                    <a name="//apple_ref/swift/Method/filterIf(tag:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC8filterIf3tagySS_tF">filterIf(tag:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Filters log messages if they are tagged with <code>tag</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">filterIf</span><span class="p">(</span><span class="nv">tag</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC8filterIf4tagsySaySSG_tF"></a>
+                    <a name="//apple_ref/swift/Method/filterIf(tags:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC8filterIf4tagsySaySSG_tF">filterIf(tags:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Filters log messages if they are tagged with any of <code>tags</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">filterIf</span><span class="p">(</span><span class="nv">tags</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC3log5level_3tag5force___yAA8LogLevelO_xyXKSSSbS2SSitlF"></a>
+                    <a name="//apple_ref/swift/Method/log(level:_:tag:force:_:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC3log5level_3tag5force___yAA8LogLevelO_xyXKSSSbS2SSitlF">log(level:<wbr>_:<wbr>tag:<wbr>force:<wbr>_:<wbr>_:<wbr>_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Logs any <code>T</code> by using string interpolation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">log</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">level</span><span class="p">:</span> <span class="kt"><a href="../Enums/LogLevel.html">LogLevel</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">info</span><span class="p">,</span>
+    <span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">,</span>
+    <span class="nv">tag</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">force</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="n">_</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kd">#file</span><span class="p">,</span>
+    <span class="n">_</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kd">#function</span><span class="p">,</span>
+    <span class="n">_</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="kd">#line</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>autoclosure statment to be logged</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tag</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a tag to apply to this log</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker6LoggerC3log5level_4tags5force___yAA8LogLevelO_xyXKSaySSGSbS2SSitlF"></a>
+                    <a name="//apple_ref/swift/Method/log(level:_:tags:force:_:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker6LoggerC3log5level_4tags5force___yAA8LogLevelO_xyXKSaySSGSbS2SSitlF">log(level:<wbr>_:<wbr>tags:<wbr>force:<wbr>_:<wbr>_:<wbr>_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Logs any <code>T</code> by using string interpolation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">log</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">level</span><span class="p">:</span> <span class="kt"><a href="../Enums/LogLevel.html">LogLevel</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">info</span><span class="p">,</span>
+    <span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">,</span>
+    <span class="nv">tags</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="nv">force</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="n">_</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kd">#file</span><span class="p">,</span>
+    <span class="n">_</span> <span class="nv">function</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kd">#function</span><span class="p">,</span>
+    <span class="n">_</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="kd">#line</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>autoclosure statment to be logged</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tags</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a set of tags to apply to this log</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018-2020 Ali Akhtarzada</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

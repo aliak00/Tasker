@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AnyTask  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Section/AnyTask" class="dashAnchor"></a>
+    <a title="AnyTask  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">Tasker 0.12.0 Docs</a></p>
+        <p class="header-right"><a href="https://www.github.com/aliak00/Tasker"><img src="img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">Tasker Reference</a>
+        <img id="carat" src="img/carat.png" />
+        AnyTask  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Task%20Management.html">Task Management</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/Task.html">Task</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/TaskError.html">TaskError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/TaskState.html">TaskState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Handle.html">Handle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/TaskManager.html">TaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Interceptor.html">Interceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/InterceptCommand.html">InterceptCommand</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Reactor.html">Reactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ReactorConfiguration.html">ReactorConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Logging.html">Logging</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/LogTags.html">LogTags</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/LogLevel.html">LogLevel</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="AnyTask.html">AnyTask</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/AnyTask.html">AnyTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="AnyTask.html#/s:6Tasker4task11closingOverAA7AnyTaskCyxGxyXA_tlF">task(closingOver:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyytGyyycc_tF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyyxcc_tlF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyys6ResultOyxs5Error_pGcc_tlF">task(executing:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Async%20Await.html">Async Await</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yyxcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Async%20Await.html#/s:6Tasker5await7timeout5blocky8Dispatch0E12TimeIntervalOSg_yyyXEctKF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yys6ResultOyxs5Error_pGcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Async%20Await.html#/s:6Tasker5curryyq0_q_cxcq0_x_q_tcr1_lF">curry(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Async%20Await.html#/s:6Tasker5curryyq1_q0_cx_q_tcq1_x_q_q0_tcr2_lF">curry(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="URL%20Session%20Interceptor.html">URL Session Interceptor</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/URLTaskManager.html">URLTaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/URLTask.html">URLTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/URLTaskInterceptor.html">URLTaskInterceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/URLTaskReactor.html">URLTaskReactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/URLTaskManagerError.html">URLTaskManagerError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Other%20Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/Array.html">Array</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Other%20Functions.html">Other Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Other%20Functions.html#/s:6Tasker5async11closingOver10completionyxyXA_ys6ResultOyxs5Error_pGcSgtlF">async(closingOver:completion:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Other%20Functions.html#/s:6Tasker5async9executingyyyc_tF">async(executing:)</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>AnyTask</h1>
+            
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker7AnyTaskC"></a>
+                    <a name="//apple_ref/swift/Class/AnyTask" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker7AnyTaskC">AnyTask</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An AnyTask can be used as a generic <code><a href="Protocols/Task.html">Task</a></code> object. You have to pass it a execute block when it&rsquo;s initialized
+and that will be called when it&rsquo;s time to execute the task.</p>
+
+<p><code>AnyTask</code>s schedules execution blocks on <code><a href="Classes/TaskManager.html#/s:6Tasker11TaskManagerC6sharedACvpZ">TaskManager.shared</a></code>.</p>
+
+                        <a href="Classes/AnyTask.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">AnyTask</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Task.html">Task</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4task11closingOverAA7AnyTaskCyxGxyXA_tlF"></a>
+                    <a name="//apple_ref/swift/Function/task(closingOver:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4task11closingOverAA7AnyTaskCyxGxyXA_tlF">task(closingOver:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a task out of an expression and returns it as an <code><a href="Classes/AnyTask.html">AnyTask</a></code></p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="nf">task</span><span class="p">(</span><span class="nf">someLongOperation</span><span class="p">())</span>
+
+<span class="n">x</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+   <span class="c1">// stuff</span>
+<span class="p">}</span>
+
+<span class="c1">// or</span>
+
+<span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="nf">await</span><span class="p">()</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">task</span><span class="o">&lt;</span><span class="kt">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">closingOver</span> <span class="nv">closure</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">R</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/AnyTask.html">AnyTask</a></span><span class="o">&lt;</span><span class="kt">R</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>closingOver</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the expression to create a task out of</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4task9executingAA7AnyTaskCyytGyyycc_tF"></a>
+                    <a name="//apple_ref/swift/Function/task(executing:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4task9executingAA7AnyTaskCyytGyyycc_tF">task(executing:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a task out of a function that has a <code>done</code> callback. I.e.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">f</span> <span class="o">=</span> <span class="p">{</span> <span class="p">(</span><span class="nv">done</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span> <span class="k">in</span>
+   <span class="kt">DispatchQueue</span><span class="o">.</span><span class="nf">global</span><span class="p">(</span><span class="nv">qos</span><span class="p">:</span> <span class="o">.</span><span class="n">unspecified</span><span class="p">)</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+       <span class="c1">// Do some long running calculation</span>
+       <span class="nf">done</span><span class="p">()</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">t</span> <span class="o">=</span> <span class="nf">task</span><span class="p">(</span><span class="nv">executing</span><span class="p">:</span> <span class="n">f</span><span class="p">)</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">task</span><span class="p">(</span><span class="n">executing</span> <span class="nv">block</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/AnyTask.html">AnyTask</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>executing</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>an asynchronous function that has a <code>done</code> callback as it&rsquo;s only parameter. The <code>done</code> callback
+must be called when the asynchronous operation completes.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4task9executingAA7AnyTaskCyxGyyxcc_tlF"></a>
+                    <a name="//apple_ref/swift/Function/task(executing:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4task9executingAA7AnyTaskCyxGyyxcc_tlF">task(executing:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a task out of a function that has a <code>done</code> callback with a specific signature</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">task</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">executing</span> <span class="nv">block</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="p">(</span><span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/AnyTask.html">AnyTask</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>executing</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>an asynchronous function that has a <code>done</code> callback as it&rsquo;s only parameter. The done callback
+must take the expected value of the asynchronous operation as its only parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4task9executingAA7AnyTaskCyxGyys6ResultOyxs5Error_pGcc_tlF"></a>
+                    <a name="//apple_ref/swift/Function/task(executing:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4task9executingAA7AnyTaskCyxGyys6ResultOyxs5Error_pGcc_tlF">task(executing:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a task out of a function that has a <code>done</code> callback with a specific signature</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">task</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">executing</span> <span class="nv">block</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">Error</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/AnyTask.html">AnyTask</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>executing</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>an asynchronous function that has a <code>done</code> callback as it&rsquo;s only parameter. The done callback
+must take the expected <code>Result&lt;T, Error&gt;</code> of the asynchronous operation as its only parameter</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018-2020 Ali Akhtarzada</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

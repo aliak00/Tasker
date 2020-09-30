@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Task Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/Task" class="dashAnchor"></a>
+    <a title="Task Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Tasker 0.12.0 Docs</a></p>
+        <p class="header-right"><a href="https://www.github.com/aliak00/Tasker"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Tasker Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Task Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Task%20Management.html">Task Management</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Task.html">Task</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TaskError.html">TaskError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TaskState.html">TaskState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Handle.html">Handle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TaskManager.html">TaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Interceptor.html">Interceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/InterceptCommand.html">InterceptCommand</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Reactor.html">Reactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ReactorConfiguration.html">ReactorConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Logging.html">Logging</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LogTags.html">LogTags</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LogLevel.html">LogLevel</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../AnyTask.html">AnyTask</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AnyTask.html">AnyTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task11closingOverAA7AnyTaskCyxGxyXA_tlF">task(closingOver:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyytGyyycc_tF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyyxcc_tlF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyys6ResultOyxs5Error_pGcc_tlF">task(executing:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Async%20Await.html">Async Await</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yyxcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blocky8Dispatch0E12TimeIntervalOSg_yyyXEctKF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yys6ResultOyxs5Error_pGcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5curryyq0_q_cxcq0_x_q_tcr1_lF">curry(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5curryyq1_q0_cx_q_tcq1_x_q_q0_tcr2_lF">curry(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../URL%20Session%20Interceptor.html">URL Session Interceptor</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/URLTaskManager.html">URLTaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/URLTask.html">URLTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/URLTaskInterceptor.html">URLTaskInterceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/URLTaskReactor.html">URLTaskReactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/URLTaskManagerError.html">URLTaskManagerError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Functions.html">Other Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Other%20Functions.html#/s:6Tasker5async11closingOver10completionyxyXA_ys6ResultOyxs5Error_pGcSgtlF">async(closingOver:completion:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Other%20Functions.html#/s:6Tasker5async9executingyyyc_tF">async(executing:)</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Task</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Task</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>A task is any unit of work that is to be carried out. It is protocol based and has a main function called <code>execute</code>
+that is called when the task is supposed to be executed. When a task is completed, a completion callback is called
+and passed the result of the task, which is a <code>Result&lt;SuccessValue, Error&gt;</code>.</p>
+<h2 id='timeouts' class='heading'>Timeouts</h2>
+
+<p>Tasks can implement a timeout that will determine when the <code><a href="../Classes/TaskManager.html">TaskManager</a></code> is to give up on the task.</p>
+<h2 id='cancellation' class='heading'>Cancellation</h2>
+
+<p>And finally, every task has a <code><a href="../Protocols/Task.html#/s:6Tasker4TaskP9didCancel4withyAA0B5ErrorO_tF">Task.didCancel(with:)</a></code> that is passed a <code><a href="../Enums/TaskError.html">TaskError</a></code> that tells the <code>Task</code> object
+why the task was cancelled. The <code>didCancel</code> will only be called after the task has been removed from the
+<code><a href="../Classes/TaskManager.html">TaskManager</a></code>.</p>
+<h2 id='notes' class='heading'>Notes</h2>
+
+<p>Tasks are reference types because the task manager has to keep track of all the tasks that are floating around.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4TaskP12SuccessValueQa"></a>
+                    <a name="//apple_ref/swift/Alias/SuccessValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4TaskP12SuccessValueQa">SuccessValue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type of a successful execution of a task</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">SuccessValue</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4TaskP6Resulta"></a>
+                    <a name="//apple_ref/swift/Alias/Result" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4TaskP6Resulta">Result</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Covenience typealias for the result of <code>execute</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">Result</span> <span class="o">=</span> <span class="kt">Swift</span><span class="o">.</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Task.html#/s:6Tasker4TaskP12SuccessValueQa">SuccessValue</a></span><span class="p">,</span> <span class="kt">Error</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4TaskP18CompletionCallbacka"></a>
+                    <a name="//apple_ref/swift/Alias/CompletionCallback" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4TaskP18CompletionCallbacka">CompletionCallback</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Conveneience typealias for the completion callback of <code>execute</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">CompletionCallback</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Task.html#/s:6Tasker4TaskP6Resulta">Result</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4TaskP7execute10completionyys6ResultOy12SuccessValueQzs5Error_pGc_tF"></a>
+                    <a name="//apple_ref/swift/Method/execute(completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4TaskP7execute10completionyys6ResultOy12SuccessValueQzs5Error_pGc_tF">execute(completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The function that executes the task</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">execute</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Protocols/Task.html#/s:6Tasker4TaskP18CompletionCallbacka">CompletionCallback</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the completion callback that the implementaiton must call when it is done with its work</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4TaskP7timeout8Dispatch0D12TimeIntervalOSgvp"></a>
+                    <a name="//apple_ref/swift/Property/timeout" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4TaskP7timeout8Dispatch0D12TimeIntervalOSgvp">timeout</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>How long does is the <code>execute</code> function allowed to take</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">timeout</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4TaskP9didCancel4withyAA0B5ErrorO_tF"></a>
+                    <a name="//apple_ref/swift/Method/didCancel(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4TaskP9didCancel4withyAA0B5ErrorO_tF">didCancel(with:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This is called if for any reason this task was cancelled.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">didCancel</span><span class="p">(</span><span class="n">with</span> <span class="nv">_</span><span class="p">:</span> <span class="kt"><a href="../Enums/TaskError.html">TaskError</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the <code><a href="../Enums/TaskError.html">TaskError</a></code> that caused the cancellation</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4TaskPAAE5async5using16startImmediately5after5queue7timeout10completionAA6Handle_pAA0B7ManagerCSg_Sb8Dispatch0M12TimeIntervalOSgSo012OS_dispatch_H0CSgARys6ResultOy12SuccessValueQzs5Error_pGcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/async(using:startImmediately:after:queue:timeout:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4TaskPAAE5async5using16startImmediately5after5queue7timeout10completionAA6Handle_pAA0B7ManagerCSg_Sb8Dispatch0M12TimeIntervalOSgSo012OS_dispatch_H0CSgARys6ResultOy12SuccessValueQzs5Error_pGcSgtF">async(using:<wbr>startImmediately:<wbr>after:<wbr>queue:<wbr>timeout:<wbr>completion:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Will execute the task asynchronously</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">async</span><span class="p">(</span>
+    <span class="n">using</span> <span class="nv">taskManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/TaskManager.html">TaskManager</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">startImmediately</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="n">after</span> <span class="nv">interval</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">timeout</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Task.html#/s:6Tasker4TaskP18CompletionCallbacka">CompletionCallback</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/Handle.html">Handle</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>taskManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>which instance of <code><a href="../Classes/TaskManager.html">TaskManager</a></code> you want to use. Defaults to <code><a href="../Classes/TaskManager.html#/s:6Tasker11TaskManagerC6sharedACvpZ">TaskManager.shared</a></code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>after</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>after how long you want the task to start being executed</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>startImmediately</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>set this to false if you want to explicity call start on the <code><a href="../Protocols/Handle.html">Handle</a></code> that&rsquo;s returned</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>on which DispatchQueue you want the completion callback to be called</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>timeout</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>after how long should the task timeout. This overwrites <code><a href="../Protocols/Task.html#/s:6Tasker4TaskP7timeout8Dispatch0D12TimeIntervalOSgvp">Task.timeout</a></code> if there is one</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the reuslt of the operation will be passed here</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker4TaskPAAE5await5using7timeout12SuccessValueQzAA0B7ManagerCSg_8Dispatch0I12TimeIntervalOSgtKF"></a>
+                    <a name="//apple_ref/swift/Method/await(using:timeout:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker4TaskPAAE5await5using7timeout12SuccessValueQzAA0B7ManagerCSg_8Dispatch0I12TimeIntervalOSgtKF">await(using:<wbr>timeout:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Will execute the task synchronously and await the result. Throws an error on failure.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">await</span><span class="p">(</span>
+    <span class="n">using</span> <span class="nv">taskManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/TaskManager.html">TaskManager</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">timeout</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/Task.html#/s:6Tasker4TaskP12SuccessValueQa">SuccessValue</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>taskManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>which instance of <code><a href="../Classes/TaskManager.html">TaskManager</a></code> you want to use. Defaults to <code><a href="../Classes/TaskManager.html#/s:6Tasker11TaskManagerC6sharedACvpZ">TaskManager.shared</a></code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>timeout</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>after how long should the task timeout. This overwrites <code><a href="../Protocols/Task.html#/s:6Tasker4TaskP7timeout8Dispatch0D12TimeIntervalOSgvp">Task.timeout</a></code> if there is one</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018-2020 Ali Akhtarzada</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TaskManager Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/TaskManager" class="dashAnchor"></a>
+    <a title="TaskManager Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Tasker 0.12.0 Docs</a></p>
+        <p class="header-right"><a href="https://www.github.com/aliak00/Tasker"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Tasker Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        TaskManager Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Task%20Management.html">Task Management</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Task.html">Task</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TaskError.html">TaskError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TaskState.html">TaskState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Handle.html">Handle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TaskManager.html">TaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Interceptor.html">Interceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/InterceptCommand.html">InterceptCommand</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Reactor.html">Reactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ReactorConfiguration.html">ReactorConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Logging.html">Logging</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LogTags.html">LogTags</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LogLevel.html">LogLevel</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../AnyTask.html">AnyTask</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AnyTask.html">AnyTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task11closingOverAA7AnyTaskCyxGxyXA_tlF">task(closingOver:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyytGyyycc_tF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyyxcc_tlF">task(executing:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../AnyTask.html#/s:6Tasker4task9executingAA7AnyTaskCyxGyys6ResultOyxs5Error_pGcc_tlF">task(executing:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Async%20Await.html">Async Await</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yyxcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blocky8Dispatch0E12TimeIntervalOSg_yyyXEctKF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5await7timeout5blockx8Dispatch0E12TimeIntervalOSg_yys6ResultOyxs5Error_pGcctKlF">await(timeout:block:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5curryyq0_q_cxcq0_x_q_tcr1_lF">curry(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Async%20Await.html#/s:6Tasker5curryyq1_q0_cx_q_tcq1_x_q_q0_tcr2_lF">curry(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../URL%20Session%20Interceptor.html">URL Session Interceptor</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/URLTaskManager.html">URLTaskManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/URLTask.html">URLTask</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/URLTaskInterceptor.html">URLTaskInterceptor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/URLTaskReactor.html">URLTaskReactor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/URLTaskManagerError.html">URLTaskManagerError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Functions.html">Other Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Other%20Functions.html#/s:6Tasker5async11closingOver10completionyxyXA_ys6ResultOyxs5Error_pGcSgtlF">async(closingOver:completion:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Other%20Functions.html#/s:6Tasker5async9executingyyyc_tF">async(executing:)</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>TaskManager</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TaskManager</span></code></pre>
+
+                </div>
+              </div>
+            <p>A task manager can be given an arbitrary number of <code><a href="../Protocols/Task.html">Task</a></code>s and initialized with a set of <code><a href="../Protocols/Interceptor.html">Interceptor</a></code>s
+and <code><a href="../Protocols/Reactor.html">Reactor</a></code>s, after which it will take care of asynchonous task management for you.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker11TaskManagerC6sharedACvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/shared" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker11TaskManagerC6sharedACvpZ">shared</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Shared TaskManager that is default constructed and has no <code><a href="../Protocols/Interceptor.html">Interceptor</a></code>s or <code><a href="../Protocols/Reactor.html">Reactor</a></code>s.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">shared</span><span class="p">:</span> <span class="kt">TaskManager</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker11TaskManagerC8reactorsSayAA7Reactor_pGvp"></a>
+                    <a name="//apple_ref/swift/Property/reactors" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker11TaskManagerC8reactorsSayAA7Reactor_pGvp">reactors</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>List of reactors that this TaskManager was created with</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">reactors</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/Reactor.html">Reactor</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker11TaskManagerC12interceptorsSayAA11Interceptor_pGvp"></a>
+                    <a name="//apple_ref/swift/Property/interceptors" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker11TaskManagerC12interceptorsSayAA11Interceptor_pGvp">interceptors</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>List of interceptors that this TaskManager was created with</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">interceptors</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/Interceptor.html">Interceptor</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker11TaskManagerC10identifierSivp"></a>
+                    <a name="//apple_ref/swift/Property/identifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker11TaskManagerC10identifierSivp">identifier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Identifies the TaskManager in question. It is an atomically increasing integer, per TaskManager created</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker11TaskManagerC12interceptors8reactorsACSayAA11Interceptor_pG_SayAA7Reactor_pGtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(interceptors:reactors:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker11TaskManagerC12interceptors8reactorsACSayAA11Interceptor_pG_SayAA7Reactor_pGtcfc">init(interceptors:<wbr>reactors:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes this manager object.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">interceptors</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/Interceptor.html">Interceptor</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span> <span class="nv">reactors</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/Reactor.html">Reactor</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>interceptors</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>an array of interceptors that will be applied to every task before being started</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reactors</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>an array of reactors that will be applied to every task after it&rsquo;s executed</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker11TaskManagerC3add4task16startImmediately5after7timeout10completeOn10completionAA6Handle_px_Sb8Dispatch0N12TimeIntervalOSgAOSo17OS_dispatch_queueCSgys6ResultOy12SuccessValueQzs5Error_pGcSgtAA0B0RzlF"></a>
+                    <a name="//apple_ref/swift/Method/add(task:startImmediately:after:timeout:completeOn:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker11TaskManagerC3add4task16startImmediately5after7timeout10completeOn10completionAA6Handle_px_Sb8Dispatch0N12TimeIntervalOSgAOSo17OS_dispatch_queueCSgys6ResultOy12SuccessValueQzs5Error_pGcSgtAA0B0RzlF">add(task:<wbr>startImmediately:<wbr>after:<wbr>timeout:<wbr>completeOn:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Add a task to the manager. You may choose to start the task immediately or start it yourself via the <code><a href="../Protocols/Handle.html">Handle</a></code> that
+is returned. Additionally, you can also set an interval on when to start the task but that is only valid if <code>startImmediately</code>
+is set to true</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="n">add</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Task.html">Task</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">task</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span>
+    <span class="nv">startImmediately</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="n">after</span> <span class="nv">interval</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">timeout</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n">completeOn</span> <span class="nv">completionQueue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kt">T</span><span class="o">.</span><span class="kt">CompletionCallback</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Tasker</span><span class="o">.</span><span class="kt"><a href="../Protocols/Handle.html">Handle</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>task</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the task to run</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>startImmediately</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>set this to false if you want to explicity call start on the <code><a href="../Protocols/Handle.html">Handle</a></code> that&rsquo;s returned</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>after</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>set this to some value if you want the task to start running after some interval</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>timeout</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>after how long the task times out (overrides <code><a href="../Protocols/Task.html#/s:6Tasker4TaskP7timeout8Dispatch0D12TimeIntervalOSgvp">Task.timeout</a></code>)</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completeOn</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>specifies which queue completion is called on</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>called after the task is done with the result of <code>Task.execute</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:6Tasker11TaskManagerC24waitTillAllTasksFinishedyyF"></a>
+                    <a name="//apple_ref/swift/Method/waitTillAllTasksFinished()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:6Tasker11TaskManagerC24waitTillAllTasksFinishedyyF">waitTillAllTasksFinished()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Blocks until all tasks finish executing</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">waitTillAllTasksFinished</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2018-2020 Ali Akhtarzada</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

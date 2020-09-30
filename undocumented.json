@@ -1,0 +1,96 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Logger/Logger.swift",
+      "line": 105,
+      "symbol": "Logger.removeTransports()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Logger/Logger.swift",
+      "line": 161,
+      "symbol": "Logger.log(level:from:_:tags:force:_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/TaskManager/TaskManagerHandle.swift",
+      "line": 42,
+      "symbol": "TaskManager.Handle",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/TaskManager/TaskManagerHandle.swift",
+      "line": 55,
+      "symbol": "TaskManager.Handle",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/URLTaskManager/URLTaskInterceptor.swift",
+      "line": 10,
+      "symbol": "URLTaskInterceptor.intercept(task:currentBatchCount:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/URLTaskManager/URLTaskReactor.swift",
+      "line": 9,
+      "symbol": "URLTaskReactor.shouldExecute(after:from:with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Utils/Atomics/Atomic.swift",
+      "line": 47,
+      "symbol": "Atomic",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Utils/Atomics/Atomic.swift",
+      "line": 57,
+      "symbol": "Atomic",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Utils/Atomics/AtomicInt.swift",
+      "line": 60,
+      "symbol": "AtomicInt",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Utils/Atomics/AtomicInt.swift",
+      "line": 68,
+      "symbol": "AtomicInt",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Utils/Collections/RingBuffer/RingBuffer.swift",
+      "line": 33,
+      "symbol": "RingBuffer",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Utils/Collections/RingBuffer/RingBuffer.swift",
+      "line": 39,
+      "symbol": "RingBuffer",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/aliak00/Tasker/Sources/Utils/Collections/RingBuffer/RingBuffer.swift",
+      "line": 62,
+      "symbol": "RingBuffer",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/travis/build/aliak00/Tasker"
+}
