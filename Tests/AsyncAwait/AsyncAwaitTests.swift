@@ -173,6 +173,19 @@ final class AsyncAwaitTests: XCTestCase {
         ensure(x.value).becomes(5)
     }
 
+    func testManyAwaitInAsync() {
+        let x = AtomicInt(0)
+        let count = 63 // Because of 64 thread count limit on GCD as await uses dispatch semaphore
+        for _ in 0 ..< count {
+            async {
+                try! AnyTask<Void> {
+                    x.getAndIncrement()
+                }.await()
+            }
+        }
+        ensure(x.value).becomes(count)
+    }
+
     func testAsyncAwaitStartLater() {
         let task = AsyncAwaitSpy { 7 }
         let handle = task.async(startImmediately: false)

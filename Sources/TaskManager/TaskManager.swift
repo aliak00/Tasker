@@ -57,6 +57,7 @@ public class TaskManager {
         self.identifier = type(of: self).identifierCounter.getAndIncrement()
 
         self.reactorManager.delegate = self
+        self.operationQueue.name = "Tasker.TaskManager.OperationQueue"
     }
 
     deinit {
